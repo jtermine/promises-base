@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBase", "PromisesBase.csproj", "{EB7D739E-E8EF-4834-AD2E-06FE73CB3D20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBase", "PromisesBase\PromisesBase.csproj", "{EB7D739E-E8EF-4834-AD2E-06FE73CB3D20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBaseTest", "..\PromisesBaseTest\PromisesBaseTest.csproj", "{9D81F10B-C1CD-49E9-980B-F5C4C0CF3BC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBaseTest", "PromisesBaseTest\PromisesBaseTest.csproj", "{9D81F10B-C1CD-49E9-980B-F5C4C0CF3BC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
