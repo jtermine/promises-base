@@ -14,6 +14,9 @@ namespace Termine.Promises
         private readonly PromiseContext _context = new PromiseContext();
         private PromiseWorkload _workload = new PromiseWorkload();
 
+        public int AuthChallengersCount { get { return _context.AuthChallengers.Count; } }
+        public int ValidatorsCount { get { return _context.Validators.Count; } }
+        
         public Promise WithWorkload(PromiseWorkload workload)
         {
             _workload = workload;

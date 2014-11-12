@@ -9,8 +9,11 @@ namespace PromisesBaseTest
         [TestMethod]
         public void TestConstructor()
         {
-            var promise = new Promise().WithAuthChallenger(f => { return; }).RunAsync();
-            Assert.IsNotNull(promise);
+            var promise = new Promise().WithValidator(f => { return; }).RunAsync();
+            
+            Assert.IsTrue(promise.ValidatorsCount == 1);
         }
+
+        public void Test
     }
 }
