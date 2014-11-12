@@ -61,16 +61,19 @@ namespace Termine.Promises
             foreach (var challenger in _context.AuthChallengers)
             {
                 challenger.Value.Invoke(_workload);
+                if (_workload.TerminateProcessing) return this;
             }
 
             foreach (var validator in _context.Validators)
             {
                 validator.Value.Invoke(_workload);
+                if (_workload.TerminateProcessing) return this;
             }
 
             foreach (var executor in _context.Executors)
             {
                 executor.Value.Invoke(_workload);
+                if (_workload.TerminateProcessing) return this;
             }
 
             return this;

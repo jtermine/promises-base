@@ -55,6 +55,7 @@
     <Compile Include="TestObjects\PromiseResponse.cs" />
     <Compile Include="TestObjects\PromiseWorkload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestPromises\FalseLockPromise.cs" />
     <Compile Include="TestPromises\CreateLockPromise.cs" />
   </ItemGroup>
   <ItemGroup>

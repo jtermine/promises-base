@@ -10,6 +10,7 @@ namespace Termine.Promises.Base.Test.TestObjects
             Response = new PromiseResponse();
         }
 
+        public bool TerminateProcessing { get; set; }
         public PromiseRequest Request { get; set; }
         public PromiseResponse Response { get; set; }
 
