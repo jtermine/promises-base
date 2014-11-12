@@ -48,9 +48,7 @@ namespace Termine.Promises.Base.Test
             var createLockPromise = new CreateLockPromise();
             var falseLockPromise = new FalseLockPromise();
 
-            var joinedPromise = CreateLockPromise.Join(createLockPromise, falseLockPromise) as CreateLockPromise;
-            
-            Assert.IsNotNull(joinedPromise);
+            var joinedPromise = CreateLockPromise.Join(createLockPromise, falseLockPromise);
             
             joinedPromise.RunAsync();
 

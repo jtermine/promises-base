@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IAmAPromise.cs" />
     <Compile Include="Interfaces\IAmAPromiseAction.cs" />
     <Compile Include="Interfaces\IAmAPromiseRequest.cs" />
     <Compile Include="Interfaces\IAmAPromiseResponse.cs" />

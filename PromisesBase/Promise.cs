@@ -5,7 +5,10 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
-    public class Promise<TT, TA, TW> where TT:IAmAPromiseWorkload<TA, TW>, new() where TA : IAmAPromiseRequest, new() where TW : IAmAPromiseResponse, new()
+    public class Promise<TT, TA, TW> : IAmAPromise<TT, TA, TW> 
+        where TT:IAmAPromiseWorkload<TA, TW>, new() 
+        where TA : IAmAPromiseRequest, new() 
+        where TW : IAmAPromiseResponse, new()
     {
         public class PromiseContext
         {
@@ -57,19 +60,13 @@ namespace Termine.Promises
             return this;
         }
 
-        public static Promise<TT, TA, TW> Join(params Promise<TT, TA, TW>[] promises)
+        public static TE Join<TE>(TE basePromise, params Promise<TT, TA, TW>[] promises)
+            where TE : Promise<TT, TA, TW>
         {
             if (promises.Length == 0) throw new ArgumentNullException("promises");
-            if (promises.Length == 1) return promises[0];
 
-            var basePromise = promises[0];
-
-            for (var i = 0; i < promises.Length; i++)
+            foreach (var thisPromise in promises)
             {
-                if (i == 0) continue;
-
-                var thisPromise = promises[i];
-
                 foreach (var authChallenger in thisPromise.Context.AuthChallengers)
                 {
                     basePromise.WithAuthChallenger(new PromiseActionInstance<TT, TA, TW>(authChallenger.Key,
@@ -90,7 +87,6 @@ namespace Termine.Promises
             }
 
             return basePromise;
-
         }
 
         public Promise<TT, TA, TW> RunAsync()
