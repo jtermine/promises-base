@@ -10,9 +10,9 @@ namespace PromisesBaseTest.TestPromises
 
         public CreateLockPromise()
         {
-            WithAuthChallenger(AuthChallenger);
-            WithValidator(Validator);
-            WithExecutor(Executor);
+            WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", AuthChallenger));
+            WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("2", Validator));
+            WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("3", Executor));
         }
 
         private void Executor(PromiseWorkload promiseWorkload)

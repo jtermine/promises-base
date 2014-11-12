@@ -10,7 +10,13 @@ namespace PromisesBaseTest
         [TestMethod]
         public void TestConstructor()
         {
-            var promise = new Promise<PromiseWorkload, PromiseRequest, PromiseResponse>().WithValidator(f => { f.Request.Claim = "123"; }).RunAsync();
+            var promise =
+                new Promise<PromiseWorkload, PromiseRequest, PromiseResponse>().WithValidator(
+                    new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", workload =>
+                    {
+                        workload.Request.Claim = "1";
+                    }));
+
             Assert.IsTrue(promise.ValidatorsCount == 1);
         }
 

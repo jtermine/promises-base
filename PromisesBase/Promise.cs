@@ -8,9 +8,9 @@ namespace Termine.Promises
     {
         private class PromiseContext
         {
-            public readonly List<Action<TT>> AuthChallengers = new List<Action<TT>>();
-            public readonly List<Action<TT>> Validators = new List<Action<TT>>();
-            public readonly List<Action<TT>> Executors = new List<Action<TT>>();
+            public readonly Dictionary<string, Action<TT>> AuthChallengers = new Dictionary<string, Action<TT>>();
+            public readonly Dictionary<string, Action<TT>> Validators = new Dictionary<string, Action<TT>>();
+            public readonly Dictionary<string, Action<TT>> Executors = new Dictionary<string, Action<TT>>();
         }
 
         private readonly PromiseContext _context = new PromiseContext();
@@ -26,21 +26,33 @@ namespace Termine.Promises
             return this;
         }
 
-        public Promise<TT, TA, TW> WithValidator(Action<TT> validator)
+        public Promise<TT, TA, TW> WithValidator(IAmAPromiseAction<TT, TA, TW> validator)
         {
-            _context.Validators.Add(validator);
+            if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == default(Action<TT>)) return this;
+
+            if (_context.Validators.ContainsKey(validator.ActionId)) return this;
+            _context.Validators.Add(validator.ActionId, validator.PromiseAction);
+
             return this;
         }
 
-        public Promise<TT, TA, TW> WithAuthChallenger(Action<TT> authChallenger)
+        public Promise<TT, TA, TW> WithAuthChallenger(IAmAPromiseAction<TT, TA, TW> authChallenger)
         {
-            _context.AuthChallengers.Add(authChallenger);
+            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == default(Action<TT>)) return this;
+
+            if (_context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return this;
+            _context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
+
             return this;
         }
 
-        public Promise<TT, TA, TW> WithExecutor(Action<TT> executor)
+        public Promise<TT, TA, TW> WithExecutor(IAmAPromiseAction<TT, TA, TW> executor)
         {
-            _context.Executors.Add(executor);
+            if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == default(Action<TT>)) return this;
+
+            if (_context.Executors.ContainsKey(executor.ActionId)) return this;
+            _context.Executors.Add(executor.ActionId, executor.PromiseAction);
+
             return this;
         }
 
@@ -48,17 +60,17 @@ namespace Termine.Promises
         {
             foreach (var challenger in _context.AuthChallengers)
             {
-                challenger.Invoke(_workload);
+                challenger.Value.Invoke(_workload);
             }
 
             foreach (var validator in _context.Validators)
             {
-                validator.Invoke(_workload);
+                validator.Value.Invoke(_workload);
             }
 
             foreach (var executor in _context.Executors)
             {
-                executor.Invoke(_workload);
+                executor.Value.Invoke(_workload);
             }
 
             return this;
