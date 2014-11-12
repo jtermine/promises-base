@@ -39,8 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IAmAPromiseRequest.cs" />
+    <Compile Include="Interfaces\IAmAPromiseResponse.cs" />
+    <Compile Include="Interfaces\IAmAPromiseWorkload.cs" />
     <Compile Include="Promise.cs" />
-    <Compile Include="PromiseWorkload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
