@@ -1,6 +1,6 @@
 ﻿using Termine.Promises.Interfaces;
 
-namespace PromisesBaseTest
+namespace Termine.Promises.Base.Test.TestObjects
 {
     public class PromiseWorkload : IAmAPromiseWorkload<PromiseRequest, PromiseResponse>
     {

@@ -6,8 +6,8 @@
     <ProjectGuid>{9D81F10B-C1CD-49E9-980B-F5C4C0CF3BC5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PromisesBaseTest</RootNamespace>
-    <AssemblyName>PromisesBaseTest</AssemblyName>
+    <RootNamespace>Termine.Promises.Base.Test</RootNamespace>
+    <AssemblyName>Termine.Promises.Base.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

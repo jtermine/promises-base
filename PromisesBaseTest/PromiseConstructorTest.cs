@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PromisesBaseTest.TestPromises;
-using Termine.Promises;
+using Termine.Promises.Base.Test.TestObjects;
+using Termine.Promises.Base.Test.TestPromises;
 
-namespace PromisesBaseTest
+namespace Termine.Promises.Base.Test
 {
     [TestClass]
     public class PromiseConstructorTest

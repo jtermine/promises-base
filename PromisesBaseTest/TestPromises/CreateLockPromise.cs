@@ -1,6 +1,6 @@
-﻿using Termine.Promises;
+﻿using Termine.Promises.Base.Test.TestObjects;
 
-namespace PromisesBaseTest.TestPromises
+namespace Termine.Promises.Base.Test.TestPromises
 {
     public class CreateLockPromise : Promise<PromiseWorkload, PromiseRequest, PromiseResponse>
     {
