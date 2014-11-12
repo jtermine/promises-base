@@ -41,5 +41,22 @@ namespace Termine.Promises.Base.Test
             Assert.IsTrue(promise.ValidatorChecksum == 2, "ValidatorCheckSum equaled [{0}] when it should have been [2].", promise.ValidatorChecksum);
             Assert.IsTrue(promise.ExecutorChecksum == 0, "ExecutorChecksum equaled [{0}] when it should have been [0].", promise.ExecutorChecksum);
         }
+
+        [TestMethod]
+        public void TestJoinPromises()
+        {
+            var createLockPromise = new CreateLockPromise();
+            var falseLockPromise = new FalseLockPromise();
+
+            var joinedPromise = CreateLockPromise.Join(createLockPromise, falseLockPromise) as CreateLockPromise;
+            
+            Assert.IsNotNull(joinedPromise);
+            
+            joinedPromise.RunAsync();
+
+            Assert.IsTrue(joinedPromise.AuthChallengerChecksum == 1, "AuthChallengerChecksum equaled [{0}] when it should have been [1].", joinedPromise.AuthChallengerChecksum);
+            Assert.IsTrue(joinedPromise.ValidatorChecksum == 2, "ValidatorCheckSum equaled [{0}] when it should have been [2].", joinedPromise.ValidatorChecksum);
+            Assert.IsTrue(joinedPromise.ExecutorChecksum == 0, "ExecutorChecksum equaled [{0}] when it should have been [0].", joinedPromise.ExecutorChecksum);
+        }
     }
 }

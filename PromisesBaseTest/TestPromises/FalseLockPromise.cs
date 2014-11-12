@@ -10,9 +10,9 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public FalseLockPromise()
         {
-            WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", AuthChallenger));
-            WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("2", Validator));
-            WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("3", Executor));
+            WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("4", AuthChallenger));
+            WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("4", Validator));
+            WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("6", Executor));
         }
 
         private void Executor(PromiseWorkload promiseWorkload)

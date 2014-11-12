@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
     public class Promise<TT, TA, TW> where TT:IAmAPromiseWorkload<TA, TW>, new() where TA : IAmAPromiseRequest, new() where TW : IAmAPromiseResponse, new()
     {
-        private class PromiseContext
+        public class PromiseContext
         {
             public readonly Dictionary<string, Action<TT>> AuthChallengers = new Dictionary<string, Action<TT>>();
             public readonly Dictionary<string, Action<TT>> Validators = new Dictionary<string, Action<TT>>();
             public readonly Dictionary<string, Action<TT>> Executors = new Dictionary<string, Action<TT>>();
         }
 
-        private readonly PromiseContext _context = new PromiseContext();
+        public readonly PromiseContext Context = new PromiseContext();
         private TT _workload = new TT();
 
-        public int AuthChallengersCount { get { return _context.AuthChallengers.Count; } }
-        public int ValidatorsCount { get { return _context.Validators.Count; } }
-        public int ExecutorsCount { get { return _context.Executors.Count; } }
+        public int AuthChallengersCount { get { return Context.AuthChallengers.Count; } }
+        public int ValidatorsCount { get { return Context.Validators.Count; } }
+        public int ExecutorsCount { get { return Context.Executors.Count; } }
 
         public Promise<TT, TA, TW> WithWorkload(TT workload)
         {
@@ -30,8 +31,8 @@ namespace Termine.Promises
         {
             if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == default(Action<TT>)) return this;
 
-            if (_context.Validators.ContainsKey(validator.ActionId)) return this;
-            _context.Validators.Add(validator.ActionId, validator.PromiseAction);
+            if (Context.Validators.ContainsKey(validator.ActionId)) return this;
+            Context.Validators.Add(validator.ActionId, validator.PromiseAction);
 
             return this;
         }
@@ -40,8 +41,8 @@ namespace Termine.Promises
         {
             if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == default(Action<TT>)) return this;
 
-            if (_context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return this;
-            _context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
+            if (Context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return this;
+            Context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
 
             return this;
         }
@@ -50,27 +51,63 @@ namespace Termine.Promises
         {
             if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == default(Action<TT>)) return this;
 
-            if (_context.Executors.ContainsKey(executor.ActionId)) return this;
-            _context.Executors.Add(executor.ActionId, executor.PromiseAction);
+            if (Context.Executors.ContainsKey(executor.ActionId)) return this;
+            Context.Executors.Add(executor.ActionId, executor.PromiseAction);
 
             return this;
         }
 
+        public static Promise<TT, TA, TW> Join(params Promise<TT, TA, TW>[] promises)
+        {
+            if (promises.Length == 0) throw new ArgumentNullException("promises");
+            if (promises.Length == 1) return promises[0];
+
+            var basePromise = promises[0];
+
+            for (var i = 0; i < promises.Length; i++)
+            {
+                if (i == 0) continue;
+
+                var thisPromise = promises[i];
+
+                foreach (var authChallenger in thisPromise.Context.AuthChallengers)
+                {
+                    basePromise.WithAuthChallenger(new PromiseActionInstance<TT, TA, TW>(authChallenger.Key,
+                        authChallenger.Value));
+                }
+
+                foreach (var validator in thisPromise.Context.Validators)
+                {
+                    basePromise.WithValidator(new PromiseActionInstance<TT, TA, TW>(validator.Key,
+                        validator.Value));
+                }
+
+                foreach (var executor in thisPromise.Context.Executors)
+                {
+                    basePromise.WithValidator(new PromiseActionInstance<TT, TA, TW>(executor.Key,
+                        executor.Value));
+                }
+            }
+
+            return basePromise;
+
+        }
+
         public Promise<TT, TA, TW> RunAsync()
         {
-            foreach (var challenger in _context.AuthChallengers)
+            foreach (var challenger in Context.AuthChallengers)
             {
                 challenger.Value.Invoke(_workload);
                 if (_workload.TerminateProcessing) return this;
             }
 
-            foreach (var validator in _context.Validators)
+            foreach (var validator in Context.Validators)
             {
                 validator.Value.Invoke(_workload);
                 if (_workload.TerminateProcessing) return this;
             }
 
-            foreach (var executor in _context.Executors)
+            foreach (var executor in Context.Executors)
             {
                 executor.Value.Invoke(_workload);
                 if (_workload.TerminateProcessing) return this;
