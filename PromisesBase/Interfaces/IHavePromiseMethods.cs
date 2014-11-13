@@ -8,5 +8,7 @@
         void Warn();
         void Error();
         void Fatal();
+        void Abort();
+        void AbortOnAccessDenied();
     }
 }

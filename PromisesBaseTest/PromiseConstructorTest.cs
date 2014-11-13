@@ -20,7 +20,7 @@ namespace Termine.Promises.Base.Test
             Assert.IsTrue(promise.ValidatorsCount == 1);
         }
 
-        [TestMethod]
+        [TestMethod]    
         public void TestCreateLockPromise()
         {
             var promise = new CreateLockPromise();

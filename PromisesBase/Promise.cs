@@ -4,6 +4,12 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
+    /// <summary>
+    /// The basic promise model
+    /// </summary>
+    /// <typeparam name="TT">a promise workload</typeparam>
+    /// <typeparam name="TA">a promise request</typeparam>
+    /// <typeparam name="TW">a promise response</typeparam>
     public class Promise<TT, TA, TW> : IAmAPromise<TT, TA, TW>,
         IHavePromiseMethods
         where TT:IAmAPromiseWorkload<TA, TW>, new() 
@@ -110,6 +116,16 @@ namespace Termine.Promises
         }
 
         public void Fatal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Abort()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AbortOnAccessDenied()
         {
             throw new NotImplementedException();
         }
