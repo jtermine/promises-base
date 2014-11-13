@@ -5,5 +5,9 @@
         where TA : IAmAPromiseRequest, new()
         where TW : IAmAPromiseResponse, new()
     {
+        Promise<TT, TA, TW>.PromiseContext Context { get; }
+        int AuthChallengersCount { get; }
+        int ValidatorsCount { get; }
+        int ExecutorsCount { get; }
     }
 }

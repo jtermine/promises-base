@@ -8,6 +8,6 @@ namespace Termine.Promises.Interfaces
         where TW : IAmAPromiseResponse, new()
     {
         string ActionId { get; }
-        Action<TT> PromiseAction { get; }
+        Action<IHavePromiseMethods, TT> PromiseAction { get; }
     }
 }

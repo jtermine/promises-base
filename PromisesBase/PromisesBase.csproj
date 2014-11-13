@@ -44,8 +44,10 @@
     <Compile Include="Interfaces\IAmAPromiseRequest.cs" />
     <Compile Include="Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Interfaces\IAmAPromiseWorkload.cs" />
+    <Compile Include="Interfaces\IHavePromiseMethods.cs" />
     <Compile Include="Promise.cs" />
     <Compile Include="PromiseActionInstance.cs" />
+    <Compile Include="PromiseExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
 ﻿using Termine.Promises.Base.Test.TestObjects;
+using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
@@ -10,22 +11,22 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public CreateLockPromise()
         {
-            WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", AuthChallenger));
-            WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("2", Validator));
-            WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("3", Executor));
+            this.WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", AuthChallenger));
+            this.WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("2", Validator));
+            this.WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("3", Executor));
         }
 
-        private void Executor(PromiseWorkload promiseWorkload)
+        private void Executor(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(PromiseWorkload promiseWorkload)
+        private void Validator(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
         }
 
-        private void AuthChallenger(PromiseWorkload promiseWorkload)
+        private void AuthChallenger(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
         {
             AuthChallengerChecksum = 1;
         }

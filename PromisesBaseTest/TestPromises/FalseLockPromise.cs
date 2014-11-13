@@ -1,4 +1,5 @@
 ﻿using Termine.Promises.Base.Test.TestObjects;
+using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
@@ -10,23 +11,23 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public FalseLockPromise()
         {
-            WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("4", AuthChallenger));
-            WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("4", Validator));
-            WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("6", Executor));
+            this.WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("4", AuthChallenger));
+            this.WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("5", Validator));
+            this.WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("6", Executor));
         }
 
-        private void Executor(PromiseWorkload promiseWorkload)
+        private void Executor(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(PromiseWorkload promiseWorkload)
+        private void Validator(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
             promiseWorkload.TerminateProcessing = true;
         }
 
-        private void AuthChallenger(PromiseWorkload promiseWorkload)
+        private void AuthChallenger(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
         {
             AuthChallengerChecksum = 1;
         }

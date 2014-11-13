@@ -12,7 +12,7 @@ namespace Termine.Promises.Base.Test
         {
             var promise =
                 new Promise<PromiseWorkload, PromiseRequest, PromiseResponse>().WithValidator(
-                    new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", workload =>
+                    new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", (p, workload) =>
                     {
                         workload.Request.Claim = "1";
                     }));
@@ -49,6 +49,10 @@ namespace Termine.Promises.Base.Test
             var falseLockPromise = new FalseLockPromise();
 
             var joinedPromise = CreateLockPromise.Join(createLockPromise, falseLockPromise);
+            
+            Assert.IsTrue(joinedPromise.AuthChallengersCount == 2, "AuthChallengersCount was expected to be [2] but was [{0}]", joinedPromise.AuthChallengersCount);
+            Assert.IsTrue(joinedPromise.ValidatorsCount == 2, "ValidatorsCount was expected to be [2] but was [{0}]", joinedPromise.ValidatorsCount);
+            Assert.IsTrue(joinedPromise.ExecutorsCount == 2, "ExecutorsCount was expected to be [2] but was [{0}]", joinedPromise.ExecutorsCount);
             
             joinedPromise.RunAsync();
 
