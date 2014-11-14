@@ -3,7 +3,7 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
-    public class FalseLockPromise : Promise<PromiseWorkload, PromiseRequest, PromiseResponse>
+    public class FalseLockPromise : Promise<PromiseRequest, PromiseResponse>
     {
         public int AuthChallengerChecksum { get; set; }
         public int ValidatorChecksum { get; set; }
@@ -11,23 +11,23 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public FalseLockPromise()
         {
-            this.WithAuthChallenger(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("4", AuthChallenger));
-            this.WithValidator(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("5", Validator));
-            this.WithExecutor(new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("6", Executor));
+            this.WithAuthChallenger(new PromiseActionInstance<PromiseRequest, PromiseResponse>("4", AuthChallenger));
+            this.WithValidator(new PromiseActionInstance<PromiseRequest, PromiseResponse>("5", Validator));
+            this.WithExecutor(new PromiseActionInstance<PromiseRequest, PromiseResponse>("6", Executor));
         }
 
-        private void Executor(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
+        private void Executor(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
+        private void Validator(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
-            promiseWorkload.TerminateProcessing = true;
+            workload.TerminateProcessing = true;
         }
 
-        private void AuthChallenger(IHavePromiseMethods promise, PromiseWorkload promiseWorkload)
+        private void AuthChallenger(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
         {
             AuthChallengerChecksum = 1;
         }

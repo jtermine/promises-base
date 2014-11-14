@@ -7,41 +7,39 @@ namespace Termine.Promises
     /// <summary>
     /// The basic promise model
     /// </summary>
-    /// <typeparam name="TT">a promise workload</typeparam>
     /// <typeparam name="TA">a promise request</typeparam>
     /// <typeparam name="TW">a promise response</typeparam>
-    public class Promise<TT, TA, TW> : IAmAPromise<TT, TA, TW>,
-        IHavePromiseMethods
-        where TT:IAmAPromiseWorkload<TA, TW>, new() 
+    public class Promise<TA, TW> : IAmAPromise<TA, TW>,
+        IPromise
         where TA : IAmAPromiseRequest, new() 
         where TW : IAmAPromiseResponse, new()
     {
         public class PromiseContext
         {
-            public readonly Dictionary<string, Action<IHavePromiseMethods, TT>> AuthChallengers = new Dictionary<string, Action<IHavePromiseMethods, TT>>();
-            public readonly Dictionary<string, Action<IHavePromiseMethods, TT>> Validators = new Dictionary<string, Action<IHavePromiseMethods, TT>>();
-            public readonly Dictionary<string, Action<IHavePromiseMethods, TT>> Executors = new Dictionary<string, Action<IHavePromiseMethods, TT>>();
+            public readonly Dictionary<string, Action<IPromise, PromiseWorkload<TA, TW>>> AuthChallengers = new Dictionary<string, Action<IPromise, PromiseWorkload<TA, TW>>>();
+            public readonly Dictionary<string, Action<IPromise, PromiseWorkload<TA, TW>>> Validators = new Dictionary<string, Action<IPromise, PromiseWorkload<TA, TW>>>();
+            public readonly Dictionary<string, Action<IPromise, PromiseWorkload<TA, TW>>> Executors = new Dictionary<string, Action<IPromise, PromiseWorkload<TA, TW>>>();
         }
 
         private readonly PromiseContext _context = new PromiseContext();
-        private TT _workload = new TT();
+        private readonly PromiseWorkload<TA, TW> _workload = new PromiseWorkload<TA, TW>();
 
         public PromiseContext Context { get { return _context; } }
 
-        public TT Workload { get { return _workload; } }
+        public PromiseWorkload<TA, TW> Workload { get { return _workload; } }
 
         public int AuthChallengersCount { get { return Context.AuthChallengers.Count; } }
         public int ValidatorsCount { get { return Context.Validators.Count; } }
         public int ExecutorsCount { get { return Context.Executors.Count; } }
 
-        public IAmAPromise<TT, TA, TW> WithWorkload(TT workload)
+        public IAmAPromise<TA, TW> WithRequest(TA request)
         {
-            _workload = workload;
+            _workload.Request = request;
             return this;
         }
         
-        public static TE Join<TE>(TE basePromise, params Promise<TT, TA, TW>[] promises)
-            where TE : Promise<TT, TA, TW>
+        public static TE Join<TE>(TE basePromise, params Promise<TA, TW>[] promises)
+            where TE : Promise<TA, TW>
         {
             if (promises.Length == 0) throw new ArgumentNullException("promises");
 
@@ -49,19 +47,19 @@ namespace Termine.Promises
             {
                 foreach (var authChallenger in thisPromise.Context.AuthChallengers)
                 {
-                    basePromise.WithAuthChallenger(new PromiseActionInstance<TT, TA, TW>(authChallenger.Key,
+                    basePromise.WithAuthChallenger(new PromiseActionInstance<TA, TW>(authChallenger.Key,
                         authChallenger.Value));
                 }
 
                 foreach (var validator in thisPromise.Context.Validators)
                 {
-                    basePromise.WithValidator(new PromiseActionInstance<TT, TA, TW>(validator.Key,
+                    basePromise.WithValidator(new PromiseActionInstance<TA, TW>(validator.Key,
                         validator.Value));
                 }
 
                 foreach (var executor in thisPromise.Context.Executors)
                 {
-                    basePromise.WithExecutor(new PromiseActionInstance<TT, TA, TW>(executor.Key,
+                    basePromise.WithExecutor(new PromiseActionInstance<TA, TW>(executor.Key,
                         executor.Value));
                 }
             }
@@ -69,7 +67,7 @@ namespace Termine.Promises
             return basePromise;
         }
 
-        public IAmAPromise<TT, TA, TW> RunAsync()
+        public IAmAPromise<TA, TW> RunAsync()
         {
             foreach (var challenger in Context.AuthChallengers)
             {

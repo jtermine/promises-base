@@ -1,6 +1,6 @@
 ﻿namespace Termine.Promises.Interfaces
 {
-    public interface IHavePromiseMethods
+    public interface IPromise
     {
         void Trace();
         void Debug();

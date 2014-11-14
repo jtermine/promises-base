@@ -6,13 +6,12 @@ namespace Termine.Promises.ClaimsBasedAuth.Base
 {
     public static class Extensions
     {
-        public static TX WithClaimsBasedAuth<TX, TT, TA, TW>(this TX promise, IAmAPromiseAction<TT, TA, TW> authChallenger)
-            where TX : IAmAPromise<TT, TA, TW>
-            where TT : IAmAPromiseWorkload<TA, TW>, new()
+        public static TX WithClaimsBasedAuth<TX, TA, TW>(this TX promise, IAmAPromiseAction<TA, TW> authChallenger)
+            where TX : IAmAPromise<TA, TW>
             where TA : IAmAPromiseRequest, ISupportClaims, new()
             where TW : IAmAPromiseResponse, new()
         {
-            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == default(Action<IHavePromiseMethods, TT>)) return promise;
+            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == default(Action<IPromise, IAmAPromise<TA, TW>>)) return promise;
 
             if (promise.Context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return promise;
             promise.Context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
@@ -20,12 +19,11 @@ namespace Termine.Promises.ClaimsBasedAuth.Base
             return promise;
         }
 
-        public static IAmAPromise<TT, TA, TW> WithDefaultClaimsBasedAuthChallenger<TT, TA, TW>(this IAmAPromise<TT, TA, TW> promise)
-            where TT : IAmAPromiseWorkload<TA, TW>, new()
+        public static IAmAPromise<TA,TW> WithDefaultClaimsBasedAuthChallenger<TA, TW>(this IAmAPromise<TA, TW> promise)
             where TA : IAmAPromiseRequest, ISupportClaims, new()
             where TW : IAmAPromiseResponse, new()
         {
-            var n = new PromiseActionInstance<TT, TA, TW>("8ce3a9ff472740dc87895c15694c9ff4", (methods, tt) =>
+            var n = new PromiseActionInstance<TA, TW>("8ce3a9ff472740dc87895c15694c9ff4", (methods, tt) =>
             {
                 var claim = tt.Request.Claim;
                 if (!string.IsNullOrEmpty(claim)) return;

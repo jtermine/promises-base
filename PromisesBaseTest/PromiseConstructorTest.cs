@@ -12,8 +12,8 @@ namespace Termine.Promises.Base.Test
         public void TestConstructor()
         {
             var promise =
-                new Promise<PromiseWorkload, PromiseRequest, PromiseResponse>().WithValidator(
-                    new PromiseActionInstance<PromiseWorkload, PromiseRequest, PromiseResponse>("1", (p, workload) =>
+                new Promise<PromiseRequest, PromiseResponse>().WithValidator(
+                    new PromiseActionInstance<PromiseRequest, PromiseResponse>("1", (p, workload) =>
                     {
                         workload.Request.Claim = "1";
                     }));
@@ -66,9 +66,8 @@ namespace Termine.Promises.Base.Test
         public void TestClaimsBasedAuthBase()
         {
             var testClaimsPromise = new ClaimsBasedPromise();
-            var workload = new ClaimsBaseWorkload {Request = {Claim = "123123"}};
-
-            testClaimsPromise.WithWorkload(workload);
+            
+            testClaimsPromise.WithRequest(new ClaimsBaseRequest {Claim = "123123"});
             
             testClaimsPromise.RunAsync();
             

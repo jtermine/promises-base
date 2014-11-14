@@ -3,12 +3,12 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
-    public class PromiseActionInstance<TT, TA, TW> : IAmAPromiseAction<TT, TA, TW> where TT : IAmAPromiseWorkload<TA, TW>, new() where TA : IAmAPromiseRequest, new() where TW : IAmAPromiseResponse, new()
+    public class PromiseActionInstance<TA, TW> : IAmAPromiseAction<TA, TW> where TA : IAmAPromiseRequest, new() where TW : IAmAPromiseResponse, new()
     {
         public string ActionId { get; private set; }
-        public Action<IHavePromiseMethods, TT> PromiseAction { get; private set; }
+        public Action<IPromise, PromiseWorkload<TA, TW>> PromiseAction { get; private set; }
 
-        public PromiseActionInstance(string actionId, Action<IHavePromiseMethods, TT> promiseAction)
+        public PromiseActionInstance(string actionId, Action<IPromise, PromiseWorkload<TA,TW>> promiseAction)
         {
             ActionId = actionId;
             PromiseAction = promiseAction;

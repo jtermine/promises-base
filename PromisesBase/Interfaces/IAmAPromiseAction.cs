@@ -2,12 +2,11 @@
 
 namespace Termine.Promises.Interfaces
 {
-    public interface IAmAPromiseAction<in TT, TA, TW>
-        where TT : IAmAPromiseWorkload<TA, TW>, new()
+    public interface IAmAPromiseAction<TA, TW>
         where TA : IAmAPromiseRequest, new()
         where TW : IAmAPromiseResponse, new()
     {
         string ActionId { get; }
-        Action<IHavePromiseMethods, TT> PromiseAction { get; }
+        Action<IPromise, PromiseWorkload<TA, TW>> PromiseAction { get; }
     }
 }

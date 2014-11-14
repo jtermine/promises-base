@@ -1,13 +1,12 @@
 ﻿namespace Termine.Promises.Interfaces
 {
-    public interface IAmAPromise <TT, TA, TW>
-        where TT : IAmAPromiseWorkload<TA, TW>, new()
+    public interface IAmAPromise <TA, TW>
         where TA : IAmAPromiseRequest, new()
         where TW : IAmAPromiseResponse, new()
     {
-        Promise<TT, TA, TW>.PromiseContext Context { get; }
+        Promise<TA, TW>.PromiseContext Context { get; }
 
-        TT Workload { get; }
+        PromiseWorkload<TA, TW> Workload { get; }
 
         int AuthChallengersCount { get; }
         int ValidatorsCount { get; }
