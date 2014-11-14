@@ -1,8 +1,8 @@
 ﻿using System;
-using Termine.Promises.ClaimsBasedAuth.Interfaces;
+using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
 using Termine.Promises.Interfaces;
 
-namespace Termine.Promises.ClaimsBasedAuth
+namespace Termine.Promises.ClaimsBasedAuth.Base
 {
     public static class Extensions
     {

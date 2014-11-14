@@ -7,8 +7,8 @@
     <ProjectGuid>{C10182E3-068C-4BD5-9847-C2BD19059A91}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Termine.Promises.ClaimsBasedAuth</RootNamespace>
-    <AssemblyName>Termine.Promises.ClaimsBasedAuth</AssemblyName>
+    <RootNamespace>Termine.Promises.ClaimsBasedAuth.Base</RootNamespace>
+    <AssemblyName>Termine.Promises.ClaimsBasedAuth.Base</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

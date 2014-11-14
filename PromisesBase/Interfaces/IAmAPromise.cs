@@ -6,6 +6,9 @@
         where TW : IAmAPromiseResponse, new()
     {
         Promise<TT, TA, TW>.PromiseContext Context { get; }
+
+        TT Workload { get; }
+
         int AuthChallengersCount { get; }
         int ValidatorsCount { get; }
         int ExecutorsCount { get; }

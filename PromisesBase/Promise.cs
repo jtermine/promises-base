@@ -28,6 +28,8 @@ namespace Termine.Promises
 
         public PromiseContext Context { get { return _context; } }
 
+        public TT Workload { get { return _workload; } }
+
         public int AuthChallengersCount { get { return Context.AuthChallengers.Count; } }
         public int ValidatorsCount { get { return Context.Validators.Count; } }
         public int ExecutorsCount { get { return Context.Executors.Count; } }
@@ -92,42 +94,35 @@ namespace Termine.Promises
 
         public void Trace()
         {
-            throw new NotImplementedException();
         }
 
         public void Debug()
         {
-            throw new NotImplementedException();
         }
 
         public void Info()
         {
-            throw new NotImplementedException();
         }
 
         public void Warn()
         {
-            throw new NotImplementedException();
         }
 
         public void Error()
         {
-            throw new NotImplementedException();
         }
 
         public void Fatal()
         {
-            throw new NotImplementedException();
         }
 
         public void Abort()
         {
-            throw new NotImplementedException();
         }
 
         public void AbortOnAccessDenied()
         {
-            throw new NotImplementedException();
+            _workload.TerminateProcessing = true;
         }
     }
 }

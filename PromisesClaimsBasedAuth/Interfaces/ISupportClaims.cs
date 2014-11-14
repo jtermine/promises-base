@@ -1,4 +1,4 @@
-﻿namespace Termine.Promises.ClaimsBasedAuth.Interfaces
+﻿namespace Termine.Promises.ClaimsBasedAuth.Base.Interfaces
 {
     public interface ISupportClaims
     {

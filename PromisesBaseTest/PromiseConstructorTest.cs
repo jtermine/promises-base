@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
 using Termine.Promises.Base.Test.TestObjects;
 using Termine.Promises.Base.Test.TestPromises;
 
@@ -59,6 +60,19 @@ namespace Termine.Promises.Base.Test
             Assert.IsTrue(joinedPromise.AuthChallengerChecksum == 1, "AuthChallengerChecksum equaled [{0}] when it should have been [1].", joinedPromise.AuthChallengerChecksum);
             Assert.IsTrue(joinedPromise.ValidatorChecksum == 2, "ValidatorCheckSum equaled [{0}] when it should have been [2].", joinedPromise.ValidatorChecksum);
             Assert.IsTrue(joinedPromise.ExecutorChecksum == 0, "ExecutorChecksum equaled [{0}] when it should have been [0].", joinedPromise.ExecutorChecksum);
+        }
+
+        [TestMethod]
+        public void TestClaimsBasedAuthBase()
+        {
+            var testClaimsPromise = new ClaimsBasedPromise();
+            var workload = new ClaimsBaseWorkload {Request = {Claim = "123123"}};
+
+            testClaimsPromise.WithWorkload(workload);
+            
+            testClaimsPromise.RunAsync();
+            
+            Assert.IsTrue(!testClaimsPromise.Workload.TerminateProcessing);
         }
     }
 }
