@@ -7,7 +7,8 @@ namespace Termine.Promises.Base.Test.TestPromises
     {
         public ClaimsBasedPromise()
         {
-            this.WithDefaultClaimsBasedAuthChallenger();
+            var config = new ClaimsBasedConfig();
+            this.WithDefaultClaimsBasedAuthChallenger(config);
         }
     }
 }

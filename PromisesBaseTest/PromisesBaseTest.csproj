@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedConfig.cs" />
     <Compile Include="ClaimsBasePromiseObjects\ClaimsBaseRequest.cs" />
     <Compile Include="ClaimsBasePromiseObjects\ClaimsBaseResponse.cs" />
     <Compile Include="ClaimsBasePromiseObjects\ClaimsBaseWorkload.cs" />
