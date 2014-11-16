@@ -39,11 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generics\GenericEventMessage.cs" />
     <Compile Include="Interfaces\IAmAPromise.cs" />
     <Compile Include="Interfaces\IAmAPromiseAction.cs" />
     <Compile Include="Interfaces\IAmAPromiseRequest.cs" />
     <Compile Include="Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Interfaces\IAmAPromiseWorkload.cs" />
+    <Compile Include="Interfaces\IHandleEventMessage.cs" />
     <Compile Include="Promise.cs" />
     <Compile Include="PromiseActionInstance.cs" />
     <Compile Include="PromiseExtension.cs" />

@@ -1,4 +1,5 @@
-﻿using Termine.Promises.Interfaces;
+﻿using System;
+using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
@@ -38,6 +39,102 @@ namespace Termine.Promises
             promise.Context.Executors.Add(executor.ActionId, executor.PromiseAction);
 
             return promise;
+        }
+
+        public static TX WithTraceHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.TraceHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.TraceHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithDebugHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.DebugHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.DebugHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithInfoHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.InfoHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.InfoHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithWarnHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.WarnHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.WarnHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithErrorHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.ErrorHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.ErrorHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithFatalHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.FatalHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.FatalHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithAbortHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.AbortHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.AbortHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static TX WithAbortOnAccessDeniedHandler<TX, TW>(this TX promise,
+            Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.AbortOnAccessDeniedHandlers.Contains(eventHandler)) return promise;
+
+            promise.Context.AbortOnAccessDeniedHandlers.Add(eventHandler);
+            return promise;
+        }
+
+        public static void HandleInstrumentationError<TX, TW>(this TX promise, Exception ex)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+
         }
     }
 }
