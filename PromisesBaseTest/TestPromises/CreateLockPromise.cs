@@ -1,9 +1,8 @@
-﻿using Termine.Promises.Base.Test.TestObjects;
-using Termine.Promises.Interfaces;
+﻿using Termine.Promises.Base.Test.CreateLockPromiseObjects;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
-    public class CreateLockPromise : Promise<PromiseRequest, PromiseResponse>
+    public class CreateLockPromise : Promise<CreateLockWorkload>
     {
         public int AuthChallengerChecksum { get; set; }
         public int ValidatorChecksum { get; set; }
@@ -11,22 +10,22 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public CreateLockPromise()
         {
-            this.WithAuthChallenger(new PromiseActionInstance<PromiseRequest, PromiseResponse>("1", AuthChallenger));
-            this.WithValidator(new PromiseActionInstance<PromiseRequest, PromiseResponse>("2", Validator));
-            this.WithExecutor(new PromiseActionInstance<PromiseRequest, PromiseResponse>("3", Executor));
+            this.WithAuthChallenger(new PromiseActionInstance<CreateLockWorkload>("1", AuthChallenger));
+            this.WithValidator(new PromiseActionInstance<CreateLockWorkload>("2", Validator));
+            this.WithExecutor(new PromiseActionInstance<CreateLockWorkload>("3", Executor));
         }
 
-        private void Executor(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
+        private void Executor(CreateLockWorkload lockWorkload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
+        private void Validator(CreateLockWorkload lockWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
         }
 
-        private void AuthChallenger(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
+        private void AuthChallenger(CreateLockWorkload lockWorkload)
         {
             AuthChallengerChecksum = 1;
         }

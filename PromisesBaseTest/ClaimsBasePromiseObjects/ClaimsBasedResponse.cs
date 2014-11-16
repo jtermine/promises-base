@@ -2,7 +2,7 @@
 
 namespace Termine.Promises.Base.Test.ClaimsBasePromiseObjects
 {
-    public class ClaimsBaseResponse: IAmAPromiseResponse
+    public class ClaimsBasedResponse: IAmAPromiseResponse
     {
     }
 }

@@ -1,15 +1,23 @@
 ﻿namespace Termine.Promises.Interfaces
 {
-    public interface IAmAPromise <TA, TW>
-        where TA : IAmAPromiseRequest, new()
-        where TW : IAmAPromiseResponse, new()
+    public interface IAmAPromise <TW>
+        where TW : class, IAmAPromiseWorkload, new()
     {
-        Promise<TA, TW>.PromiseContext Context { get; }
+        Promise<TW>.PromiseContext Context { get; }
 
-        PromiseWorkload<TA, TW> Workload { get; }
+        TW Workload { get; }
 
         int AuthChallengersCount { get; }
         int ValidatorsCount { get; }
         int ExecutorsCount { get; }
+
+        void Trace();
+        void Debug();
+        void Info();
+        void Warn();
+        void Error();
+        void Fatal();
+        void Abort();
+        void AbortOnAccessDenied();
     }
 }

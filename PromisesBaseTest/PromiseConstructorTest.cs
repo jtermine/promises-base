@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
-using Termine.Promises.Base.Test.TestObjects;
 using Termine.Promises.Base.Test.TestPromises;
 
 namespace Termine.Promises.Base.Test
@@ -12,10 +11,10 @@ namespace Termine.Promises.Base.Test
         public void TestConstructor()
         {
             var promise =
-                new Promise<PromiseRequest, PromiseResponse>().WithValidator(
-                    new PromiseActionInstance<PromiseRequest, PromiseResponse>("1", (p, workload) =>
+                new Promise<ClaimsBasedWorkload>().WithValidator(new PromiseActionInstance<ClaimsBasedWorkload>("1",
+                    workload =>
                     {
-                        workload.Request.Claim = "1";
+                        workload.TerminateProcessing = true;
                     }));
 
             Assert.IsTrue(promise.ValidatorsCount == 1);
@@ -44,34 +43,15 @@ namespace Termine.Promises.Base.Test
         }
 
         [TestMethod]
-        public void TestJoinPromises()
-        {
-            var createLockPromise = new CreateLockPromise();
-            var falseLockPromise = new FalseLockPromise();
-
-            var joinedPromise = CreateLockPromise.Join(createLockPromise, falseLockPromise);
-            
-            Assert.IsTrue(joinedPromise.AuthChallengersCount == 2, "AuthChallengersCount was expected to be [2] but was [{0}]", joinedPromise.AuthChallengersCount);
-            Assert.IsTrue(joinedPromise.ValidatorsCount == 2, "ValidatorsCount was expected to be [2] but was [{0}]", joinedPromise.ValidatorsCount);
-            Assert.IsTrue(joinedPromise.ExecutorsCount == 2, "ExecutorsCount was expected to be [2] but was [{0}]", joinedPromise.ExecutorsCount);
-            
-            joinedPromise.RunAsync();
-
-            Assert.IsTrue(joinedPromise.AuthChallengerChecksum == 1, "AuthChallengerChecksum equaled [{0}] when it should have been [1].", joinedPromise.AuthChallengerChecksum);
-            Assert.IsTrue(joinedPromise.ValidatorChecksum == 2, "ValidatorCheckSum equaled [{0}] when it should have been [2].", joinedPromise.ValidatorChecksum);
-            Assert.IsTrue(joinedPromise.ExecutorChecksum == 0, "ExecutorChecksum equaled [{0}] when it should have been [0].", joinedPromise.ExecutorChecksum);
-        }
-
-        [TestMethod]
         public void TestClaimsBasedAuthBase()
         {
             var testClaimsPromise = new ClaimsBasedPromise();
-            
-            testClaimsPromise.WithRequest(new ClaimsBaseRequest {Claim = "123123"});
+
+            testClaimsPromise.Workload.Request = new ClaimsBasedRequest {Claim = "1234"};
             
             testClaimsPromise.RunAsync();
             
-            Assert.IsTrue(!testClaimsPromise.Workload.TerminateProcessing);
+            Assert.IsTrue(testClaimsPromise.Workload.TerminateProcessing);
         }
     }
 }

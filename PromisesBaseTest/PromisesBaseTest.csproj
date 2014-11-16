@@ -50,14 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedConfig.cs" />
-    <Compile Include="ClaimsBasePromiseObjects\ClaimsBaseRequest.cs" />
-    <Compile Include="ClaimsBasePromiseObjects\ClaimsBaseResponse.cs" />
-    <Compile Include="ClaimsBasePromiseObjects\ClaimsBaseWorkload.cs" />
+    <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedRequest.cs" />
+    <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedResponse.cs" />
+    <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedWorkload.cs" />
+    <Compile Include="CreateLockPromiseObjects\CreateLockWorkload.cs" />
+    <Compile Include="FalseLockPromiseObjects\FalseLockWorkload.cs" />
     <Compile Include="PromiseConstructorTest.cs" />
-    <Compile Include="TestObjects\PromiseRequest.cs" />
-    <Compile Include="TestObjects\PromiseResponse.cs" />
-    <Compile Include="TestObjects\PromiseWorkload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPromises\ClaimsBasedPromise.cs" />
     <Compile Include="TestPromises\FalseLockPromise.cs" />

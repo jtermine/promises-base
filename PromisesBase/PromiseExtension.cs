@@ -1,16 +1,14 @@
-﻿using System;
-using Termine.Promises.Interfaces;
+﻿using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
     public static class PromiseExtension
     {
-        public static TX WithValidator<TX, TA, TW>(this TX promise, IAmAPromiseAction<TA, TW> validator)
-            where TX : IAmAPromise<TA, TW>
-            where TA : IAmAPromiseRequest, new()
-            where TW : IAmAPromiseResponse, new()
+        public static TX WithValidator<TX, TW>(this TX promise, IAmAPromiseAction<TW> validator)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
         {
-            if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == default(Action<IPromise, PromiseWorkload<TA, TW>>)) return promise;
+            if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == null) return promise;
 
             if (promise.Context.Validators.ContainsKey(validator.ActionId)) return promise;
             promise.Context.Validators.Add(validator.ActionId, validator.PromiseAction);
@@ -18,12 +16,11 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithAuthChallenger<TX, TA, TW>(this TX promise, IAmAPromiseAction<TA, TW> authChallenger)
-            where TX : IAmAPromise<TA, TW>
-            where TA : IAmAPromiseRequest, new()
-            where TW : IAmAPromiseResponse, new()
+        public static TX WithAuthChallenger<TX, TW>(this TX promise, IAmAPromiseAction<TW> authChallenger)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
         {
-            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == default(Action<IPromise, PromiseWorkload<TA, TW>>)) return promise;
+            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == null) return promise;
 
             if (promise.Context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return promise;
             promise.Context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
@@ -31,12 +28,11 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithExecutor<TX, TA, TW>(this TX promise, IAmAPromiseAction<TA, TW> executor)
-            where TX : IAmAPromise<TA, TW>
-            where TA : IAmAPromiseRequest, new()
-            where TW : IAmAPromiseResponse, new()
+        public static TX WithExecutor<TX, TW>(this TX promise, IAmAPromiseAction<TW> executor)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
         {
-            if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == default(Action<IPromise, PromiseWorkload<TA, TW>>)) return promise;
+            if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == null) return promise;
 
             if (promise.Context.Executors.ContainsKey(executor.ActionId)) return promise;
             promise.Context.Executors.Add(executor.ActionId, executor.PromiseAction);

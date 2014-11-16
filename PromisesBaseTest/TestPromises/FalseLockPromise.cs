@@ -1,9 +1,8 @@
-﻿using Termine.Promises.Base.Test.TestObjects;
-using Termine.Promises.Interfaces;
+﻿using Termine.Promises.Base.Test.FalseLockPromiseObjects;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
-    public class FalseLockPromise : Promise<PromiseRequest, PromiseResponse>
+    public class FalseLockPromise : Promise<FalseLockWorkload>
     {
         public int AuthChallengerChecksum { get; set; }
         public int ValidatorChecksum { get; set; }
@@ -11,23 +10,23 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public FalseLockPromise()
         {
-            this.WithAuthChallenger(new PromiseActionInstance<PromiseRequest, PromiseResponse>("4", AuthChallenger));
-            this.WithValidator(new PromiseActionInstance<PromiseRequest, PromiseResponse>("5", Validator));
-            this.WithExecutor(new PromiseActionInstance<PromiseRequest, PromiseResponse>("6", Executor));
+            this.WithAuthChallenger(new PromiseActionInstance<FalseLockWorkload>("4", AuthChallenger));
+            this.WithValidator(new PromiseActionInstance<FalseLockWorkload>("5", Validator));
+            this.WithExecutor(new PromiseActionInstance<FalseLockWorkload>("6", Executor));
         }
 
-        private void Executor(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
+        private void Executor(FalseLockWorkload lockWorkload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
+        private void Validator(FalseLockWorkload lockWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
-            workload.TerminateProcessing = true;
+            lockWorkload.TerminateProcessing = true;
         }
 
-        private void AuthChallenger(IPromise promise, PromiseWorkload<PromiseRequest, PromiseResponse> workload)
+        private void AuthChallenger(FalseLockWorkload lockWorkload)
         {
             AuthChallengerChecksum = 1;
         }
