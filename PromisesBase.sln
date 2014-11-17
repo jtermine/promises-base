@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBase", "PromisesBase\PromisesBase.csproj", "{EB7D739E-E8EF-4834-AD2E-06FE73CB3D20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBaseTest", "PromisesBaseTest\PromisesBaseTest.csproj", "{9D81F10B-C1CD-49E9-980B-F5C4C0CF3BC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesFluentValidators", "PromisesFluentValidators\PromisesFluentValidators.csproj", "{57881067-302D-4EDE-8668-3A61A23BCC40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesFluentValidation", "PromisesFluentValidators\PromisesFluentValidation.csproj", "{57881067-302D-4EDE-8668-3A61A23BCC40}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesClaimsBasedAuth", "PromisesClaimsBasedAuth\PromisesClaimsBasedAuth.csproj", "{C10182E3-068C-4BD5-9847-C2BD19059A91}"
 EndProject

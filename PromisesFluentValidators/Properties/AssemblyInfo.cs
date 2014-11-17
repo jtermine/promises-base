@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PromisesFluentValidators")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Termine.Promises.FluentValidators.Base")]
+[assembly: AssemblyDescription("A base library to implement fluent validation on a promise.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PromisesFluentValidators")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCompany("Joseph Termine")]
+[assembly: AssemblyProduct("Termine.Promises.FluentValidation")]
+[assembly: AssemblyCopyright("Copyright ©  2014 Joseph Termine")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

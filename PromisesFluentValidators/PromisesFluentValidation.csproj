@@ -7,8 +7,8 @@
     <ProjectGuid>{57881067-302D-4EDE-8668-3A61A23BCC40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PromisesFluentValidators</RootNamespace>
-    <AssemblyName>PromisesFluentValidators</AssemblyName>
+    <RootNamespace>Termine.Promises.FluentValidation.Base</RootNamespace>
+    <AssemblyName>Termine.Promises.FluentValidation.Base</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,7 +48,13 @@
       <Name>PromisesBase</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PromisesFluentValidation.nuspec" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\nuget\nuget pack $(ProjectDir)PromisesFluentValidation.csproj -OutputDirectory $(SolutionDir)nuget-tree</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
