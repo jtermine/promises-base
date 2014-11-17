@@ -3,7 +3,7 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
-    public static class PromiseExtension
+    public static class Extensions
     {
         public static TX WithValidator<TX, TW>(this TX promise, IAmAPromiseAction<TW> validator)
             where TX : IAmAPromise<TW>
@@ -41,92 +41,92 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithTraceHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithTraceHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.TraceHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.TraceHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.TraceHandlers.Add(eventHandler);
+            promise.Context.TraceHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithDebugHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithDebugHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.DebugHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.DebugHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.DebugHandlers.Add(eventHandler);
+            promise.Context.DebugHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithInfoHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithInfoHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.InfoHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.InfoHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.InfoHandlers.Add(eventHandler);
+            promise.Context.InfoHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithWarnHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithWarnHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.WarnHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.WarnHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.WarnHandlers.Add(eventHandler);
+            promise.Context.WarnHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithErrorHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithErrorHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.ErrorHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.ErrorHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.ErrorHandlers.Add(eventHandler);
+            promise.Context.ErrorHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithFatalHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithFatalHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.FatalHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.FatalHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.FatalHandlers.Add(eventHandler);
+            promise.Context.FatalHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithAbortHandler<TX, TW>(this TX promise, Action<TW, IHandleEventMessage> eventHandler)
+        public static TX WithAbortHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.AbortHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.AbortHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.AbortHandlers.Add(eventHandler);
+            promise.Context.AbortHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 
-        public static TX WithAbortOnAccessDeniedHandler<TX, TW>(this TX promise,
+        public static TX WithAbortOnAccessDeniedHandler<TX, TW>(this TX promise, string eventHandlerKey,
             Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
-            if (promise.Context.AbortOnAccessDeniedHandlers.Contains(eventHandler)) return promise;
+            if (promise.Context.AbortOnAccessDeniedHandlers.ContainsKey(eventHandlerKey)) return promise;
 
-            promise.Context.AbortOnAccessDeniedHandlers.Add(eventHandler);
+            promise.Context.AbortOnAccessDeniedHandlers.Add(eventHandlerKey, eventHandler);
             return promise;
         }
 

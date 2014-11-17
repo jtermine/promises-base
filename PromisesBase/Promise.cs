@@ -18,25 +18,25 @@ namespace Termine.Promises
             public readonly Dictionary<string, Action<TW>> Validators = new Dictionary<string, Action<TW>>();
             public readonly Dictionary<string, Action<TW>> Executors = new Dictionary<string, Action<TW>>();
 
-            public List<Action<TW, IHandleEventMessage>> TraceHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> DebugHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> InfoHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> WarnHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> ErrorHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> FatalHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> AbortHandlers { get; private set; }
-            public List<Action<TW, IHandleEventMessage>> AbortOnAccessDeniedHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> TraceHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> DebugHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> InfoHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> WarnHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> ErrorHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> FatalHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> AbortHandlers { get; private set; }
+            public Dictionary<string, Action<TW, IHandleEventMessage>> AbortOnAccessDeniedHandlers { get; private set; }
 
             public PromiseContext()
             {
-                TraceHandlers = new List<Action<TW, IHandleEventMessage>>();
-                DebugHandlers = new List<Action<TW, IHandleEventMessage>>();
-                InfoHandlers = new List<Action<TW, IHandleEventMessage>>();
-                WarnHandlers = new List<Action<TW, IHandleEventMessage>>();
-                ErrorHandlers = new List<Action<TW, IHandleEventMessage>>();
-                FatalHandlers = new List<Action<TW, IHandleEventMessage>>();
-                AbortHandlers = new List<Action<TW, IHandleEventMessage>>();
-                AbortOnAccessDeniedHandlers = new List<Action<TW, IHandleEventMessage>>();
+                TraceHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                DebugHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                InfoHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                WarnHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                ErrorHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                FatalHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                AbortHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                AbortOnAccessDeniedHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
             }
         }
 
@@ -106,7 +106,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -121,7 +121,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -136,7 +136,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -151,7 +151,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +166,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -181,7 +181,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -196,7 +196,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
@@ -212,13 +212,53 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Invoke(Workload, message);
+                    handler.Value.Invoke(Workload, message);
                 }
                 catch (Exception ex)
                 {
                     this.HandleInstrumentationError<Promise<TW>, TW>(ex);
                 }
             }
+        }
+
+        public void Trace(Exception ex)
+        {
+            Trace(new GenericEventMessage(ex));
+        }
+
+        public void Debug(Exception ex)
+        {
+            Debug(new GenericEventMessage(ex));
+        }
+
+        public void Info(Exception ex)
+        {
+            Info(new GenericEventMessage(ex));
+        }
+
+        public void Warn(Exception ex)
+        {
+            Warn(new GenericEventMessage(ex));
+        }
+
+        public void Error(Exception ex)
+        {
+            Error(new GenericEventMessage(ex));
+        }
+
+        public void Fatal(Exception ex)
+        {
+            Fatal(new GenericEventMessage(ex));
+        }
+
+        public void Abort(Exception ex)
+        {
+            Abort(new GenericEventMessage(ex));
+        }
+
+        public void AbortOnAccessDenied(Exception ex)
+        {
+            AbortOnAccessDenied(new GenericEventMessage(ex));
         }
     }
 }

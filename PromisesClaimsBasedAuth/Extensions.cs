@@ -2,26 +2,16 @@
 using System.IdentityModel.Tokens;
 using System.ServiceModel.Security.Tokens;
 using System.Text;
+using Termine.Promises.ClaimsBasedAuth.Base;
 using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
 using Termine.Promises.Interfaces;
 
-namespace Termine.Promises.ClaimsBasedAuth.Base
+// ReSharper disable once CheckNamespace
+namespace Termine.Promises
 {
     public static class Extensions
     {
-        public static TX WithClaimsBasedAuth<TX, TW>(this TX promise, IAmAPromiseAction<TW> authChallenger)
-            where TX : IAmAPromise<TW>
-            where TW : class, IAmAPromiseWorkload, new()
-        {
-            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == null) return promise;
-
-            if (promise.Context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return promise;
-            promise.Context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
-
-            return promise;
-        }
-
-        public static TX WithDefaultClaimsBasedAuthChallenger<TX, TW>(this TX promise)
+        public static TX WithDefaultClaimsBasedAuth<TX, TW>(this TX promise)
             where TX : IAmAPromise<TW>
             where TW : class, ISupportClaims, new()
         {
@@ -43,9 +33,7 @@ namespace Termine.Promises.ClaimsBasedAuth.Base
 
                     if (string.IsNullOrEmpty(jwtToken))
                     {
-                        promise.Error();
-                        promise.AbortOnAccessDenied();
-
+                        promise.AbortOnAccessDenied(ClaimsBasedMessages.JwtTokenIsNull);
                         return;
                     }
 
@@ -54,7 +42,7 @@ namespace Termine.Promises.ClaimsBasedAuth.Base
                 }
                 catch (Exception ex)
                 {
-                    promise.AbortOnAccessDenied();
+                    promise.AbortOnAccessDenied(ex);
                 }
             });
 

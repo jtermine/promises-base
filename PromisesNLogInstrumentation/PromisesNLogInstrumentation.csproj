@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EB7D739E-E8EF-4834-AD2E-06FE73CB3D20}</ProjectGuid>
+    <ProjectGuid>{224354A5-3B29-42E3-9A29-F6FF35FBBD9E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Termine.Promises</RootNamespace>
-    <AssemblyName>Termine.Promises.Base</AssemblyName>
+    <RootNamespace>Termine.Promises.NLogInstrumentation.Base</RootNamespace>
+    <AssemblyName>Termine.Promises.NLogInstrumentation.Base</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -37,26 +40,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Termine.Promises.Base">
+      <HintPath>..\packages\Termine.Promises.Base.0.0.0.14\lib\net45\Termine.Promises.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generics\GenericEventMessage.cs" />
-    <Compile Include="Interfaces\IAmAPromise.cs" />
-    <Compile Include="Interfaces\IAmAPromiseAction.cs" />
-    <Compile Include="Interfaces\IAmAPromiseRequest.cs" />
-    <Compile Include="Interfaces\IAmAPromiseResponse.cs" />
-    <Compile Include="Interfaces\IAmAPromiseWorkload.cs" />
-    <Compile Include="Interfaces\IHandleEventMessage.cs" />
-    <Compile Include="Promise.cs" />
-    <Compile Include="PromiseActionInstance.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PromisesBase.nuspec" />
+    <None Include="packages.config" />
+    <None Include="PromisesNLogInstrumentation.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>C:\nuget\nuget pack $(ProjectDir)PromisesBase.csproj -OutputDirectory C:\nuget\packages</PostBuildEvent>
+    <PostBuildEvent>C:\nuget\nuget pack $(ProjectDir)PromisesNLogInstrumentation.csproj -OutputDirectory C:\nuget\packages</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,4 +1,6 @@
-﻿namespace Termine.Promises.Interfaces
+﻿using System;
+
+namespace Termine.Promises.Interfaces
 {
     public interface IAmAPromise <TW>
         where TW : class, IAmAPromiseWorkload, new()
@@ -19,5 +21,14 @@
         void Fatal(IHandleEventMessage message);
         void Abort(IHandleEventMessage message);
         void AbortOnAccessDenied(IHandleEventMessage message);
+
+        void Trace(Exception ex);
+        void Debug(Exception ex);
+        void Info(Exception ex);
+        void Warn(Exception ex);
+        void Error(Exception ex);
+        void Fatal(Exception ex);
+        void Abort(Exception ex);
+        void AbortOnAccessDenied(Exception ex);
     }
 }

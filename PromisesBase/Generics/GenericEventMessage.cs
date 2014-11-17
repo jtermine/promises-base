@@ -25,5 +25,12 @@ namespace Termine.Promises.Generics
             EventPrivateMessage = ex.Message;
             EventPrivateDetails = ex.ToString();
         }
+
+        public GenericEventMessage(int eventId, string publicMessage, string privateMessage)
+        {
+            EventId = eventId;
+            EventPublicMessage = publicMessage;
+            EventPrivateMessage = privateMessage;
+        }
     }
 }

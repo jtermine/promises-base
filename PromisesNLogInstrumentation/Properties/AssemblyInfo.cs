@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Termine.Promises.ClaimsBasedAuth.Base")]
-[assembly: AssemblyDescription("A base library to implement claims based authentication on a promise in a railway programming context.")]
+[assembly: AssemblyTitle("Termine.Promises.NLogInstrumentation.Base")]
+[assembly: AssemblyDescription("A base library to implement NLog instrumentation claims based authentication on a promise.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
-[assembly: AssemblyProduct("Termine.Promises")]
+[assembly: AssemblyProduct("Termine.Promises.NLogInstrumentation")]
 [assembly: AssemblyCopyright("Copyright ©  2014 Joseph Termine")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4d7509b5-99e1-411a-ae5f-43928c2b5014")]
+[assembly: Guid("81baf790-993a-49ca-8bb2-6a23e7ceb4aa")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.0.7")]
+[assembly: AssemblyVersion("0.0.0.1")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

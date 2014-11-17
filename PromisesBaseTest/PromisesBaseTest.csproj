@@ -35,7 +35,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.1\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="Termine.Promises.Base, Version=0.0.0.14, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.0.14\lib\net45\Termine.Promises.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Termine.Promises.ClaimsBasedAuth.Base">
+      <HintPath>..\packages\Termine.Promises.ClaimsBasedAuth.Base.0.0.0.7\lib\net45\Termine.Promises.ClaimsBasedAuth.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Termine.Promises.NLogInstrumentation.Base">
+      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.Base.0.0.0.1\lib\net45\Termine.Promises.NLogInstrumentation.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -62,14 +79,7 @@
     <Compile Include="TestPromises\CreateLockPromise.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PromisesBase\PromisesBase.csproj">
-      <Project>{eb7d739e-e8ef-4834-ad2e-06fe73cb3d20}</Project>
-      <Name>PromisesBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PromisesClaimsBasedAuth\PromisesClaimsBasedAuth.csproj">
-      <Project>{c10182e3-068c-4bd5-9847-c2bd19059a91}</Project>
-      <Name>PromisesClaimsBasedAuth</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -1,5 +1,4 @@
 ﻿using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
-using Termine.Promises.ClaimsBasedAuth.Base;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
@@ -7,7 +6,8 @@ namespace Termine.Promises.Base.Test.TestPromises
     {
         public ClaimsBasedPromise()
         {
-            this.WithDefaultClaimsBasedAuthChallenger<ClaimsBasedPromise, ClaimsBasedWorkload>();
+            this.WithNlogInstrumentation<ClaimsBasedPromise, ClaimsBasedWorkload>();
+            this.WithDefaultClaimsBasedAuth<ClaimsBasedPromise, ClaimsBasedWorkload>();
         }
     }
 }
