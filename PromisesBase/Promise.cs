@@ -43,6 +43,10 @@ namespace Termine.Promises
         private readonly PromiseContext _context = new PromiseContext();
         private readonly TW _workload = new TW();
 
+        public virtual void Init()
+        {
+        }
+
         public PromiseContext Context
         {
             get { return _context; }
@@ -72,29 +76,42 @@ namespace Termine.Promises
         {
             try
             {
+                Init();
+
+                Trace(PromiseMessages.PromiseStarted);
 
                 foreach (var challenger in Context.AuthChallengers)
                 {
+                    Trace(PromiseMessages.AuthChallengerStarted(challenger.Key));
                     challenger.Value.Invoke(_workload);
+                    Trace(PromiseMessages.AuthChallengerStopped(challenger.Key));
                     if (_workload.TerminateProcessing) return this;
                 }
 
                 foreach (var validator in Context.Validators)
                 {
+                    Trace(PromiseMessages.ValidatorStarted(validator.Key));
                     validator.Value.Invoke(_workload);
+                    Trace(PromiseMessages.ValidatorStopped(validator.Key));
                     if (_workload.TerminateProcessing) return this;
                 }
 
                 foreach (var executor in Context.Executors)
                 {
+
+                    Trace(PromiseMessages.ExecutorStarted(executor.Key));
                     executor.Value.Invoke(_workload);
+                    Trace(PromiseMessages.ExecutorStopped(executor.Key));
                     if (_workload.TerminateProcessing) return this;
                 }
+
+                Trace(PromiseMessages.PromiseSuccess);
 
             }
             catch (Exception ex)
             {
                 Error(new GenericEventMessage(ex));
+                Trace(PromiseMessages.PromiseFail);
             }
 
             return this;
@@ -208,6 +225,7 @@ namespace Termine.Promises
         public void AbortOnAccessDenied(IHandleEventMessage message)
         {
             _workload.TerminateProcessing = true;
+
             foreach (var handler in Context.AbortOnAccessDeniedHandlers)
             {
                 try

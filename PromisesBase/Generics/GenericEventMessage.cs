@@ -16,6 +16,12 @@ namespace Termine.Promises.Generics
             
         }
 
+        public GenericEventMessage(int eventId, string publicMessage)
+        {
+            EventId = eventId;
+            EventPublicMessage = publicMessage;
+        }
+
         public GenericEventMessage(Exception ex)
         {
             EventId = -1;

@@ -1,9 +1,16 @@
-﻿using Termine.Promises.Interfaces;
+﻿using System.Security.Claims;
+using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
 
 namespace Termine.Promises.Base.Test.CreateLockPromiseObjects
 {
-    public class CreateLockWorkload: IAmAPromiseWorkload
+    public class CreateLockWorkload: ISupportClaims
     {
+        public string PromiseId { get; set; }
         public bool TerminateProcessing { get; set; }
+        public string Claim { get; private set; }
+        public string HmacSigningKey { get; private set; }
+        public string HmacAudienceUri { get; private set; }
+        public string HmacIssuer { get; private set; }
+        public ClaimsPrincipal ClaimsPrincipal { get; set; }
     }
 }

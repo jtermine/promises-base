@@ -8,8 +8,9 @@ namespace Termine.Promises.Base.Test.TestPromises
         public int ValidatorChecksum { get; set; }
         public int ExecutorChecksum { get; set; }
 
-        public FalseLockPromise()
+        public override void Init()
         {
+            this.WithNlogInstrumentation<FalseLockPromise, FalseLockWorkload>();
             this.WithAuthChallenger(new PromiseActionInstance<FalseLockWorkload>("4", AuthChallenger));
             this.WithValidator(new PromiseActionInstance<FalseLockWorkload>("5", Validator));
             this.WithExecutor(new PromiseActionInstance<FalseLockWorkload>("6", Executor));

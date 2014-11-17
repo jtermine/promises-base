@@ -4,6 +4,7 @@ using System.ServiceModel.Security.Tokens;
 using System.Text;
 using Termine.Promises.ClaimsBasedAuth.Base;
 using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
+using Termine.Promises.FluentValidation.Base;
 using Termine.Promises.Interfaces;
 
 // ReSharper disable once CheckNamespace
@@ -15,7 +16,18 @@ namespace Termine.Promises
             where TX : IAmAPromise<TW>
             where TW : class, ISupportClaims, new()
         {
-            var n = new PromiseActionInstance<TW>("8ce3a9ff472740dc87895c15694c9ff4", workload =>
+            var authValidator = new PromiseActionInstance<TW>("claims.validator", workload =>
+            {
+                var supportClaimsValidator = new SupportClaimsValidator<TW>();
+                var validationResult = supportClaimsValidator.Validate(workload);
+                
+                if (!validationResult.IsValid)
+                promise.Abort(new FailedValidationEventMessage(validationResult.Errors));
+            });
+
+            promise.WithAuthChallenger(authValidator);
+
+            var n = new PromiseActionInstance<TW>("claims.authenticator", workload =>
             {
                 try
                 {

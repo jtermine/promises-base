@@ -8,11 +8,13 @@ namespace Termine.Promises.Base.Test.TestPromises
         public int ValidatorChecksum { get; set; }
         public int ExecutorChecksum { get; set; }
 
-        public CreateLockPromise()
+        public override void Init()
         {
-            this.WithAuthChallenger(new PromiseActionInstance<CreateLockWorkload>("1", AuthChallenger));
-            this.WithValidator(new PromiseActionInstance<CreateLockWorkload>("2", Validator));
-            this.WithExecutor(new PromiseActionInstance<CreateLockWorkload>("3", Executor));
+            this.WithNlogInstrumentation<CreateLockPromise, CreateLockWorkload>()
+                .WithDefaultClaimsBasedAuth<CreateLockPromise, CreateLockWorkload>()
+                .WithAuthChallenger(new PromiseActionInstance<CreateLockWorkload>("1", AuthChallenger))
+                .WithValidator(new PromiseActionInstance<CreateLockWorkload>("2", Validator))
+                .WithExecutor(new PromiseActionInstance<CreateLockWorkload>("3", Executor));
         }
 
         private void Executor(CreateLockWorkload lockWorkload)

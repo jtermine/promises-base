@@ -5,6 +5,8 @@ namespace Termine.Promises.Interfaces
     public interface IAmAPromise <TW>
         where TW : class, IAmAPromiseWorkload, new()
     {
+        void Init();
+
         Promise<TW>.PromiseContext Context { get; }
 
         TW Workload { get; }
