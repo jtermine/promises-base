@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using FluentValidation.Results;
+using Newtonsoft.Json;
 using Termine.Promises.Generics;
 
 namespace Termine.Promises.FluentValidation.Base
@@ -9,20 +10,19 @@ namespace Termine.Promises.FluentValidation.Base
     {
         public FailedValidationEventMessage(IEnumerable<ValidationFailure> failuresList)
         {
-            var sb = new StringBuilder();
+            if (failuresList == null) return;
 
-            sb.Append("Validation Errors : [");
+            var validationFailures = failuresList as ValidationFailure[] ?? failuresList.ToArray();
 
-            foreach (var validationFailure in failuresList)
+            var validationErrors = validationFailures.Select(f => new ValidationFailureModel
             {
-                sb.Append(string.Format("{ {0}: prop: {1}, attempted value: {2} } ", validationFailure.ErrorMessage,
-                    validationFailure.PropertyName, validationFailure.AttemptedValue == null ? "null": validationFailure.AttemptedValue.ToString()));
-            }
-
-            sb.Append("]");
+                AttemptedValue = f.AttemptedValue == null ? "null" : f.AttemptedValue.ToString(),
+                ErrorMessage = f.ErrorMessage,
+                PropertyName = f.PropertyName
+            });
 
             EventPublicMessage = "Validation errors found.";
-            EventPublicDetails = sb.ToString();
+            EventPublicDetails = JsonConvert.SerializeObject(validationErrors);
         }
     }
 }

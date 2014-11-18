@@ -22,7 +22,7 @@ namespace Termine.Promises
                 var validationResult = supportClaimsValidator.Validate(workload);
                 
                 if (!validationResult.IsValid)
-                promise.Abort(new FailedValidationEventMessage(validationResult.Errors));
+                promise.AbortOnAccessDenied(new FailedValidationEventMessage(validationResult.Errors));
             });
 
             promise.WithAuthChallenger(authValidator);
