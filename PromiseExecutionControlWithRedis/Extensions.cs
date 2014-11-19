@@ -1,6 +1,8 @@
 ﻿using System;
+using ServiceStack.Redis;
+using Termine.Promises.ExectionControlWithRedis;
+using Termine.Promises.ExectionControlWithRedis.Interfaces;
 using Termine.Promises.Interfaces;
-using StackExchange.Redis;
 
 // ReSharper disable once CheckNamespace
 namespace Termine.Promises
@@ -9,28 +11,31 @@ namespace Termine.Promises
     {
         public static TX WithDuplicatePrevention<TX, TW>(this TX promise)
             where TX : IAmAPromise<TW>
-            where TW : class, IAmAPromiseWorkload, new()
+            where TW : class, ISupportRedis, new()
         {
-            /*
+            
             var duplicationValidator = new PromiseActionInstance<TW>("request.duplicationPrevention", workload =>
             {
                 var requestId = workload.PromiseId;
 
-                using (var redisClient = new RedisClient(Config.RedisUri))
+                using (var redisClient = new RedisClient(workload.RedisConnectionString))
                 {
-                    if (redisClient.Exists(Request.RequestId.RGuidHash()) == 1)
+                    if (redisClient.Exists(requestId.RGuidHash()) == 1)
                     {
-                        BlockedOnDuplicateRequest.Invoke(this, EventArgs.Empty);
-                        return true;
+                        promise.Block(ExecutionControlMessages.PromiseIsADuplicate(requestId));
                     }
 
-                    redisClient.Add(Request.RequestId.RGuidHash(), DateTime.UtcNow, TimeSpan.FromDays(1));
+                    redisClient.Add(requestId.RGuidHash(), DateTime.UtcNow, TimeSpan.FromDays(1));
                 }
             });
 
-            return promise.WithValidator(duplicationValidator
-             */
-            return promise;
+            return promise.WithValidator(duplicationValidator);
         }
+
+        private static string RGuidHash(this string requestId)
+        {
+            return string.IsNullOrEmpty(requestId) ? string.Empty : string.Format("urn:requestId:{0}", requestId.Replace("-", "").Replace("{", "").Replace("}", "").ToLowerInvariant());
+        }
+        
     }
 }
