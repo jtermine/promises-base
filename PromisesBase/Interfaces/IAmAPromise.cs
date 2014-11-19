@@ -15,6 +15,7 @@ namespace Termine.Promises.Interfaces
         int ValidatorsCount { get; }
         int ExecutorsCount { get; }
 
+        void Block(IHandleEventMessage message);
         void Trace(IHandleEventMessage message);
         void Debug(IHandleEventMessage message);
         void Info(IHandleEventMessage message);
@@ -24,6 +25,7 @@ namespace Termine.Promises.Interfaces
         void Abort(IHandleEventMessage message);
         void AbortOnAccessDenied(IHandleEventMessage message);
 
+        void Block(Exception ex);
         void Trace(Exception ex);
         void Debug(Exception ex);
         void Info(Exception ex);
@@ -32,5 +34,6 @@ namespace Termine.Promises.Interfaces
         void Fatal(Exception ex);
         void Abort(Exception ex);
         void AbortOnAccessDenied(Exception ex);
+        
     }
 }
