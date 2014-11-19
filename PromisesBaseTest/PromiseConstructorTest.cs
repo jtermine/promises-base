@@ -11,23 +11,24 @@ namespace Termine.Promises.Base.Test
         public void TestConstructor()
         {
             var promise =
-                new Promise<ClaimsBasedWorkload>()
-                .WithValidator(new PromiseActionInstance<ClaimsBasedWorkload>("1",
+                new Promise<ClaimsBasedWorkload>();
+
+            promise.WithValidator(new PromiseActionInstance<ClaimsBasedWorkload>("1",
                     workload =>
                     {
                         workload.TerminateProcessing = true;
                     }));
 
-            promise.RunAsync();
+            promise.Run();
 
-            Assert.IsTrue(promise.ValidatorsCount == 1);
+            Assert.IsTrue(promise.ValidatorsCount == 1, "The promise has [{0}] validators attached when it expected [1] ", promise.ValidatorsCount);
         }
 
         [TestMethod]    
         public void TestCreateLockPromise()
         {
             var promise = new CreateLockPromise();
-            promise.RunAsync();
+            promise.Run();
 
             Assert.IsTrue(promise.AuthChallengerChecksum == 1, "AuthChallengerChecksum equaled [{0}] when it should have been [1].", promise.AuthChallengerChecksum);
             Assert.IsTrue(promise.ValidatorChecksum == 2, "ValidatorCheckSum equaled [{0}] when it should have been [2].", promise.ValidatorChecksum);
@@ -38,7 +39,7 @@ namespace Termine.Promises.Base.Test
         public void TestFalseLockPromise()
         {
             var promise = new FalseLockPromise();
-            promise.RunAsync();
+            promise.Run();
 
             Assert.IsTrue(promise.AuthChallengerChecksum == 1, "AuthChallengerChecksum equaled [{0}] when it should have been [1].", promise.AuthChallengerChecksum);
             Assert.IsTrue(promise.ValidatorChecksum == 2, "ValidatorCheckSum equaled [{0}] when it should have been [2].", promise.ValidatorChecksum);
@@ -56,7 +57,7 @@ namespace Termine.Promises.Base.Test
 
             testClaimsPromise.Workload.Request = new ClaimsBasedRequest {Claim = "1234"};
             
-            testClaimsPromise.RunAsync();
+            testClaimsPromise.Run();
             
             Assert.IsTrue(testClaimsPromise.Workload.TerminateProcessing);
         }

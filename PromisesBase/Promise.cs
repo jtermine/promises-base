@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
 
@@ -47,6 +48,9 @@ namespace Termine.Promises
         {
         }
 
+        /// <summary>
+        /// returns a readonly reference to the promise context
+        /// </summary>
         public PromiseContext Context
         {
             get { return _context; }
@@ -57,22 +61,44 @@ namespace Termine.Promises
             get { return _workload; }
         }
 
+        /// <summary>
+        /// the number of authChallenger actions established on this promise
+        /// </summary>
         public int AuthChallengersCount
         {
             get { return Context.AuthChallengers.Count; }
         }
 
+        /// <summary>
+        /// the number of validator actions established on this promise
+        /// </summary>
         public int ValidatorsCount
         {
             get { return Context.Validators.Count; }
         }
 
+        /// <summary>
+        /// the number of executor actions established on this promise
+        /// </summary>
         public int ExecutorsCount
         {
             get { return Context.Executors.Count; }
         }
 
-        public IAmAPromise<TW> RunAsync()
+        /// <summary>
+        /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
+        /// </summary>
+        /// <returns>the async task that returns an instance of this promise object when it completes</returns>
+        public Task<IAmAPromise<TW>> RunAsync()
+        {
+            return Task.Run(() => Run());
+        }
+
+        /// <summary>
+        /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks synchronously
+        /// </summary>
+        /// <returns>the instance of this promise object</returns>
+        public IAmAPromise<TW> Run()
         {
             try
             {
@@ -117,6 +143,10 @@ namespace Termine.Promises
             return this;
         }
 
+        /// <summary>
+        /// Submits a message to the trace instrumentation handler
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Trace(IHandleEventMessage message)
         {
             foreach (var handler in Context.TraceHandlers)
@@ -132,6 +162,10 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the debug instrumentation handler
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Debug(IHandleEventMessage message)
         {
             foreach (var handler in Context.DebugHandlers)
@@ -147,6 +181,10 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the info instrumentation handler
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Info(IHandleEventMessage message)
         {
             foreach (var handler in Context.InfoHandlers)
@@ -162,6 +200,10 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the 'warn' instrumentation handler
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Warn(IHandleEventMessage message)
         {
             foreach (var handler in Context.WarnHandlers)
@@ -177,6 +219,10 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the 'error' instrumentation handler
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Error(IHandleEventMessage message)
         {
             foreach (var handler in Context.ErrorHandlers)
@@ -192,6 +238,10 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the 'fatal' instrumentation handler
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Fatal(IHandleEventMessage message)
         {
             foreach (var handler in Context.FatalHandlers)
@@ -207,6 +257,11 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the 'abort' instrumentation handler.
+        /// Notifies the promise to abort processing.
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Abort(IHandleEventMessage message)
         {
             foreach (var handler in Context.AbortHandlers)
@@ -222,6 +277,11 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the 'abortOnAccessDenied' instrumentation handler.
+        /// Notifies the promise to abort processing.
+        /// </summary>
+        /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void AbortOnAccessDenied(IHandleEventMessage message)
         {
             _workload.TerminateProcessing = true;
@@ -239,41 +299,75 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits an exception to the 'trace' instrumentation handler
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Trace(Exception ex)
         {
             Trace(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'debug' instrumentation handler
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Debug(Exception ex)
         {
             Debug(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'info' instrumentation handler
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Info(Exception ex)
         {
             Info(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'warn' instrumentation handler
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Warn(Exception ex)
         {
             Warn(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'error' instrumentation handler
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Error(Exception ex)
         {
             Error(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'fatal' instrumentation handler
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Fatal(Exception ex)
         {
             Fatal(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'abort' instrumentation handler
+        /// Notifies the promise to abort processing.
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void Abort(Exception ex)
         {
             Abort(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// Submits an exception to the 'abortOnAccessDenied' instrumentation handler
+        /// Notifies the promise to abort processing.
+        /// </summary>
+        /// <param name="ex">an exception object</param>
         public void AbortOnAccessDenied(Exception ex)
         {
             AbortOnAccessDenied(new GenericEventMessage(ex));

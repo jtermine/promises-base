@@ -52,15 +52,13 @@ namespace Termine.Promises
         private static void LogEvent<TT>(this TT message, Logger logger, LogLevel logLevel, string promiseId, params object[] options)
             where TT : IHandleEventMessage
         {
-            var theEvent = new LogEventInfo(logLevel, logger.Name, CultureInfo.DefaultThreadCurrentCulture, message.EventPrivateMessage, options);
+            var theEvent = new LogEventInfo(logLevel, logger.Name, CultureInfo.DefaultThreadCurrentCulture, message.EventPublicMessage, options);
 
             if (string.IsNullOrEmpty(promiseId)) promiseId = Guid.NewGuid().ToString("N");
 
             theEvent.Properties.Add("RequestId", promiseId);
             theEvent.Properties.Add("EventTypeId", message.EventId);
             theEvent.Properties.Add("EventPublicDetails", message.EventPublicDetails);
-            theEvent.Properties.Add("EventPrivateMessage", message.EventPrivateMessage);
-            theEvent.Properties.Add("EventPrivateDetails", message.EventPrivateDetails);
 
             logger.Log(theEvent);
         }

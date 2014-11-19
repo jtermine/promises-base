@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Termine.Promises.FluentValidators.Base")]
-[assembly: AssemblyDescription("A base library to implement fluent validation on a promise.")]
+[assembly: AssemblyTitle("Termine.Promises.PromisesWithRedis")]
+[assembly: AssemblyDescription("A base library to provide Redis methods to a promise.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
-[assembly: AssemblyProduct("Termine.Promises.FluentValidation")]
+[assembly: AssemblyProduct("Termine.Promises.WithRedis")]
 [assembly: AssemblyCopyright("Copyright ©  2014 Joseph Termine")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ed646cac-2889-48ef-a767-78642ce05826")]
+[assembly: Guid("b9f416bf-ab36-472a-93cf-f1676142e037")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.0.9")]
+[assembly: AssemblyVersion("0.0.0.1")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
