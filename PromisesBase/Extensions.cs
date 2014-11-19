@@ -41,6 +41,17 @@ namespace Termine.Promises
             return promise;
         }
 
+        public static TX WithBlockHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (eventHandler == null) return promise;
+            if (promise.Context.BlockHandlers.ContainsKey(eventHandlerKey)) return promise;
+
+            promise.Context.BlockHandlers.Add(eventHandlerKey, eventHandler);
+            return promise;
+        }
+
         public static TX WithTraceHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()

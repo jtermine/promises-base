@@ -24,7 +24,7 @@ namespace Termine.Promises.Base.Test.TestPromises
         private void Validator(FalseLockWorkload lockWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
-            lockWorkload.TerminateProcessing = true;
+            lockWorkload.IsTerminated = true;
         }
 
         private void AuthChallenger(FalseLockWorkload lockWorkload)

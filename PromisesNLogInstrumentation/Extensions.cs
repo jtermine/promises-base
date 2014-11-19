@@ -14,6 +14,10 @@ namespace Termine.Promises
         {
             var log = LogManager.GetLogger(typeof(TX).FullName);
 
+            promise.WithBlockHandler("nlog.block",
+                new Action<TW, IHandleEventMessage>(
+                    (w, m) => m.LogEvent(log, LogLevel.Trace, w.PromiseId, m)));
+
             promise.WithTraceHandler("nlog.trace",
                 new Action<TW, IHandleEventMessage>(
                     (w, m) => m.LogEvent(log, LogLevel.Trace, w.PromiseId, m)));

@@ -16,7 +16,7 @@ namespace Termine.Promises.Base.Test
             promise.WithValidator(new PromiseActionInstance<ClaimsBasedWorkload>("1",
                     workload =>
                     {
-                        workload.TerminateProcessing = true;
+                        workload.IsTerminated = true;
                     }));
 
             promise.Run();
@@ -59,7 +59,7 @@ namespace Termine.Promises.Base.Test
             
             testClaimsPromise.Run();
             
-            Assert.IsTrue(testClaimsPromise.Workload.TerminateProcessing);
+            Assert.IsTrue(testClaimsPromise.Workload.IsTerminated);
         }
     }
 }

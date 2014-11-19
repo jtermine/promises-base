@@ -36,13 +36,15 @@ namespace Termine.Promises
 
         public static readonly GenericEventMessage PromiseAccessDenied = new GenericEventMessage(13,
             "Access denied : The operation could not be completed.");
-
-
+        
         public static readonly GenericEventMessage PromiseReceivedHttp200 = new GenericEventMessage(11,
             "The promise received an http response with code 200 OK.");
 
         public static readonly GenericEventMessage PromiseReceivedHttpError = new GenericEventMessage(12,
             "The promise received an http response corresponding to an an error code.  See body for details.");
+
+        public static readonly GenericEventMessage PromiseBlocked = new GenericEventMessage(14,
+            "The promise was blocked from processing.");
 
         public static GenericEventMessage AuthChallengerStarted(string actionId)
         {

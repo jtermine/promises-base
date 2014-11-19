@@ -19,6 +19,7 @@ namespace Termine.Promises
             public readonly Dictionary<string, Action<TW>> Validators = new Dictionary<string, Action<TW>>();
             public readonly Dictionary<string, Action<TW>> Executors = new Dictionary<string, Action<TW>>();
 
+            public Dictionary<string, Action<TW, IHandleEventMessage>> BlockHandlers { get; private set; }
             public Dictionary<string, Action<TW, IHandleEventMessage>> TraceHandlers { get; private set; }
             public Dictionary<string, Action<TW, IHandleEventMessage>> DebugHandlers { get; private set; }
             public Dictionary<string, Action<TW, IHandleEventMessage>> InfoHandlers { get; private set; }
@@ -30,6 +31,7 @@ namespace Termine.Promises
 
             public PromiseContext()
             {
+                BlockHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
                 TraceHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
                 DebugHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
                 InfoHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
@@ -111,7 +113,7 @@ namespace Termine.Promises
                     Trace(PromiseMessages.AuthChallengerStarted(challenger.Key));
                     challenger.Value.Invoke(_workload);
                     Trace(PromiseMessages.AuthChallengerStopped(challenger.Key));
-                    if (_workload.TerminateProcessing) return this;
+                    if (_workload.IsTerminated) return this;
                 }
 
                 foreach (var validator in Context.Validators)
@@ -119,8 +121,10 @@ namespace Termine.Promises
                     Trace(PromiseMessages.ValidatorStarted(validator.Key));
                     validator.Value.Invoke(_workload);
                     Trace(PromiseMessages.ValidatorStopped(validator.Key));
-                    if (_workload.TerminateProcessing) return this;
+                    if (_workload.IsTerminated) return this;
                 }
+
+                if (_workload.IsBlocked) return this;
 
                 foreach (var executor in Context.Executors)
                 {
@@ -128,7 +132,7 @@ namespace Termine.Promises
                     Trace(PromiseMessages.ExecutorStarted(executor.Key));
                     executor.Value.Invoke(_workload);
                     Trace(PromiseMessages.ExecutorStopped(executor.Key));
-                    if (_workload.TerminateProcessing) return this;
+                    if (_workload.IsTerminated) return this;
                 }
 
                 Trace(PromiseMessages.PromiseSuccess);
@@ -141,6 +145,21 @@ namespace Termine.Promises
             }
 
             return this;
+        }
+
+        public void Block(IHandleEventMessage message)
+        {
+            foreach (var handler in Context.BlockHandlers)
+            {
+                try
+                {
+                    handler.Value.Invoke(Workload, message);
+                }
+                catch (Exception ex)
+                {
+                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                }
+            }
         }
 
         /// <summary>
@@ -284,7 +303,7 @@ namespace Termine.Promises
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void AbortOnAccessDenied(IHandleEventMessage message)
         {
-            _workload.TerminateProcessing = true;
+            _workload.IsTerminated = true;
 
             foreach (var handler in Context.AbortOnAccessDeniedHandlers)
             {
@@ -297,6 +316,11 @@ namespace Termine.Promises
                     this.HandleInstrumentationError<Promise<TW>, TW>(ex);
                 }
             }
+        }
+
+        public void Block(Exception ex)
+        {
+            Block(new GenericEventMessage(ex));
         }
 
         /// <summary>

@@ -3,6 +3,7 @@
     public interface IAmAPromiseWorkload
     {
         string PromiseId { get; set; }
-        bool TerminateProcessing { get; set; }
+        bool IsTerminated { get; set; }
+        bool IsBlocked { get; set; }
     }
 }
