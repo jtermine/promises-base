@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Termine.Promises.Interfaces
+﻿namespace Termine.Promises.Interfaces
 {
     public interface IAmAPromiseRequest
     {
+        string RequestName { get; }
     }
 }

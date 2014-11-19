@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Termine.Promises.NLogInstrumentation.Base")]
-[assembly: AssemblyDescription("A base library to implement NLog instrumentation claims based authentication on a promise.")]
+[assembly: AssemblyDescription("A base library to implement NLog instrumentation on a promise.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
 [assembly: AssemblyProduct("Termine.Promises.NLogInstrumentation")]

@@ -57,7 +57,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>C:\nuget\nuget pack $(ProjectDir)PromisesBase.csproj -OutputDirectory $(SolutionDir)nuget-tree</PostBuildEvent>
+    <PostBuildEvent>$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesBase.csproj -OutputDirectory $(SolutionDir)nuget-tree</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
