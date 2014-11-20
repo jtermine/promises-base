@@ -149,6 +149,9 @@ namespace Termine.Promises
 
         public void Block(IHandleEventMessage message)
         {
+            _workload.IsTerminated = true;
+            _workload.IsBlocked = true;
+
             foreach (var handler in Context.BlockHandlers)
             {
                 try

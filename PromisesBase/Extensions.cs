@@ -5,6 +5,17 @@ namespace Termine.Promises
 {
     public static class Extensions
     {
+        public static TX WithRequestId<TX, TW>(this TX promise, string requestId)
+            where TX : IAmAPromise<TW>
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            if (string.IsNullOrEmpty(requestId)) return promise;
+
+            promise.Workload.PromiseId = requestId;
+
+            return promise;
+        }
+
         public static TX WithValidator<TX, TW>(this TX promise, IAmAPromiseAction<TW> validator)
             where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()

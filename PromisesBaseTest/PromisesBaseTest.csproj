@@ -59,10 +59,16 @@
     <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedRequest.cs" />
     <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedResponse.cs" />
     <Compile Include="ClaimsBasePromiseObjects\ClaimsBasedWorkload.cs" />
+    <Compile Include="ConfigHelpers.cs" />
     <Compile Include="CreateLockPromiseObjects\CreateLockWorkload.cs" />
     <Compile Include="FalseLockPromiseObjects\FalseLockWorkload.cs" />
     <Compile Include="PromiseConstructorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="TestPromises\ClaimsBasedPromise.cs" />
     <Compile Include="TestPromises\FalseLockPromise.cs" />
     <Compile Include="TestPromises\CreateLockPromise.cs" />
@@ -70,8 +76,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PromiseExecutionControlWithRedis\PromisesExecutionControlWithRedis.csproj">
+      <Project>{5e05d603-6304-4d8c-94d7-05398c73d629}</Project>
+      <Name>PromisesExecutionControlWithRedis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PromisesBase\PromisesBase.csproj">
       <Project>{eb7d739e-e8ef-4834-ad2e-06fe73cb3d20}</Project>
       <Name>PromisesBase</Name>
@@ -87,6 +101,10 @@
     <ProjectReference Include="..\PromisesNLogInstrumentation\PromisesNLogInstrumentation.csproj">
       <Project>{224354a5-3b29-42e3-9a29-f6ff35fbbd9e}</Project>
       <Name>PromisesNLogInstrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PromisesWithRedis\PromisesWithRedis.csproj">
+      <Project>{add596aa-7290-437a-8d2d-e9bf991152b7}</Project>
+      <Name>PromisesWithRedis</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

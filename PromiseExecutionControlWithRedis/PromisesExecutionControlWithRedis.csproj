@@ -51,12 +51,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.0.23, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.0.24, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.0.23\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.0.24\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.WithRedis">
-      <HintPath>..\packages\Termine.Promises.WithRedis.0.0.0.2\lib\net45\Termine.Promises.WithRedis.dll</HintPath>
+    <Reference Include="Termine.Promises.WithRedis, Version=0.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Termine.Promises.WithRedis.0.0.0.3\lib\net45\Termine.Promises.WithRedis.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

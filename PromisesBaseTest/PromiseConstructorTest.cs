@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
+using Termine.Promises.Base.Test.FalseLockPromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
 
 namespace Termine.Promises.Base.Test
@@ -60,6 +61,28 @@ namespace Termine.Promises.Base.Test
             testClaimsPromise.Run();
             
             Assert.IsTrue(testClaimsPromise.Workload.IsTerminated);
+        }
+
+        [TestMethod]
+        public void TestDuplicatePromises()
+        {
+            var promiseA = new FalseLockPromise();
+
+            promiseA
+                .WithDuplicatePrevention<FalseLockPromise, FalseLockWorkload>()
+                .WithRequestId<FalseLockPromise, FalseLockWorkload>("1234");
+
+            promiseA.Run();
+
+            var promiseB = new FalseLockPromise();
+
+            promiseB
+                .WithDuplicatePrevention<FalseLockPromise, FalseLockWorkload>()
+                .WithRequestId<FalseLockPromise, FalseLockWorkload>("1234");
+
+            promiseB.Run();
+
+            Assert.IsTrue(promiseB.Workload.IsBlocked);
         }
     }
 }
