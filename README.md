@@ -11,3 +11,6 @@ In a railway pattern, requests are targeted at a common "rail-line" (single endp
 - Executors - which perform tasks using the request (or other environment data pertaining to that request) to transform that request into a response
 
 This project aims to create a generic implementation of the promise that follows SOLID principles and fluent design for use in a railway service.
+
+## NuGet feed
+These packages are published to the NuGet feed: https://www.myget.org/F/termine/
