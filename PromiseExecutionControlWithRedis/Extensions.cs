@@ -16,7 +16,7 @@ namespace Termine.Promises
             
             var duplicationValidator = new PromiseActionInstance<TW>("request.duplicationPrevention", workload =>
             {
-                var requestId = workload.PromiseId;
+                var requestId = workload.RequestId;
 
                 using (var redisClient = new RedisClient(workload.RedisConnectionString))
                 {

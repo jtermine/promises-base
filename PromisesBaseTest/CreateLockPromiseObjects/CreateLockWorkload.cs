@@ -5,7 +5,7 @@ namespace Termine.Promises.Base.Test.CreateLockPromiseObjects
 {
     public class CreateLockWorkload: ISupportClaims
     {
-        public string PromiseId { get; set; }
+        public string RequestId { get; set; }
         public bool IsTerminated { get; set; }
         public bool IsBlocked { get; set; }
         public string Claim { get; private set; }

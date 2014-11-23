@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -101,6 +104,10 @@
     <ProjectReference Include="..\PromisesNLogInstrumentation\PromisesNLogInstrumentation.csproj">
       <Project>{224354a5-3b29-42e3-9a29-f6ff35fbbd9e}</Project>
       <Name>PromisesNLogInstrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PromisesWithProtobuf\PromisesWithProtobuf.csproj">
+      <Project>{6794fe31-8623-4330-b2fa-d373e2c83821}</Project>
+      <Name>PromisesWithProtobuf</Name>
     </ProjectReference>
     <ProjectReference Include="..\PromisesWithRedis\PromisesWithRedis.csproj">
       <Project>{add596aa-7290-437a-8d2d-e9bf991152b7}</Project>

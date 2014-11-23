@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBase", "PromisesBase\PromisesBase.csproj", "{EB7D739E-E8EF-4834-AD2E-06FE73CB3D20}"
 EndProject
@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D44D9
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithProtobuf", "PromisesWithProtobuf\PromisesWithProtobuf.csproj", "{6794FE31-8623-4330-B2FA-D373E2C83821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +60,10 @@ Global
 		{ADD596AA-7290-437A-8D2D-E9BF991152B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADD596AA-7290-437A-8D2D-E9BF991152B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADD596AA-7290-437A-8D2D-E9BF991152B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6794FE31-8623-4330-B2FA-D373E2C83821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6794FE31-8623-4330-B2FA-D373E2C83821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6794FE31-8623-4330-B2FA-D373E2C83821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6794FE31-8623-4330-B2FA-D373E2C83821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
 using Termine.Promises.Base.Test.FalseLockPromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
@@ -83,6 +84,33 @@ namespace Termine.Promises.Base.Test
             promiseB.Run();
 
             Assert.IsTrue(promiseB.Workload.IsBlocked);
+        }
+
+        [TestMethod]
+        public void TestSerialization()
+        {
+            var promise = new ClaimsBasedPromise();
+
+            promise.WithRequestId<ClaimsBasedPromise, ClaimsBasedWorkload>("12345");
+
+            promise.Workload.Request.Init(promise.Workload.RequestId);
+
+            promise.Workload.Request.Claim = "4444";
+
+            var testStream = new MemoryStream();
+
+            promise.Workload.Request.Serialize(testStream);
+
+            testStream.Flush();
+            testStream.Seek(0, SeekOrigin.Begin);
+
+            Assert.IsTrue(testStream.Capacity > 0);
+
+            var request = testStream.Deserialize<ClaimsBasedRequest>();
+
+            Assert.IsTrue(request.RequestName == typeof(ClaimsBasedRequest).FullName);
+            Assert.IsTrue(request.RequestId == promise.Workload.RequestId);
+            Assert.IsTrue(request.Claim == "4444");
         }
     }
 }

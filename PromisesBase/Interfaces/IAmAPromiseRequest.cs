@@ -2,6 +2,8 @@
 {
     public interface IAmAPromiseRequest
     {
-        string RequestName { get; }
+        string RequestId { get; set; }
+        string RequestName { get; set; }
+        void Init(string requestId);
     }
 }

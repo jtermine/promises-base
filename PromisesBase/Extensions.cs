@@ -11,7 +11,7 @@ namespace Termine.Promises
         {
             if (string.IsNullOrEmpty(requestId)) return promise;
 
-            promise.Workload.PromiseId = requestId;
+            promise.Workload.RequestId = requestId;
 
             return promise;
         }

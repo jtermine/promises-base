@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{224354A5-3B29-42E3-9A29-F6FF35FBBD9E}</ProjectGuid>
+    <ProjectGuid>{6794FE31-8623-4330-B2FA-D373E2C83821}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Termine.Promises.NLogInstrumentation.Base</RootNamespace>
-    <AssemblyName>Termine.Promises.NLogInstrumentation.Base</AssemblyName>
+    <RootNamespace>Termine.Promises.WithProtobuf</RootNamespace>
+    <AssemblyName>Termine.Promises.WithProtobuf</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,15 +49,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\ISupportProtobuf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="PromisesNLogInstrumentation.nuspec" />
+    <None Include="PromisesWithProtobuf.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesNLogInstrumentation.csproj -OutputDirectory $(SolutionDir)nuget-tree</PostBuildEvent>
+    <PostBuildEvent>$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesWithProtobuf.csproj -OutputDirectory $(SolutionDir)nuget-tree</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

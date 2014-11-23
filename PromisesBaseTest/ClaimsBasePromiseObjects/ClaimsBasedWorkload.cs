@@ -5,10 +5,15 @@ namespace Termine.Promises.Base.Test.ClaimsBasePromiseObjects
 {
     public class ClaimsBasedWorkload: ISupportClaims
     {
+        public ClaimsBasedWorkload()
+        {
+            Request = new ClaimsBasedRequest();
+        }
+
         public ClaimsBasedRequest Request { get; set; }
         public ClaimsBasedResponse Response { get; set; }
 
-        public string PromiseId { get; set; }
+        public string RequestId { get; set; }
         public bool IsTerminated { get; set; }
         public bool IsBlocked { get; set; }
         public string Claim { get; private set; }

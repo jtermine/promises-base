@@ -2,7 +2,7 @@
 {
     public interface IAmAPromiseWorkload
     {
-        string PromiseId { get; set; }
+        string RequestId { get; set; }
         bool IsTerminated { get; set; }
         bool IsBlocked { get; set; }
     }
