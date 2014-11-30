@@ -9,8 +9,7 @@ namespace Termine.Promises
 {
     public static class Extensions
     {
-        public static TX WithDuplicatePrevention<TX, TW>(this TX promise)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithDuplicatePrevention<TW>(this IAmAPromise<TW> promise)
             where TW : class, ISupportRedis, new()
         {
             

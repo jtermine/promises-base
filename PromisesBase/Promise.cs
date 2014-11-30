@@ -160,7 +160,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -217,7 +217,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -236,7 +236,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -255,7 +255,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -274,7 +274,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -294,7 +294,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }
@@ -316,7 +316,7 @@ namespace Termine.Promises
                 }
                 catch (Exception ex)
                 {
-                    this.HandleInstrumentationError<Promise<TW>, TW>(ex);
+                    this.HandleInstrumentationError(ex);
                 }
             }
         }

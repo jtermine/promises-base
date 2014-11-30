@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
-using Termine.Promises.Base.Test.FalseLockPromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
 
 namespace Termine.Promises.Base.Test
@@ -55,7 +54,7 @@ namespace Termine.Promises.Base.Test
 
             testClaimsPromise
                 .WithNlogInstrumentation<ClaimsBasedPromise, ClaimsBasedWorkload>()
-                .WithDefaultClaimsBasedAuth<ClaimsBasedPromise, ClaimsBasedWorkload>();
+                .WithDefaultClaimsBasedAuth<ClaimsBasedWorkload>();
 
             testClaimsPromise.Workload.Request = new ClaimsBasedRequest {Claim = "1234"};
             
@@ -70,16 +69,16 @@ namespace Termine.Promises.Base.Test
             var promiseA = new FalseLockPromise();
 
             promiseA
-                .WithDuplicatePrevention<FalseLockPromise, FalseLockWorkload>()
-                .WithRequestId<FalseLockPromise, FalseLockWorkload>("1234");
+                .WithDuplicatePrevention()
+                .WithRequestId("1234");
 
             promiseA.Run();
 
             var promiseB = new FalseLockPromise();
 
             promiseB
-                .WithDuplicatePrevention<FalseLockPromise, FalseLockWorkload>()
-                .WithRequestId<FalseLockPromise, FalseLockWorkload>("1234");
+                .WithDuplicatePrevention()
+                .WithRequestId("1234");
 
             promiseB.Run();
 
@@ -91,7 +90,7 @@ namespace Termine.Promises.Base.Test
         {
             var promise = new ClaimsBasedPromise();
 
-            promise.WithRequestId<ClaimsBasedPromise, ClaimsBasedWorkload>("12345");
+            promise.WithRequestId("12345");
 
             promise.Workload.Request.Init(promise.Workload.RequestId);
 

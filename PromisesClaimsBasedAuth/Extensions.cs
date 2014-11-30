@@ -12,9 +12,7 @@ namespace Termine.Promises
 {
     public static class Extensions
     {
-        public static TX WithDefaultClaimsBasedAuth<TX, TW>(this TX promise)
-            where TX : IAmAPromise<TW>
-            where TW : class, ISupportClaims, new()
+        public static IAmAPromise<TW> WithDefaultClaimsBasedAuth<TW>(this IAmAPromise<TW> promise) where TW : class, ISupportClaims, new()
         {
             var authValidator = new PromiseActionInstance<TW>("claims.validator", workload =>
             {

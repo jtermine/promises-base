@@ -5,19 +5,18 @@ namespace Termine.Promises
 {
     public static class Extensions
     {
-        public static TX WithRequestId<TX, TW>(this TX promise, string requestId)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithRequestId<TW>(this IAmAPromise<TW> promise, string requestId)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (string.IsNullOrEmpty(requestId)) return promise;
+            if (promise.Workload == null) return promise;
 
             promise.Workload.RequestId = requestId;
 
             return promise;
         }
 
-        public static TX WithValidator<TX, TW>(this TX promise, IAmAPromiseAction<TW> validator)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithValidator<TW>(this IAmAPromise<TW> promise, IAmAPromiseAction<TW> validator)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == null) return promise;
@@ -28,8 +27,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithAuthChallenger<TX, TW>(this TX promise, IAmAPromiseAction<TW> authChallenger)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithAuthChallenger<TW>(this IAmAPromise<TW> promise, IAmAPromiseAction<TW> authChallenger)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == null) return promise;
@@ -40,8 +38,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithExecutor<TX, TW>(this TX promise, IAmAPromiseAction<TW> executor)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithExecutor<TW>(this IAmAPromise<TW> promise, IAmAPromiseAction<TW> executor)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == null) return promise;
@@ -52,8 +49,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithBlockHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithBlockHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -63,8 +59,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithTraceHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithTraceHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -74,8 +69,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithDebugHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithDebugHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -85,8 +79,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithInfoHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithInfoHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -96,8 +89,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithWarnHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithWarnHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -107,8 +99,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithErrorHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithErrorHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -118,8 +109,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithFatalHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithFatalHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -129,8 +119,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithAbortHandler<TX, TW>(this TX promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
+        public static IAmAPromise<TW> WithAbortHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey, Action<TW, IHandleEventMessage> eventHandler)
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -140,9 +129,8 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static TX WithAbortOnAccessDeniedHandler<TX, TW>(this TX promise, string eventHandlerKey,
+        public static IAmAPromise<TW> WithAbortOnAccessDeniedHandler<TW>(this IAmAPromise<TW> promise, string eventHandlerKey,
             Action<TW, IHandleEventMessage> eventHandler)
-            where TX : IAmAPromise<TW>
             where TW : class, IAmAPromiseWorkload, new()
         {
             if (eventHandler == null) return promise;
@@ -152,8 +140,7 @@ namespace Termine.Promises
             return promise;
         }
 
-        public static void HandleInstrumentationError<TX, TW>(this TX promise, Exception ex)
-            where TX : IAmAPromise<TW>
+        public static void HandleInstrumentationError<TW>(this IAmAPromise<TW> promise, Exception ex)
             where TW : class, IAmAPromiseWorkload, new()
         {
 
