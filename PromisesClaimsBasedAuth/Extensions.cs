@@ -5,14 +5,13 @@ using System.Text;
 using Termine.Promises.ClaimsBasedAuth.Base;
 using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
 using Termine.Promises.FluentValidation.Base;
-using Termine.Promises.Interfaces;
 
 // ReSharper disable once CheckNamespace
 namespace Termine.Promises
 {
     public static class Extensions
     {
-        public static IAmAPromise<TW> WithDefaultClaimsBasedAuth<TW>(this IAmAPromise<TW> promise) where TW : class, ISupportClaims, new()
+        public static Promise<TW> WithDefaultClaimsBasedAuth<TW>(this Promise<TW> promise) where TW : class, ISupportClaims, new()
         {
             var authValidator = new PromiseActionInstance<TW>("claims.validator", workload =>
             {

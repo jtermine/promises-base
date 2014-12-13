@@ -13,33 +13,40 @@ namespace Termine.Promises
     public class Promise<TW> : IAmAPromise<TW>
         where TW : class, IAmAPromiseWorkload, new()
     {
+        public Promise()
+        {
+            PromiseId = Guid.NewGuid().ToString("N");
+        }
+
         public class PromiseContext
         {
             public readonly Dictionary<string, Action<TW>> AuthChallengers = new Dictionary<string, Action<TW>>();
             public readonly Dictionary<string, Action<TW>> Validators = new Dictionary<string, Action<TW>>();
             public readonly Dictionary<string, Action<TW>> Executors = new Dictionary<string, Action<TW>>();
 
-            public Dictionary<string, Action<TW, IHandleEventMessage>> BlockHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> TraceHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> DebugHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> InfoHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> WarnHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> ErrorHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> FatalHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> AbortHandlers { get; private set; }
-            public Dictionary<string, Action<TW, IHandleEventMessage>> AbortOnAccessDeniedHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> BlockHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> TraceHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> DebugHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> InfoHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> WarnHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> ErrorHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> FatalHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> AbortHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> AbortOnAccessDeniedHandlers { get; private set; }
+            public Dictionary<string, Action<IAmAPromise<TW>>> SuccessHandlers { get; private set; }
 
             public PromiseContext()
             {
-                BlockHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                TraceHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                DebugHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                InfoHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                WarnHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                ErrorHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                FatalHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                AbortHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
-                AbortOnAccessDeniedHandlers = new Dictionary<string, Action<TW, IHandleEventMessage>>();
+                BlockHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                TraceHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                DebugHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                InfoHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                WarnHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                ErrorHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                FatalHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                AbortHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                AbortOnAccessDeniedHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();
+                SuccessHandlers = new Dictionary<string, Action<IAmAPromise<TW>>>();
             }
         }
 
@@ -49,6 +56,8 @@ namespace Termine.Promises
         public virtual void Init()
         {
         }
+
+        public string PromiseId { get; private set; }
 
         /// <summary>
         /// returns a readonly reference to the promise context
@@ -135,6 +144,15 @@ namespace Termine.Promises
                     if (_workload.IsTerminated) return this;
                 }
 
+                foreach (var successHandler in Context.SuccessHandlers)
+                {
+
+                    Trace(PromiseMessages.ExecutorStarted(successHandler.Key));
+                    successHandler.Value.Invoke(this);
+                    Trace(PromiseMessages.ExecutorStopped(successHandler.Key));
+                    if (_workload.IsTerminated) return this;
+                }
+
                 Trace(PromiseMessages.PromiseSuccess);
 
             }
@@ -156,7 +174,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -175,7 +193,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -194,7 +212,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -213,7 +231,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -232,7 +250,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -251,7 +269,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -270,7 +288,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -290,7 +308,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -312,7 +330,7 @@ namespace Termine.Promises
             {
                 try
                 {
-                    handler.Value.Invoke(Workload, message);
+                    handler.Value.Invoke(this, message);
                 }
                 catch (Exception ex)
                 {
@@ -398,6 +416,128 @@ namespace Termine.Promises
         public void AbortOnAccessDenied(Exception ex)
         {
             AbortOnAccessDenied(new GenericEventMessage(ex));
+        }
+
+        public Promise<TW> WithValidator(IAmAPromiseAction<TW> validator)
+        {
+            if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == null) return this;
+
+            if (Context.Validators.ContainsKey(validator.ActionId)) return this;
+            Context.Validators.Add(validator.ActionId, validator.PromiseAction);
+
+            return this;
+        }
+
+        public Promise<TW> WithAuthChallenger(IAmAPromiseAction<TW> authChallenger)
+        {
+            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == null) return this;
+
+            if (Context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return this;
+            Context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
+
+            return this;
+        }
+
+        public Promise<TW> WithExecutor(IAmAPromiseAction<TW> executor)
+        {
+            if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == null) return this;
+
+            if (Context.Executors.ContainsKey(executor.ActionId)) return this;
+            Context.Executors.Add(executor.ActionId, executor.PromiseAction);
+
+            return this;
+        }
+
+        public Promise<TW> WithBlockHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.BlockHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.BlockHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithTraceHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.TraceHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.TraceHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithDebugHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.DebugHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.DebugHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithInfoHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.InfoHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.InfoHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithWarnHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.WarnHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.WarnHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithErrorHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.ErrorHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.ErrorHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithFatalHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.FatalHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.FatalHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithAbortHandler(string eventHandlerKey, Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.AbortHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.AbortHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithAbortOnAccessDeniedHandler(string eventHandlerKey,
+            Action<IAmAPromise<TW>, IHandleEventMessage> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.AbortOnAccessDeniedHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.AbortOnAccessDeniedHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
+        }
+
+        public Promise<TW> WithSuccessHandler(string eventHandlerKey,
+            Action<IAmAPromise<TW>> eventHandler)
+        {
+            if (eventHandler == null) return this;
+            if (Context.SuccessHandlers.ContainsKey(eventHandlerKey)) return this;
+
+            Context.SuccessHandlers.Add(eventHandlerKey, eventHandler);
+            return this;
         }
     }
 }

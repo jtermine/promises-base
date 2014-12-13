@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IDescribeAPromise.cs" />
+    <Compile Include="Interfaces\IHandlePromiseActions.cs" />
     <Compile Include="PromiseMessages.cs" />
     <Compile Include="Generics\GenericEventMessage.cs" />
     <Compile Include="Interfaces\IAmAPromise.cs" />

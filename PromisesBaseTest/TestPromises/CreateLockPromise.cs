@@ -10,7 +10,7 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public override void Init()
         {
-            this.WithNlogInstrumentation<CreateLockPromise, CreateLockWorkload>()
+            this.WithNlogInstrumentation()
                 .WithAuthChallenger(new PromiseActionInstance<CreateLockWorkload>("1", AuthChallenger))
                 .WithValidator(new PromiseActionInstance<CreateLockWorkload>("2", Validator))
                 .WithExecutor(new PromiseActionInstance<CreateLockWorkload>("3", Executor));

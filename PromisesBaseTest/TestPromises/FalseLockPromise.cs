@@ -10,10 +10,11 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public override void Init()
         {
-            this.WithNlogInstrumentation<FalseLockPromise, FalseLockWorkload>();
-            this.WithAuthChallenger(new PromiseActionInstance<FalseLockWorkload>("4", AuthChallenger));
-            this.WithValidator(new PromiseActionInstance<FalseLockWorkload>("5", Validator));
-            this.WithExecutor(new PromiseActionInstance<FalseLockWorkload>("6", Executor));
+            this.WithNlogInstrumentation();
+            
+            WithAuthChallenger(new PromiseActionInstance<FalseLockWorkload>("4", AuthChallenger));
+            WithValidator(new PromiseActionInstance<FalseLockWorkload>("5", Validator));
+            WithExecutor(new PromiseActionInstance<FalseLockWorkload>("6", Executor));
         }
 
         private void Executor(FalseLockWorkload lockWorkload)
