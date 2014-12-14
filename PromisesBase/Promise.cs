@@ -418,32 +418,32 @@ namespace Termine.Promises
             AbortOnAccessDenied(new GenericEventMessage(ex));
         }
 
-        public Promise<TW> WithValidator(IAmAPromiseAction<TW> validator)
+        public Promise<TW> WithValidator(string actionId, Action<TW> action)
         {
-            if (string.IsNullOrEmpty(validator.ActionId) || validator.PromiseAction == null) return this;
+            if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
-            if (Context.Validators.ContainsKey(validator.ActionId)) return this;
-            Context.Validators.Add(validator.ActionId, validator.PromiseAction);
+            if (Context.Validators.ContainsKey(actionId)) return this;
+            Context.Validators.Add(actionId, action);
 
             return this;
         }
 
-        public Promise<TW> WithAuthChallenger(IAmAPromiseAction<TW> authChallenger)
+        public Promise<TW> WithAuthChallenger(string actionId, Action<TW> action)
         {
-            if (string.IsNullOrEmpty(authChallenger.ActionId) || authChallenger.PromiseAction == null) return this;
+            if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
-            if (Context.AuthChallengers.ContainsKey(authChallenger.ActionId)) return this;
-            Context.AuthChallengers.Add(authChallenger.ActionId, authChallenger.PromiseAction);
+            if (Context.AuthChallengers.ContainsKey(actionId)) return this;
+            Context.AuthChallengers.Add(actionId, action);
 
             return this;
         }
 
-        public Promise<TW> WithExecutor(IAmAPromiseAction<TW> executor)
+        public Promise<TW> WithExecutor(string actionId, Action<TW> action)
         {
-            if (string.IsNullOrEmpty(executor.ActionId) || executor.PromiseAction == null) return this;
+            if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
-            if (Context.Executors.ContainsKey(executor.ActionId)) return this;
-            Context.Executors.Add(executor.ActionId, executor.PromiseAction);
+            if (Context.Executors.ContainsKey(actionId)) return this;
+            Context.Executors.Add(actionId, action);
 
             return this;
         }

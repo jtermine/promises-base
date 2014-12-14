@@ -2,7 +2,6 @@
 using ServiceStack.Redis;
 using Termine.Promises.ExectionControlWithRedis;
 using Termine.Promises.ExectionControlWithRedis.Interfaces;
-using Termine.Promises.Interfaces;
 
 // ReSharper disable once CheckNamespace
 namespace Termine.Promises
@@ -13,7 +12,7 @@ namespace Termine.Promises
             where TW : class, ISupportRedis, new()
         {
             
-            var duplicationValidator = new PromiseActionInstance<TW>("request.duplicationPrevention", workload =>
+            var duplicationValidator = new Action<TW>(workload =>
             {
                 var requestId = workload.RequestId;
 
@@ -28,7 +27,7 @@ namespace Termine.Promises
                 }
             });
 
-            return promise.WithValidator(duplicationValidator);
+            return promise.WithValidator("request.duplicationPrevention", duplicationValidator);
         }
 
         private static string RGuidHash(this string requestId)

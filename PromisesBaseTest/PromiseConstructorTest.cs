@@ -14,15 +14,16 @@ namespace Termine.Promises.Base.Test
             var promise =
                 new Promise<ClaimsBasedWorkload>();
 
-            promise.WithValidator(new PromiseActionInstance<ClaimsBasedWorkload>("1",
-                    workload =>
-                    {
-                        workload.IsTerminated = true;
-                    }));
+            promise.WithValidator("1",
+                workload =>
+                {
+                    workload.IsTerminated = true;
+                });
 
             promise.Run();
 
-            Assert.IsTrue(promise.ValidatorsCount == 1, "The promise has [{0}] validators attached when it expected [1] ", promise.ValidatorsCount);
+            Assert.IsTrue(promise.ValidatorsCount == 1,
+                "The promise has [{0}] validators attached when it expected [1] ", promise.ValidatorsCount);
         }
 
         [TestMethod]    

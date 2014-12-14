@@ -13,7 +13,7 @@ namespace Termine.Promises
     {
         public static Promise<TW> WithDefaultClaimsBasedAuth<TW>(this Promise<TW> promise) where TW : class, ISupportClaims, new()
         {
-            var authValidator = new PromiseActionInstance<TW>("claims.validator", workload =>
+            var authValidator = new Action<TW>(workload =>
             {
                 var supportClaimsValidator = new SupportClaimsValidator<TW>();
                 var validationResult = supportClaimsValidator.Validate(workload);
@@ -22,9 +22,9 @@ namespace Termine.Promises
                 promise.AbortOnAccessDenied(new FailedValidationEventMessage(validationResult.Errors));
             });
 
-            promise.WithAuthChallenger(authValidator);
+            promise.WithAuthChallenger("claims.validator", authValidator);
 
-            var n = new PromiseActionInstance<TW>("claims.authenticator", workload =>
+            var n = new Action<TW>( workload =>
             {
                 try
                 {
@@ -55,7 +55,7 @@ namespace Termine.Promises
                 }
             });
 
-            return promise.WithAuthChallenger(n);
+            return promise.WithAuthChallenger("claims.authenticator", n);
         }
     }
 }
