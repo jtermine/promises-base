@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D44D9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithProtobuf", "PromisesWithProtobuf\PromisesWithProtobuf.csproj", "{6794FE31-8623-4330-B2FA-D373E2C83821}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesEncryption", "PromisesEncryption\PromisesEncryption.csproj", "{0C13A532-7419-4943-85CF-C0292C01BD4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{6794FE31-8623-4330-B2FA-D373E2C83821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6794FE31-8623-4330-B2FA-D373E2C83821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6794FE31-8623-4330-B2FA-D373E2C83821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
