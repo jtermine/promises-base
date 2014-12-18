@@ -54,9 +54,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Termine.Promises.Base.0.0.0.35\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.FluentValidation.Base, Version=0.0.0.14, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.FluentValidation.Base.0.0.0.14\lib\net45\Termine.Promises.FluentValidation.Base.dll</HintPath>
+    <Reference Include="Termine.Promises.FluentValidation.Base">
+      <HintPath>..\packages\Termine.Promises.FluentValidation.Base.0.0.0.15\lib\net45\Termine.Promises.FluentValidation.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
