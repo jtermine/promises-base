@@ -37,5 +37,21 @@ namespace Termine.Promises
                 return Serializer.Deserialize<TT>(memoryStream);
             }
         }
+
+        public static EncryptedRequest Encrypt<TT>(this TT model, byte[] key) where TT : class, ISupportProtobuf
+        {
+            var memoryStream = model.ToByteArray();
+
+            var encryptedRequest = memoryStream.Encrypt(key);
+
+            return encryptedRequest;
+        }
+
+        public static TT Decrypt<TT>(this EncryptedRequest request, byte[] key) where TT : class, ISupportProtobuf
+        {
+            var memoryStream = request.Decrypt(key);
+            var response = memoryStream.FromByteArray<TT>();
+            return response;
+        }
     }
 }
