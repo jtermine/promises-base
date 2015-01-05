@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Termine.Promises.Base.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,9 +63,9 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-	<GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
-		<Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo"/>
-	</GetAssemblyIdentity>
-	<Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package"/>
+    <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
+      <Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo" />
+    </GetAssemblyIdentity>
+    <Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
 </Project>
