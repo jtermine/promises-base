@@ -1,5 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
-namespace Termine.Promises
+﻿namespace Termine.Promises.WithRedis
 {
     public static class Extensions
     {

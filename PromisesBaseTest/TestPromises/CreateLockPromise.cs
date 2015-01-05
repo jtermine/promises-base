@@ -1,4 +1,5 @@
 ﻿using Termine.Promises.Base.Test.CreateLockPromiseObjects;
+using Termine.Promises.NLogInstrumentation.Base;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {

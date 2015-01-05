@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Termine.Promises.NLogInstrumentation.Base")]
-[assembly: AssemblyDescription("A base library to implement NLog instrumentation on a promise.")]
+[assembly: AssemblyTitle("PromisesEncryption")]
+[assembly: AssemblyDescription("A library to implement methods to encrypt and decrypt promises.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
-[assembly: AssemblyProduct("Termine.Promises.NLogInstrumentation")]
+[assembly: AssemblyProduct("Termine.Promises")]
 [assembly: AssemblyCopyright("Copyright ©  2014 Joseph Termine")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("81baf790-993a-49ca-8bb2-6a23e7ceb4aa")]
+[assembly: Guid("8f4763d6-c13f-4668-89b0-3e15e3033ba6")]
 
 // Version information for an assembly consists of the following four values:
 //

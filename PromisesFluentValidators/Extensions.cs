@@ -1,6 +1,5 @@
 ﻿
-// ReSharper disable once CheckNamespace
-namespace Termine.Promises
+namespace Termine.Promises.FluentValidation.Base
 {
     public static class Extensions
     {

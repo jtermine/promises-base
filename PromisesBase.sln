@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithProtobuf", "Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesEncryption", "PromisesEncryption\PromisesEncryption.csproj", "{0C13A532-7419-4943-85CF-C0292C01BD4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesZMQ", "PromisesZMQ\PromisesZMQ.csproj", "{DD8ED2DD-38B7-41F3-B869-93452BB759C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

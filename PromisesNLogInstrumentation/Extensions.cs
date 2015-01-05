@@ -3,9 +3,7 @@ using System.Globalization;
 using NLog;
 using Termine.Promises.Interfaces;
 
-// ReSharper disable once CheckNamespace
-
-namespace Termine.Promises
+namespace Termine.Promises.NLogInstrumentation.Base
 {
     public static class Extensions
     {

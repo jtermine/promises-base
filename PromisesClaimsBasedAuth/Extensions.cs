@@ -2,12 +2,10 @@
 using System.IdentityModel.Tokens;
 using System.ServiceModel.Security.Tokens;
 using System.Text;
-using Termine.Promises.ClaimsBasedAuth.Base;
 using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
 using Termine.Promises.FluentValidation.Base;
 
-// ReSharper disable once CheckNamespace
-namespace Termine.Promises
+namespace Termine.Promises.ClaimsBasedAuth.Base
 {
     public static class Extensions
     {

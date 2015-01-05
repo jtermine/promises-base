@@ -3,8 +3,7 @@ using System.IO;
 using ProtoBuf;
 using Termine.Promises.WithProtobuf.Interfaces;
 
-// ReSharper disable once CheckNamespace
-namespace Termine.Promises
+namespace Termine.Promises.WithProtobuf
 {
     public static class Extensions
     {
@@ -38,6 +37,7 @@ namespace Termine.Promises
             }
         }
 
+        /*
         public static EncryptedRequest Encrypt<TT>(this TT model, byte[] key) where TT : class, ISupportProtobuf
         {
             var memoryStream = model.ToByteArray();
@@ -53,5 +53,6 @@ namespace Termine.Promises
             var response = memoryStream.FromByteArray<TT>();
             return response;
         }
+         */
     }
 }

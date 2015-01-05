@@ -2,6 +2,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
+using Termine.Promises.ClaimsBasedAuth.Base;
+using Termine.Promises.ExectionControlWithRedis;
+using Termine.Promises.NLogInstrumentation.Base;
+using Termine.Promises.WithProtobuf;
 
 namespace Termine.Promises.Base.Test
 {

@@ -1,10 +1,8 @@
 ﻿using System;
 using ServiceStack.Redis;
-using Termine.Promises.ExectionControlWithRedis;
 using Termine.Promises.ExectionControlWithRedis.Interfaces;
 
-// ReSharper disable once CheckNamespace
-namespace Termine.Promises
+namespace Termine.Promises.ExectionControlWithRedis
 {
     public static class Extensions
     {
