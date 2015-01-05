@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Termine.Promises.ClaimsBasedAuth.Base")]
+[assembly: AssemblyTitle("Termine.Promises.ClaimsBasedAuth")]
 [assembly: AssemblyDescription("A base library to implement claims based authentication on a promise in a railway programming context.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]

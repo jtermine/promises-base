@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PromisesEncryption")]
-[assembly: AssemblyDescription("A library to implement methods to encrypt and decrypt promises.")]
+[assembly: AssemblyTitle("Termine.Promises.ZMQ")]
+[assembly: AssemblyDescription("A library to implement methods to implement ZeroMQ transport on promises.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
 [assembly: AssemblyProduct("Termine.Promises")]

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
+using Termine.Promises.ClaimsBasedAuth.Interfaces;
 
-namespace Termine.Promises.ClaimsBasedAuth.Base
+namespace Termine.Promises.ClaimsBasedAuth
 {
     public class SupportClaimsValidator<TT>: AbstractValidator<TT>
         where TT: class, ISupportClaims

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Termine.Promises.FluentValidation.Base
+namespace Termine.Promises.FluentValidation
 {
     [DataContract]
     public class ValidationFailureModel

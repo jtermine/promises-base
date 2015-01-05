@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>a6a3327b</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>90ddb850</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +37,8 @@
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="Sodium">
+    <Reference Include="Sodium, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\libsodium-net.0.6.0\lib\Net40\Sodium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -51,9 +52,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Termine.Promises.Base.0.0.5482.40503\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.Encryption, Version=0.0.5482.40600, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Encryption, Version=0.0.5483.13585, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5482.40600\lib\net45\Termine.Promises.Encryption.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5483.13585\lib\net45\Termine.Promises.Encryption.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -77,7 +78,6 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets'))" />
   </Target>
-  <Import Project="..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
@@ -86,4 +86,5 @@
     </GetAssemblyIdentity>
     <Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
+  <Import Project="..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
 </Project>

@@ -1,6 +1,6 @@
 ﻿using Termine.Promises.Generics;
 
-namespace Termine.Promises.ClaimsBasedAuth.Base
+namespace Termine.Promises.ClaimsBasedAuth
 {
     public static class ClaimsBasedMessages
     {

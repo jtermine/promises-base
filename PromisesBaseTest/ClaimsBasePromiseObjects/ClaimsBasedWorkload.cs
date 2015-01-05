@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
+using Termine.Promises.ClaimsBasedAuth.Interfaces;
 
 namespace Termine.Promises.Base.Test.ClaimsBasePromiseObjects
 {

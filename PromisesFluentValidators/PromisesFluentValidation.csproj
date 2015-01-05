@@ -7,8 +7,8 @@
     <ProjectGuid>{57881067-302D-4EDE-8668-3A61A23BCC40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Termine.Promises.FluentValidation.Base</RootNamespace>
-    <AssemblyName>Termine.Promises.FluentValidation.Base</AssemblyName>
+    <RootNamespace>Termine.Promises.FluentValidation</RootNamespace>
+    <AssemblyName>Termine.Promises.FluentValidation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Termine.Promises.FluentValidation.Base.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Termine.Promises.FluentValidation.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

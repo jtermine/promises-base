@@ -7,8 +7,8 @@
     <ProjectGuid>{224354A5-3B29-42E3-9A29-F6FF35FBBD9E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Termine.Promises.NLogInstrumentation.Base</RootNamespace>
-    <AssemblyName>Termine.Promises.NLogInstrumentation.Base</AssemblyName>
+    <RootNamespace>Termine.Promises.NLogInstrumentation</RootNamespace>
+    <AssemblyName>Termine.Promises.NLogInstrumentation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Termine.Promises.NLogInstrumentation.Base.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Termine.Promises.NLogInstrumentation.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

@@ -1,5 +1,5 @@
 ﻿
-namespace Termine.Promises.FluentValidation.Base
+namespace Termine.Promises.FluentValidation
 {
     public static class Extensions
     {

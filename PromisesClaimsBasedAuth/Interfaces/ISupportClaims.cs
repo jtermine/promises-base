@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Termine.Promises.Interfaces;
 
-namespace Termine.Promises.ClaimsBasedAuth.Base.Interfaces
+namespace Termine.Promises.ClaimsBasedAuth.Interfaces
 {
     public interface ISupportClaims: IAmAPromiseWorkload
     {

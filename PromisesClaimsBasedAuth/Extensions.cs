@@ -2,10 +2,10 @@
 using System.IdentityModel.Tokens;
 using System.ServiceModel.Security.Tokens;
 using System.Text;
-using Termine.Promises.ClaimsBasedAuth.Base.Interfaces;
-using Termine.Promises.FluentValidation.Base;
+using Termine.Promises.ClaimsBasedAuth.Interfaces;
+using Termine.Promises.FluentValidation;
 
-namespace Termine.Promises.ClaimsBasedAuth.Base
+namespace Termine.Promises.ClaimsBasedAuth
 {
     public static class Extensions
     {

@@ -3,7 +3,7 @@ using System.Globalization;
 using NLog;
 using Termine.Promises.Interfaces;
 
-namespace Termine.Promises.NLogInstrumentation.Base
+namespace Termine.Promises.NLogInstrumentation
 {
     public static class Extensions
     {

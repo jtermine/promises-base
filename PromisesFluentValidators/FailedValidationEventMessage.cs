@@ -4,7 +4,7 @@ using FluentValidation.Results;
 using Newtonsoft.Json;
 using Termine.Promises.Generics;
 
-namespace Termine.Promises.FluentValidation.Base
+namespace Termine.Promises.FluentValidation
 {
     public class FailedValidationEventMessage : GenericEventMessage
     {
