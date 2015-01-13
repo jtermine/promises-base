@@ -7,7 +7,7 @@ namespace Termine.Promises.NLogInstrumentation
 {
     public static class Extensions
     {
-        public static Promise<TW> WithNlogInstrumentation<TW>(this Promise<TW> promise)
+        public static Promise<TW> WithNLogInstrumentation<TW>(this Promise<TW> promise)
             where TW : class, IAmAPromiseWorkload, new()
         {
             var log = LogManager.GetLogger(typeof (TW).FullName);

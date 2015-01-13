@@ -1,4 +1,6 @@
-﻿namespace Termine.Promises.Interfaces
+﻿using System;
+
+namespace Termine.Promises.Interfaces
 {
     public interface IAmAPromiseWorkload
     {
