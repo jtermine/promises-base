@@ -5,12 +5,23 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.NLogInstrumentation
 {
+    /// <summary>
+    /// Implements extensions to promises related to NLog
+    /// </summary>
     public static class Extensions
     {
+        /// <summary>
+        /// Enables NLog instrumentation on a promise
+        /// </summary>
+        /// <typeparam name="TW">any workload that implements IAmAPromiseWorkload which is a class that can be initialized with new()</typeparam>
+        /// <param name="promise">the promise object</param>
+        /// <returns>the promise that NLog has been added to</returns>
         public static Promise<TW> WithNLogInstrumentation<TW>(this Promise<TW> promise)
             where TW : class, IAmAPromiseWorkload, new()
         {
-            var log = LogManager.GetLogger(typeof (TW).FullName);
+            var loggerName = string.Format("{0}.{1}", typeof (TW).FullName, promise.PromiseId);
+
+            var log = LogManager.GetLogger(loggerName);
             
             promise.WithBlockHandler("nlog.block",
                 (w, m) => m.LogEvent(log, LogLevel.Trace, w.PromiseId, m));
