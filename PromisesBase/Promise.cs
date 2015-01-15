@@ -57,6 +57,9 @@ namespace Termine.Promises
         {
         }
 
+        /// <summary>
+        /// The Id for the promise.  Gets sent to the requestId of the workload if one isn't already provided.
+        /// </summary>
         public string PromiseId { get; private set; }
 
         /// <summary>
