@@ -11,7 +11,7 @@ namespace Termine.Promises.Base.Test.TestPromises
 
         public override void Init()
         {
-            this.WithNlogInstrumentation()
+            this.WithNLogInstrumentation()
                 .WithAuthChallenger("4", AuthChallenger)
                 .WithValidator("5", Validator)
                 .WithExecutor("6", Executor);

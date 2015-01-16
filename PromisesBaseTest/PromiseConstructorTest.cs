@@ -58,7 +58,7 @@ namespace Termine.Promises.Base.Test
             var testClaimsPromise = new ClaimsBasedPromise();
 
             testClaimsPromise
-                .WithNlogInstrumentation()
+                .WithNLogInstrumentation()
                 .WithDefaultClaimsBasedAuth();
 
             testClaimsPromise.Workload.Request = new ClaimsBasedRequest {Claim = "1234"};

@@ -307,6 +307,8 @@ namespace Termine.Promises
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Abort(IHandleEventMessage message)
         {
+            _workload.IsTerminated = true;
+
             foreach (var handler in Context.AbortHandlers)
             {
                 try
