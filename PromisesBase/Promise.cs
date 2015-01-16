@@ -116,6 +116,8 @@ namespace Termine.Promises
         {
             try
             {
+                Workload.RequestId = PromiseId;
+
                 Init();
 
                 Trace(PromiseMessages.PromiseStarted);
