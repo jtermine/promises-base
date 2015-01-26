@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesEncryption", "Promi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesZMQ", "PromisesZMQ\PromisesZMQ.csproj", "{DD8ED2DD-38B7-41F3-B869-93452BB759C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWeb", "PromisesWeb\PromisesWeb.csproj", "{A1D26B5D-7113-45CA-B158-55CAD8143BAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD8ED2DD-38B7-41F3-B869-93452BB759C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
