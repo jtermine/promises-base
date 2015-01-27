@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RestSharp;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
 using Termine.Promises.ClaimsBasedAuth;
@@ -115,6 +119,37 @@ namespace Termine.Promises.Base.Test
             Assert.IsTrue(request.RequestName == typeof(ClaimsBasedRequest).FullName);
             Assert.IsTrue(request.RequestId == promise.Workload.RequestId);
             Assert.IsTrue(request.Claim == "4444");
+        }
+
+        [TestMethod]
+        public async void TestGetRequest()
+        {
+             var promise = new ClaimsBasedPromise();
+
+            promise.WithRequestId("12345");
+
+            promise.Workload.Request.Init(promise.Workload.RequestId);
+
+            promise.Workload.Request.Claim = "4444";
+
+            var testStream = new MemoryStream();
+
+            promise.Workload.Request.Serialize(testStream);
+
+            testStream.Flush();
+            testStream.Seek(0, SeekOrigin.Begin);
+
+            using (var client = new HttpClient())
+            {
+                var content = new ByteArrayContent(testStream.ToArray());
+
+                var response = await client.PostAsync("http://localhost.fiddler:7762", content);
+
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                Assert.IsNotNull(responseString);
+            }
+
         }
     }
 }
