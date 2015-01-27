@@ -13,28 +13,87 @@ namespace Termine.Promises
     public class Promise<TW> : IAmAPromise<TW>
         where TW : class, IAmAPromiseWorkload, new()
     {
+        /// <summary>
+        /// When a promise initialized, the PromiseId is set to a Guid
+        /// </summary>
         public Promise()
         {
             PromiseId = Guid.NewGuid().ToString("N");
         }
 
+        /// <summary>
+        /// The promise context stores instances of the actions (i.e. auth challengers, validators, executors) that a promise supports
+        /// </summary>
         public class PromiseContext
         {
+            /// <summary>
+            /// this dictionary of AuthChallengers -- these are executed in sequence to determine whether the promise has the authority to run
+            /// </summary>
             public readonly Dictionary<string, Action<TW>> AuthChallengers = new Dictionary<string, Action<TW>>();
+            
+            /// <summary>
+            /// a dictionary of Validators -- these are executed in sequenced to determine whether the promise workload contains valid information
+            /// </summary>
             public readonly Dictionary<string, Action<TW>> Validators = new Dictionary<string, Action<TW>>();
+
+            /// <summary>
+            /// a dictionary of executors -- these are executed in sequence to perform the action(s) that the promise makes
+            /// </summary>
             public readonly Dictionary<string, Action<TW>> Executors = new Dictionary<string, Action<TW>>();
 
+            /// <summary>
+            /// a dictionary of block handlers -- there are executed when a promise is blocked
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> BlockHandlers { get; private set; }
+            
+            /// <summary>
+            /// a dictionary of trace handlers -- these are executed whe na promise is tracing
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> TraceHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> DebugHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> InfoHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> WarnHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> ErrorHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> FatalHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> AbortHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> AbortOnAccessDeniedHandlers { get; private set; }
+            
+            /// <summary>
+            /// 
+            /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>>> SuccessHandlers { get; private set; }
 
+            /// <summary>
+            /// when a promise context is initialized, each of the dictionaries it contains are also initialized to make it easy to add the events to the promise
+            /// </summary>
             public PromiseContext()
             {
                 BlockHandlers = new Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>>();

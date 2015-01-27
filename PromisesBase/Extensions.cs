@@ -3,19 +3,17 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
+    /// <summary>
+    /// Extends the promise object to add functional
+    /// </summary>
     public static class Extensions
     {
-        public static IAmAPromise<TW> WithRequestId<TW>(this IAmAPromise<TW> promise, string requestId)
-            where TW : class, IAmAPromiseWorkload, new()
-        {
-            if (string.IsNullOrEmpty(requestId)) return promise;
-            if (promise.Workload == null) return promise;
-
-            promise.Workload.RequestId = requestId;
-
-            return promise;
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TW"></typeparam>
+        /// <param name="promise"></param>
+        /// <param name="ex"></param>
         public static void HandleInstrumentationError<TW>(this IAmAPromise<TW> promise, Exception ex)
             where TW : class, IAmAPromiseWorkload, new()
         {

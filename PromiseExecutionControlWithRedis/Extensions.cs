@@ -6,6 +6,12 @@ namespace Termine.Promises.ExectionControlWithRedis
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Add
+        /// </summary>
+        /// <typeparam name="TW"></typeparam>
+        /// <param name="promise"></param>
+        /// <returns></returns>
         public static Promise<TW> WithDuplicatePrevention<TW>(this Promise<TW> promise)
             where TW : class, ISupportRedis, new()
         {
