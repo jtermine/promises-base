@@ -14,4 +14,3 @@ namespace Termine.Promises.Interfaces
 
     }
 }
-

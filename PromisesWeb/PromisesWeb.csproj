@@ -42,6 +42,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Xml">
+      <HintPath>..\packages\Ninject.Extensions.Xml.3.2.0.0\lib\net45-full\Ninject.Extensions.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -71,17 +80,24 @@
       <HintPath>..\packages\Termine.Promises.Base.0.0.5494.23158\lib\net45\Termine.Promises.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Termine.Promises.Encryption">
-      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5483.13585\lib\net45\Termine.Promises.Encryption.dll</HintPath>
+    <Reference Include="Termine.Promises.Encryption, Version=0.0.5483.13585, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5505.21427\lib\net45\Termine.Promises.Encryption.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Termine.Promises.NLogInstrumentation">
       <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5494.23461\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
     </Reference>
     <Reference Include="Termine.Promises.WithProtobuf">
-      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5493.38220\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5505.22092\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="modules.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -94,8 +110,12 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="PromisesHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProtobufWorkload.cs" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

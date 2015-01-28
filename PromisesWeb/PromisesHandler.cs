@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web;
+using Termine.Promises.WithProtobuf;
 
 namespace Termine.Promises.Web
 {
-    public class PromisesHandler: IHttpHandler
+    public class PromisesHandler : IHttpHandler
     {
         public void ProcessRequest(HttpContext context)
         {
@@ -27,25 +27,30 @@ namespace Termine.Promises.Web
                 return;
             }
 
-            byte[] buffer = {};
-            int offset = 0;
-            int count = 4096;
+            using (var stream = new MemoryStream())
+            {
+                var buffer = new byte[2048]; // read in chunks of 2KB
+                int bytesRead;
 
-            var streamReader = new BinaryReader(incoming, Encoding.UTF8);
+                while ((bytesRead = incoming.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    stream.Write(buffer, 0, bytesRead);
+                }
 
-            byte[] result = {};
+                byte[] result = stream.ToArray();
 
-            while (streamReader.Read(buffer, offset, count) > 0)
-            {   
-                buffer.CopyTo(result, offset);
-                offset = offset + count;
+                var genericWorkload = result.FromByteArray<ProtobufWorkload>();
+
+                context.Response.Write(genericWorkload.RequestId);
             }
-
+            
             context.Response.StatusCode = 204;
             context.Response.StatusDescription = "Completed without exception";
-
         }
 
-        public bool IsReusable { get { return true; } }
+        public bool IsReusable
+        {
+            get { return true; }
+        }
     }
 }

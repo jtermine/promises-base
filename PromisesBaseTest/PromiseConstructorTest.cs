@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RestSharp;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
 using Termine.Promises.ClaimsBasedAuth;
@@ -78,16 +75,14 @@ namespace Termine.Promises.Base.Test
             var promiseA = new FalseLockPromise();
 
             promiseA
-                .WithDuplicatePrevention()
-                .WithRequestId("1234");
+                .WithDuplicatePrevention();
 
             promiseA.Run();
 
             var promiseB = new FalseLockPromise();
 
             promiseB
-                .WithDuplicatePrevention()
-                .WithRequestId("1234");
+                .WithDuplicatePrevention();
 
             promiseB.Run();
 
@@ -98,8 +93,6 @@ namespace Termine.Promises.Base.Test
         public void TestSerialization()
         {
             var promise = new ClaimsBasedPromise();
-
-            promise.WithRequestId("12345");
 
             promise.Workload.Request.Init(promise.Workload.RequestId);
 
@@ -122,11 +115,9 @@ namespace Termine.Promises.Base.Test
         }
 
         [TestMethod]
-        public async void TestGetRequest()
+        public void TestGetRequest()
         {
              var promise = new ClaimsBasedPromise();
-
-            promise.WithRequestId("12345");
 
             promise.Workload.Request.Init(promise.Workload.RequestId);
 
@@ -143,9 +134,11 @@ namespace Termine.Promises.Base.Test
             {
                 var content = new ByteArrayContent(testStream.ToArray());
 
-                var response = await client.PostAsync("http://localhost.fiddler:7762", content);
+                content.Headers.Add("X-OLR-PromiseName", "Promise1");
 
-                var responseString = await response.Content.ReadAsStringAsync();
+                var response = client.PostAsync("http://localhost.fiddler:7762", content);
+
+                var responseString = response.Result.Content.ReadAsStringAsync();
 
                 Assert.IsNotNull(responseString);
             }
