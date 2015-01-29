@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Web;
+using Ninject;
 using Termine.Promises.WithProtobuf;
 
 namespace Termine.Promises.Web
@@ -27,6 +29,12 @@ namespace Termine.Promises.Web
                 return;
             }
 
+            // Termine.Promises.Interfaces.IAmAPromise<Termine.Promises.Interfaces.IAmAPromiseWorkload>
+
+            var n = new HttpApplicationStateWrapper(HttpContext.Current.Application);
+            
+            // (n.Get("kernel") as IKernel).
+            
             using (var stream = new MemoryStream())
             {
                 var buffer = new byte[2048]; // read in chunks of 2KB

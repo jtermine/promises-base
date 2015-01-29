@@ -42,14 +42,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Extensions.Xml">
       <HintPath>..\packages\Ninject.Extensions.Xml.3.2.0.0\lib\net45-full\Ninject.Extensions.Xml.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Common">
-      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
@@ -76,21 +81,24 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Termine.Promises.Base">
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5494.23158\lib\net45\Termine.Promises.Base.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Termine.Promises.Encryption, Version=0.0.5483.13585, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5506.36537, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5505.21427\lib\net45\Termine.Promises.Encryption.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5506.37901\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.NLogInstrumentation">
-      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5494.23461\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+    <Reference Include="Termine.Promises.Encryption, Version=0.0.5506.37560, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5506.37905\lib\net45\Termine.Promises.Encryption.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.WithProtobuf">
-      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5505.22092\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5506.37012, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5506.37901\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+    </Reference>
+    <Reference Include="Termine.Promises.WithProtobuf, Version=0.0.5506.37012, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5506.37906\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +118,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

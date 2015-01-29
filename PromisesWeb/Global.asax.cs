@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Ninject;
 using Ninject.Web.Common;
 
@@ -6,6 +7,7 @@ namespace Termine.Promises.Web
 {
     public class Global : NinjectHttpApplication
     {
+
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -46,12 +48,22 @@ namespace Termine.Promises.Web
         {
             var kernel = new StandardKernel();
             RegisterServices(kernel);
+
+            if (!Context.Application.AllKeys.Contains("kernel"))
+            {
+                Context.Application.Add("kernel", kernel);
+            }
+            else
+            {
+                Context.Application["kernel"] = kernel;
+            }
+            
             return kernel;
         }
 
         private void RegisterServices(IKernel kernel)
         {
-            kernel.Load("modules.xml");
+            
         }
     }
 }
