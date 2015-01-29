@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PromisesWeb")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Termine.Promises.Web")]
+[assembly: AssemblyDescription("A base library web application that receives promise workloads serialized over JSON or Protobuf and executes them in-process")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PromisesWeb")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Joseph Termine")]
+[assembly: AssemblyProduct("Termine.Promises.Web")]
+[assembly: AssemblyCopyright("Copyright ©  2015 Joseph Termine")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.0.*")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

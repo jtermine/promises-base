@@ -37,9 +37,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="NClone">
+      <HintPath>..\packages\NClone.1.1.1\lib\net45\NClone.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,13 +55,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5506.36537, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5507.30376, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5506.37901\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5507.30376\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5506.37012, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5506.26510, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5506.37901\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5507.28108\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -86,7 +89,7 @@
     <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo" />
     </GetAssemblyIdentity>
-    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesClaimsBasedAuth.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version)" />
+    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesClaimsBasedAuth.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version) –Prop Configuration=Release" />
     <Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
 </Project>

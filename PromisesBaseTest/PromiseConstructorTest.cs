@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Net.Http;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
 using Termine.Promises.Base.Test.TestPromises;
 using Termine.Promises.ClaimsBasedAuth;
@@ -132,11 +134,11 @@ namespace Termine.Promises.Base.Test
 
             using (var client = new HttpClient())
             {
-                var content = new ByteArrayContent(testStream.ToArray());
+                var json = JsonConvert.SerializeObject(promise.Workload.Request);
 
-                content.Headers.Add("X-OLR-PromiseName", "Promise1");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = client.PostAsync("http://localhost.fiddler:7762", content);
+                var response = client.PostAsync("http://localhost.fiddler:2950", content);
 
                 var responseString = response.Result.Content.ReadAsStringAsync();
 

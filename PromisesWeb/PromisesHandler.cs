@@ -1,23 +1,21 @@
 ﻿using System.IO;
-using System.Linq;
-using System.Net.Mime;
 using System.Web;
-using Ninject;
-using Termine.Promises.WithProtobuf;
 
 namespace Termine.Promises.Web
 {
-    public class PromisesHandler : IHttpHandler
+    public abstract class PromisesHandler : IHttpHandler
     {
+        public abstract void HandlePromise(byte[] body, WebConstants webConstants, HttpContext context);
+
         public void ProcessRequest(HttpContext context)
         {
-            var headers = context.Request.Headers;
+            var webConstants = WebConstants.Other;
 
-            if (!headers.AllKeys.Contains("X-OLR-PromiseName"))
+            var contentType = context.Request.ContentType.ToLowerInvariant();
+
+            if (contentType.Contains("application/json") || contentType.Contains("text/javascript"))
             {
-                context.Response.StatusCode = 500;
-                context.Response.StatusDescription = "The header X-OLR-PromiseName does not exist in this POST request.";
-                return;
+                webConstants = WebConstants.Json;
             }
 
             var incoming = context.Request.GetBufferlessInputStream();
@@ -29,12 +27,6 @@ namespace Termine.Promises.Web
                 return;
             }
 
-            // Termine.Promises.Interfaces.IAmAPromise<Termine.Promises.Interfaces.IAmAPromiseWorkload>
-
-            var n = new HttpApplicationStateWrapper(HttpContext.Current.Application);
-            
-            // (n.Get("kernel") as IKernel).
-            
             using (var stream = new MemoryStream())
             {
                 var buffer = new byte[2048]; // read in chunks of 2KB
@@ -47,9 +39,7 @@ namespace Termine.Promises.Web
 
                 byte[] result = stream.ToArray();
 
-                var genericWorkload = result.FromByteArray<ProtobufWorkload>();
-
-                context.Response.Write(genericWorkload.RequestId);
+                HandlePromise(result, webConstants, context);
             }
             
             context.Response.StatusCode = 204;

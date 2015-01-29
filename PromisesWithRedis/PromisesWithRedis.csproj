@@ -33,21 +33,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NClone">
+      <HintPath>..\packages\NClone.1.1.1\lib\net45\NClone.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.Signed.4.0.35\lib\net40\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.Signed.4.0.36\lib\net40\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Interfaces.4.0.35\lib\portable-wp80+sl5+net40+win8+monotouch+monoandroid\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Interfaces.4.0.36\lib\portable-wp80+sl5+net40+win8+monotouch+monoandroid\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Redis, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Redis.Signed.4.0.35\lib\net40\ServiceStack.Redis.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Redis.Signed.4.0.36\lib\net40\ServiceStack.Redis.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.Signed.4.0.35\lib\net40\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Text.Signed.4.0.36\lib\net40\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,9 +59,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5506.36537, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5507.30376, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5506.37901\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5507.30376\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +86,7 @@
     <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo" />
     </GetAssemblyIdentity>
-    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesWithRedis.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version)" />
+    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesWithRedis.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version) –Prop Configuration=Release" />
     <Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
 </Project>

@@ -31,15 +31,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Termine.Promises.Base.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NClone">
+      <HintPath>..\packages\NClone.1.1.1\lib\net45\NClone.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generics\GenericWorkload.cs" />
@@ -63,20 +62,20 @@
     <None Include="PromisesBase.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
-      <Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo" />
-    </GetAssemblyIdentity>
-    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesBase.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version)" />
-    <Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
-  </Target>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
+      <Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo" />
+    </GetAssemblyIdentity>
+    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesBase.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version) –Prop Configuration=Release" />
+    <Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
 </Project>

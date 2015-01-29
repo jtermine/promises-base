@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<module name="SomeModule">
-	<bind service="Termine.Promises.Interfaces.IAmAPromise" to="Game.Sword"/>
-	<bind service="Game.IWarrior" toProvider="Game.SamuraiProvider"/>
-</module>

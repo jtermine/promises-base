@@ -67,7 +67,7 @@
     <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Assemblies" ItemName="targetAssemblyInfo" />
     </GetAssemblyIdentity>
-    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesZMQ.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version)" />
+    <Exec Command="$(SolutionDir)\.nuget\nuget pack $(ProjectDir)PromisesZMQ.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version) –Prop Configuration=Release" />
 	<Exec Command="$(SolutionDir)\.nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
 </Project>

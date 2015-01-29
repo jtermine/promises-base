@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
 [assembly: AssemblyProduct("Termine.Promises.NLogInstrumentation")]
-[assembly: AssemblyCopyright("Copyright ©  2014 Joseph Termine")]
+[assembly: AssemblyCopyright("Copyright ©  2015 Joseph Termine")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

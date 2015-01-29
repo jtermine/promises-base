@@ -17,7 +17,7 @@ namespace Termine.Promises
         public static void HandleInstrumentationError<TW>(this IAmAPromise<TW> promise, Exception ex)
             where TW : class, IAmAPromiseWorkload, new()
         {
-
+            //
         }
     }
 }

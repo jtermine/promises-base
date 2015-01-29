@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NClone;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
 
@@ -110,7 +111,7 @@ namespace Termine.Promises
         }
 
         private readonly PromiseContext _context = new PromiseContext();
-        private readonly TW _workload = new TW();
+        private TW _workload = new TW();
 
         public virtual void Init()
         {
@@ -129,9 +130,22 @@ namespace Termine.Promises
             get { return _context; }
         }
 
+        /// <summary>
+        /// Exposes the promise's workload
+        /// </summary>
         public TW Workload
         {
             get { return _workload; }
+        }
+
+        /// <summary>
+        /// Injects a workload obtained from a serializable source into this promise and resets the promiseId accordingly
+        /// </summary>
+        /// <param name="workload">the workload obtained from the serializable source</param>
+        public void WithWorkload(TW workload)
+        {
+            _workload = Clone.ObjectGraph(workload);
+            PromiseId = workload.RequestId;
         }
 
         /// <summary>
@@ -229,6 +243,12 @@ namespace Termine.Promises
             return this;
         }
 
+
+        /// <summary>
+        /// Submits a message to the 'block' instrumentation handler.
+        /// Notifies the promise to abort processing.
+        /// </summary>
+        /// <param name="message"></param>
         public void Block(IHandleEventMessage message)
         {
             _workload.IsTerminated = true;
@@ -329,6 +349,8 @@ namespace Termine.Promises
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Error(IHandleEventMessage message)
         {
+            _workload.IsTerminated = true;
+
             foreach (var handler in Context.ErrorHandlers)
             {
                 try
@@ -348,6 +370,8 @@ namespace Termine.Promises
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Fatal(IHandleEventMessage message)
         {
+            _workload.IsTerminated = true;
+
             foreach (var handler in Context.FatalHandlers)
             {
                 try
@@ -405,6 +429,11 @@ namespace Termine.Promises
             }
         }
 
+        /// <summary>
+        /// Submits a message to the 'block' instrumentation handler.
+        /// Notifies the promise to abort processing.
+        /// </summary>
+        /// <param name="ex"></param>
         public void Block(Exception ex)
         {
             Block(new GenericEventMessage(ex));

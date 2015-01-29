@@ -11,6 +11,7 @@ namespace Termine.Promises.Interfaces
 
         Task<IAmAPromise<TW>> RunAsync();
         IAmAPromise<TW> Run();
+        void WithWorkload(TW workload);
 
     }
 }
