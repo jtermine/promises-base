@@ -1,11 +1,18 @@
 ﻿using System.IO;
+using System.Text;
 using System.Web;
+using Newtonsoft.Json;
+using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.Web
 {
-    public abstract class PromisesHandler : IHttpHandler
+    public class PromisesHandler<TT, TW> : IHttpHandler
+        where TT: IAmAPromise<TW>, new() where TW: class, IAmAPromiseWorkload, new()
     {
-        public abstract void HandlePromise(byte[] body, WebConstants webConstants, HttpContext context);
+        public virtual void HandlePromise(byte[] body, WebConstants webConstants, HttpContext context)
+        {
+            
+        }
 
         public void ProcessRequest(HttpContext context)
         {
@@ -20,7 +27,7 @@ namespace Termine.Promises.Web
 
             var incoming = context.Request.GetBufferlessInputStream();
 
-            if (incoming.Length < 1)
+            if (incoming.Length < 1 || webConstants != WebConstants.Json)
             {
                 context.Response.StatusCode = 404;
                 context.Response.StatusDescription = "No content was provided to the POST request.";
@@ -37,9 +44,18 @@ namespace Termine.Promises.Web
                     stream.Write(buffer, 0, bytesRead);
                 }
 
-                byte[] result = stream.ToArray();
+                byte[] body = stream.ToArray();
 
-                HandlePromise(result, webConstants, context);
+                var json = Encoding.UTF8.GetString(body);
+                var workload = JsonConvert.DeserializeObject<TW>(json);
+
+                var promise = new TT();
+
+                promise.WithWorkload(workload);
+
+                promise.Run();
+
+                HandlePromise(body, webConstants, context);
             }
             
             context.Response.StatusCode = 204;
