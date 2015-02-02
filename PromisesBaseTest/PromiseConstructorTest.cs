@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -121,7 +122,7 @@ namespace Termine.Promises.Base.Test
         {
              var promise = new ClaimsBasedPromise();
 
-            promise.Workload.Request.Init(promise.Workload.RequestId);
+            promise.Workload.Request.Init(Guid.NewGuid().ToString("N"));
 
             promise.Workload.Request.Claim = "4444";
 

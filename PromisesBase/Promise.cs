@@ -43,6 +43,16 @@ namespace Termine.Promises
             public readonly Dictionary<string, Action<TW>> Executors = new Dictionary<string, Action<TW>>();
 
             /// <summary>
+            /// a dictionary of actions that execute in sequence before a promise starts
+            /// </summary>
+            public readonly Dictionary<string, Action<TW>> PreStartActions = new Dictionary<string, Action<TW>>();
+
+            /// <summary>
+            /// a dicationary of actions that execute in sequence after a promise ends
+            /// </summary>
+            public readonly Dictionary<string, Action<TW>> PostEndActions = new Dictionary<string, Action<TW>>();
+
+            /// <summary>
             /// a dictionary of block handlers -- there are executed when a promise is blocked
             /// </summary>
             public Dictionary<string, Action<IAmAPromise<TW>, IHandleEventMessage>> BlockHandlers { get; private set; }
@@ -195,12 +205,19 @@ namespace Termine.Promises
 
                 Trace(PromiseMessages.PromiseStarted);
 
+                foreach (var preStartAction in Context.PreStartActions)
+                {
+                    Trace(PromiseMessages.PreStartActionStarted(preStartAction.Key));
+                    preStartAction.Value.Invoke(_workload);
+                    Trace(PromiseMessages.PreStartActionStopped(preStartAction.Key));
+                }
+
                 foreach (var challenger in Context.AuthChallengers)
                 {
                     Trace(PromiseMessages.AuthChallengerStarted(challenger.Key));
                     challenger.Value.Invoke(_workload);
                     Trace(PromiseMessages.AuthChallengerStopped(challenger.Key));
-                    if (_workload.IsTerminated) return this;
+                    if (_workload.IsTerminated) return PostEnd();
                 }
 
                 foreach (var validator in Context.Validators)
@@ -208,18 +225,17 @@ namespace Termine.Promises
                     Trace(PromiseMessages.ValidatorStarted(validator.Key));
                     validator.Value.Invoke(_workload);
                     Trace(PromiseMessages.ValidatorStopped(validator.Key));
-                    if (_workload.IsTerminated) return this;
+                    if (_workload.IsTerminated) return PostEnd();
                 }
 
-                if (_workload.IsBlocked) return this;
+                if (_workload.IsBlocked) return PostEnd();
 
                 foreach (var executor in Context.Executors)
                 {
-
                     Trace(PromiseMessages.ExecutorStarted(executor.Key));
                     executor.Value.Invoke(_workload);
                     Trace(PromiseMessages.ExecutorStopped(executor.Key));
-                    if (_workload.IsTerminated) return this;
+                    if (_workload.IsTerminated) return PostEnd();
                 }
 
                 foreach (var successHandler in Context.SuccessHandlers)
@@ -228,7 +244,7 @@ namespace Termine.Promises
                     Trace(PromiseMessages.ExecutorStarted(successHandler.Key));
                     successHandler.Value.Invoke(this);
                     Trace(PromiseMessages.ExecutorStopped(successHandler.Key));
-                    if (_workload.IsTerminated) return this;
+                    if (_workload.IsTerminated) return PostEnd();
                 }
 
                 Trace(PromiseMessages.PromiseSuccess);
@@ -238,6 +254,18 @@ namespace Termine.Promises
             {
                 Error(new GenericEventMessage(ex));
                 Trace(PromiseMessages.PromiseFail);
+            }
+
+            return PostEnd();
+        }
+
+        private IAmAPromise<TW> PostEnd()
+        {
+            foreach (var postEndAction in Context.PostEndActions)
+            {
+                Trace(PromiseMessages.PostEndActionStarted(postEndAction.Key));
+                postEndAction.Value.Invoke(_workload);
+                Trace(PromiseMessages.PostEndActionStopped(postEndAction.Key));
             }
 
             return this;
@@ -511,6 +539,26 @@ namespace Termine.Promises
         public void AbortOnAccessDenied(Exception ex)
         {
             AbortOnAccessDenied(new GenericEventMessage(ex));
+        }
+
+        public Promise<TW> WithPreStart(string actionId, Action<TW> action)
+        {
+            if (string.IsNullOrEmpty(actionId) || action == null) return this;
+
+            if (Context.PreStartActions.ContainsKey(actionId)) return this;
+            Context.PreStartActions.Add(actionId, action);
+
+            return this;
+        }
+
+        public Promise<TW> WithPostEnd(string actionId, Action<TW> action)
+        {
+            if (string.IsNullOrEmpty(actionId) || action == null) return this;
+
+            if (Context.PostEndActions.ContainsKey(actionId)) return this;
+            Context.PostEndActions.Add(actionId, action);
+
+            return this;
         }
 
         public Promise<TW> WithValidator(string actionId, Action<TW> action)

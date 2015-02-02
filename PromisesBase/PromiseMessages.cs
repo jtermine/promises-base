@@ -175,5 +175,61 @@ namespace Termine.Promises
             };
         }
 
+        /// <summary>
+        /// PreStartAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PreStartAction that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PreStartActionStarted(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 102,
+                EventPublicMessage = string.Format("PreStartAction started {0}", actionId)
+            };
+        }
+
+        /// <summary>
+        /// PreStartAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PreStartAction that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PreStartActionStopped(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 103,
+                EventPublicMessage = string.Format("PreStartAction stopped {0}", actionId)
+            };
+        }
+
+        /// <summary>
+        /// PostEndAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PostEndAction that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PostEndActionStarted(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 102,
+                EventPublicMessage = string.Format("PostEndAction started {0}", actionId)
+            };
+        }
+
+        /// <summary>
+        /// PostEndAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PostEndAction that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PostEndActionStopped(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 103,
+                EventPublicMessage = string.Format("PostEndAction stopped {0}", actionId)
+            };
+        }
+
     }
 }
