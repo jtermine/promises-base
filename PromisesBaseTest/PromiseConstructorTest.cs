@@ -138,7 +138,7 @@ namespace Termine.Promises.Base.Test
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = client.PostAsync("http://localhost.fiddler:2950", content);
+                var response = client.PostAsync("http://localhost.fiddler:2950/TestPromise", content);
 
                 var responseString = response.Result.Content.ReadAsStringAsync();
 
