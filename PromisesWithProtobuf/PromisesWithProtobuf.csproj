@@ -51,14 +51,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5511.31267, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5511.39831, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5511.31267\lib\net45\Termine.Promises.Base.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5511.39831\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.Encryption, Version=0.0.5506.37560, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Encryption, Version=0.0.5511.39837, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5506.37905\lib\net45\Termine.Promises.Encryption.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Encryption.0.0.5511.39837\lib\net45\Termine.Promises.Encryption.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

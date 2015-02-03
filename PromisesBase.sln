@@ -3,6 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D44D985-3239-45B3-A221-5709BFDA7C7A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBase", "PromisesBase\PromisesBase.csproj", "{EB7D739E-E8EF-4834-AD2E-06FE73CB3D20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesBaseTest", "PromisesBaseTest\PromisesBaseTest.csproj", "{9D81F10B-C1CD-49E9-980B-F5C4C0CF3BC5}"
@@ -16,13 +23,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesExecutionControlWithRedis", "PromiseExecutionControlWithRedis\PromisesExecutionControlWithRedis.csproj", "{5E05D603-6304-4D8C-94D7-05398C73D629}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithRedis", "PromisesWithRedis\PromisesWithRedis.csproj", "{ADD596AA-7290-437A-8D2D-E9BF991152B7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D44D985-3239-45B3-A221-5709BFDA7C7A}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithProtobuf", "PromisesWithProtobuf\PromisesWithProtobuf.csproj", "{6794FE31-8623-4330-B2FA-D373E2C83821}"
 EndProject

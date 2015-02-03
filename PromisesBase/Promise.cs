@@ -28,6 +28,11 @@ namespace Termine.Promises
         public class PromiseContext
         {
             /// <summary>
+            /// this dictionary of generic objects travels with the promise context and can be accessed by any object that inherits the promise
+            /// </summary>
+            public Dictionary<string, object> Objects = new Dictionary<string, object>();
+
+            /// <summary>
             /// this dictionary of AuthChallengers -- these are executed in sequence to determine whether the promise has the authority to run
             /// </summary>
             public readonly Dictionary<string, Action<TW>> AuthChallengers = new Dictionary<string, Action<TW>>();
