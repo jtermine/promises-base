@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -120,31 +121,31 @@ namespace Termine.Promises.Base.Test
         [TestMethod]
         public void TestGetRequest()
         {
-             var promise = new ClaimsBasedPromise();
+             var promise = new CreateLockPromise();
 
-            promise.Workload.Request.Init(Guid.NewGuid().ToString("N"));
+            //promise.Workload.Request.Claim = "4444";
 
-            promise.Workload.Request.Claim = "4444";
+            promise.Run();
 
-            var testStream = new MemoryStream();
+            //var testStream = new MemoryStream();
 
-            promise.Workload.Request.Serialize(testStream);
+            //promise.Workload.Request.Serialize(testStream);
 
-            testStream.Flush();
-            testStream.Seek(0, SeekOrigin.Begin);
+            //testStream.Flush();
+            //testStream.Seek(0, SeekOrigin.Begin);
 
-            using (var client = new HttpClient())
-            {
-                var json = JsonConvert.SerializeObject(promise.Workload.Request);
+            //using (var client = new HttpClient())
+            //{
+            //    var json = JsonConvert.SerializeObject(promise.Workload);
 
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //    var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = client.PostAsync("http://localhost.fiddler:2950/TestPromise", content);
+            //    var response = client.PostAsync("http://localhost.fiddler:2950/TestPromise", content);
 
-                var responseString = response.Result.Content.ReadAsStringAsync();
+            //    //var responseString = response.Result.Content.ReadAsStringAsync();
 
-                Assert.IsNotNull(responseString);
-            }
+            //    Assert.IsTrue(response.Result.StatusCode == HttpStatusCode.NoContent, "Response returned {0}", response.Result.StatusCode);
+            //}
 
         }
     }

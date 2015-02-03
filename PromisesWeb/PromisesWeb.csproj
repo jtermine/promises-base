@@ -68,25 +68,25 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5511.39831, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5512.29503, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5511.39831\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5512.29503\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
     <Reference Include="Termine.Promises.Encryption, Version=0.0.5511.39837, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Termine.Promises.Encryption.0.0.5511.39837\lib\net45\Termine.Promises.Encryption.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5511.39908, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5512.29631, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5511.39908\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5512.29631\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5511.39908, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5512.29631, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5511.39908\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5512.29631\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.WithProtobuf, Version=0.0.5511.39951, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.WithProtobuf, Version=0.0.5512.29634, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5511.39951\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5512.29634\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -139,5 +139,5 @@
     <Exec Command="$(SolutionDir).nuget\nuget pack $(ProjectDir)PromisesWeb.csproj -OutputDirectory $(SolutionDir)nuget-tree -Version %(targetAssemblyInfo.Version) –Prop Configuration=Release" />
     <Exec Command="$(SolutionDir).nuget\nuget push $(SolutionDir)nuget-tree\$(TargetName).%(targetAssemblyInfo.Version).nupkg 1c63191d-bab0-4492-b4fe-743e5feef12e -Source https://www.myget.org/F/termine/api/v2/package" />
   </Target>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v12.0\WebApplications\Microsoft.WebApplication.targets" />
 </Project>

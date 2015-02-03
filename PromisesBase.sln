@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWeb", "PromisesWeb\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithFileTransactionLog", "PromisesWithFileTransactionLog\PromisesWithFileTransactionLog.csproj", "{5D75BB33-6392-4C69-A29D-E678F0D23161}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithREST", "PromisesHTTPs\PromisesWithREST.csproj", "{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

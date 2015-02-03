@@ -176,6 +176,34 @@ namespace Termine.Promises
         }
 
         /// <summary>
+        /// XferAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage XferActionStarted(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 100,
+                EventPublicMessage = string.Format("XferAction started {0}", actionId)
+            };
+        }
+
+        /// <summary>
+        /// XferAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage XferActionStopped(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 101,
+                EventPublicMessage = string.Format("XferAction stopped {0}", actionId)
+            };
+        }
+
+        /// <summary>
         /// PreStartAction started {actionId}
         /// </summary>
         /// <param name="actionId">the actionId of the PreStartAction that started</param>

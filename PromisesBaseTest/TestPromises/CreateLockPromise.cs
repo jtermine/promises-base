@@ -1,5 +1,6 @@
 ﻿using Termine.Promises.Base.Test.CreateLockPromiseObjects;
 using Termine.Promises.NLogInstrumentation;
+using Termine.Promises.WithREST;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
@@ -8,6 +9,12 @@ namespace Termine.Promises.Base.Test.TestPromises
         public int AuthChallengerChecksum { get; set; }
         public int ValidatorChecksum { get; set; }
         public int ExecutorChecksum { get; set; }
+
+        public CreateLockPromise()
+        {
+            this.WithNLogInstrumentation();
+            this.WithRest();
+        }
 
         public override void Init()
         {

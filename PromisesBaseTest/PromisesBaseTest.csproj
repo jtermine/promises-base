@@ -111,6 +111,10 @@
       <Project>{57881067-302d-4ede-8668-3a61a23bcc40}</Project>
       <Name>PromisesFluentValidation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PromisesHTTPs\PromisesWithREST.csproj">
+      <Project>{caf9e016-e4e1-44ed-aa7b-9d722ea79e3b}</Project>
+      <Name>PromisesWithREST</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PromisesNLogInstrumentation\PromisesNLogInstrumentation.csproj">
       <Project>{224354a5-3b29-42e3-9a29-f6ff35fbbd9e}</Project>
       <Name>PromisesNLogInstrumentation</Name>

@@ -53,9 +53,14 @@ namespace Termine.Promises
             public readonly Dictionary<string, Action<TW>> PreStartActions = new Dictionary<string, Action<TW>>();
 
             /// <summary>
-            /// a dicationary of actions that execute in sequence after a promise ends
+            /// a dictionary of actions that execute in sequence after a promise ends
             /// </summary>
             public readonly Dictionary<string, Action<TW>> PostEndActions = new Dictionary<string, Action<TW>>();
+
+            /// <summary>
+            /// a dictionary of actions that execute in sequence when transmitting a promise to a services
+            /// </summary>
+            public readonly Dictionary<string, Action<TW>> XferActions = new Dictionary<string, Action<TW>>();
 
             /// <summary>
             /// a dictionary of block handlers -- there are executed when a promise is blocked
@@ -204,7 +209,7 @@ namespace Termine.Promises
         {
             try
             {
-                Workload.RequestId = PromiseId;
+                Workload.WithRequestId(PromiseId);
 
                 Init();
 
@@ -240,6 +245,16 @@ namespace Termine.Promises
                     Trace(PromiseMessages.ExecutorStarted(executor.Key));
                     executor.Value.Invoke(_workload);
                     Trace(PromiseMessages.ExecutorStopped(executor.Key));
+                    if (_workload.IsTerminated) return PostEnd();
+                }
+
+                if (_workload.IsBlocked) return PostEnd();
+
+                foreach (var xferAction in Context.XferActions)
+                {
+                    Trace(PromiseMessages.XferActionStarted(xferAction.Key));
+                    xferAction.Value.Invoke(_workload);
+                    Trace(PromiseMessages.XferActionStopped(xferAction.Key));
                     if (_workload.IsTerminated) return PostEnd();
                 }
 
