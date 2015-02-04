@@ -1,6 +1,5 @@
 ﻿using Termine.Promises.Base.Test.CreateLockPromiseObjects;
 using Termine.Promises.NLogInstrumentation;
-using Termine.Promises.WithREST;
 using Termine.Promises.ZMQ;
 
 namespace Termine.Promises.Base.Test.TestPromises

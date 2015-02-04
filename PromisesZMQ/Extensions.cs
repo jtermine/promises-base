@@ -1,4 +1,5 @@
-﻿using EasyNetQ;
+﻿using System;
+using EasyNetQ;
 using Newtonsoft.Json;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
@@ -10,6 +11,14 @@ namespace Termine.Promises.ZMQ
     /// </summary>
     public static class Extensions
     {
+        public static Promise<TW> WithRabbitMQ<TW>(this Promise<TW> promise)
+            where TW : class, IAmAPromiseWorkload, new()
+        {
+            var bus = RabbitHutch.CreateBus("host=localhost");
+            return promise.WithRabbitMQ(bus);
+        }
+
+
         /// <summary>
         /// Adds support for broadcasting event states to RabbitMQ
         /// </summary>
@@ -58,7 +67,7 @@ namespace Termine.Promises.ZMQ
             where TT : IHandleEventMessage
             where TW : class, IAmAPromiseWorkload, new()
         {
-            var payload = new {rabbitId = rabbitLogLevel, header = message, body = promise.Workload};
+            var payload = new {rabbitId = Convert.ChangeType(rabbitLogLevel, rabbitLogLevel.GetTypeCode()), header = message, body = promise.Workload};
             bus.Send("my.queue", JsonConvert.SerializeObject(payload));
         }
 
