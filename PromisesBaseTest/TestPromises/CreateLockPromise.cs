@@ -1,6 +1,7 @@
 ﻿using Termine.Promises.Base.Test.CreateLockPromiseObjects;
 using Termine.Promises.NLogInstrumentation;
 using Termine.Promises.WithREST;
+using Termine.Promises.ZMQ;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
@@ -13,7 +14,8 @@ namespace Termine.Promises.Base.Test.TestPromises
         public CreateLockPromise()
         {
             this.WithNLogInstrumentation();
-            this.WithRest();
+            //this.WithRest();
+            this.WithRabbitMQ();
         }
 
         public override void Init()

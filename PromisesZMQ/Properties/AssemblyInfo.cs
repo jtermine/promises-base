@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Termine.Promises.ZMQ")]
-[assembly: AssemblyDescription("A library to implement methods to implement ZeroMQ transport on promises.")]
+[assembly: AssemblyDescription("A library to implement methods to implement RabbitMQ transport on promises.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joseph Termine")]
 [assembly: AssemblyProduct("Termine.Promises")]

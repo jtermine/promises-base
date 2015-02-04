@@ -261,9 +261,9 @@ namespace Termine.Promises
                 foreach (var successHandler in Context.SuccessHandlers)
                 {
 
-                    Trace(PromiseMessages.ExecutorStarted(successHandler.Key));
+                    Trace(PromiseMessages.SuccessActionStarted(successHandler.Key));
                     successHandler.Value.Invoke(this);
-                    Trace(PromiseMessages.ExecutorStopped(successHandler.Key));
+                    Trace(PromiseMessages.SuccessActionStopped(successHandler.Key));
                     if (_workload.IsTerminated) return PostEnd();
                 }
 

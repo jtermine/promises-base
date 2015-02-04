@@ -259,5 +259,33 @@ namespace Termine.Promises
             };
         }
 
+        /// <summary>
+        /// SuccessAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the SuccessAction that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage SuccessActionStarted(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 104,
+                EventPublicMessage = string.Format("SuccessAction started {0}", actionId)
+            };
+        }
+
+        /// <summary>
+        /// SuccessAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the SuccessAction that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage SuccessActionStopped(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventId = 105,
+                EventPublicMessage = string.Format("SuccessAction stopped {0}", actionId)
+            };
+        }
+
     }
 }

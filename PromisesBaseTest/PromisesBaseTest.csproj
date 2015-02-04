@@ -127,6 +127,10 @@
       <Project>{add596aa-7290-437a-8d2d-e9bf991152b7}</Project>
       <Name>PromisesWithRedis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PromisesZMQ\PromisesZMQ.csproj">
+      <Project>{dd8ed2dd-38b7-41f3-b869-93452bb759c6}</Project>
+      <Name>PromisesZMQ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
