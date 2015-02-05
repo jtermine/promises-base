@@ -1,6 +1,5 @@
-﻿using System;
-using EasyNetQ;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
 
@@ -11,14 +10,6 @@ namespace Termine.Promises.ZMQ
     /// </summary>
     public static class Extensions
     {
-        public static Promise<TW> WithRabbitMQ<TW>(this Promise<TW> promise)
-            where TW : class, IAmAPromiseWorkload, new()
-        {
-            var bus = RabbitHutch.CreateBus("host=localhost");
-            return promise.WithRabbitMQ(bus);
-        }
-
-
         /// <summary>
         /// Adds support for broadcasting event states to RabbitMQ
         /// </summary>
@@ -26,49 +17,57 @@ namespace Termine.Promises.ZMQ
         /// <param name="promise">a promise object</param>
         /// <param name="bus">an instance of the connected message bus</param>
         /// <returns>the instance of that promise with the RabbitMQ enabled</returns>
-        public static Promise<TW> WithRabbitMQ<TW>(this Promise<TW> promise, IBus bus)
+        public static Promise<TW> WithRabbitMQ<TW>(this Promise<TW> promise)
             where TW : class, IAmAPromiseWorkload, new()
         {
 
             promise.WithBlockHandler("rabbitMq.block",
-                (w, m) => m.LogEvent(RabbitLogLevel.Trace, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Trace, w));
 
             promise.WithTraceHandler("rabbitMq.trace",
-                (w, m) => m.LogEvent(RabbitLogLevel.Trace, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Trace, w));
 
             promise.WithDebugHandler("rabbitMq.debug",
-                (w, m) => m.LogEvent(RabbitLogLevel.Debug, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Debug, w));
 
             promise.WithInfoHandler("rabbitMq.info",
-                (w, m) => m.LogEvent(RabbitLogLevel.Info, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Info, w));
 
             promise.WithWarnHandler("rabbitMq.warn",
-                (w, m) => m.LogEvent(RabbitLogLevel.Warn, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Warn, w));
 
             promise.WithErrorHandler("rabbitMq.error",
-                (w, m) => m.LogEvent(RabbitLogLevel.Error, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Error, w));
 
             promise.WithFatalHandler("rabbitMq.fatal",
-                (w, m) => m.LogEvent(RabbitLogLevel.Fatal, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Fatal, w));
 
             promise.WithAbortHandler("rabbitMq.abort",
-                (w, m) => m.LogEvent(RabbitLogLevel.Info, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Info, w));
 
             promise.WithAbortOnAccessDeniedHandler("rabbitMq.abortAccessDenied",
-                (w, m) => m.LogEvent(RabbitLogLevel.Info, w, bus));
+                (w, m) => m.LogEvent(RabbitLogLevel.Info, w));
 
             promise.WithSuccessHandler("rabbitMq.success",
-                aPromise => LogEvent(new GenericEventMessage(6, "Success"), RabbitLogLevel.Success, aPromise, bus));
+                aPromise => LogEvent(new GenericEventMessage(6, "Success"), RabbitLogLevel.Success, aPromise));
 
             return promise;
         }
 
-        private static void LogEvent<TT, TW>(this TT message, RabbitLogLevel rabbitLogLevel, IAmAPromise<TW> promise, IBus bus)
+        private static void LogEvent<TT, TW>(this TT message, RabbitLogLevel rabbitLogLevel, IAmAPromise<TW> promise)
             where TT : IHandleEventMessage
             where TW : class, IAmAPromiseWorkload, new()
         {
-            var payload = new {rabbitId = Convert.ChangeType(rabbitLogLevel, rabbitLogLevel.GetTypeCode()), header = message, body = promise.Workload};
-            bus.Send("my.queue", JsonConvert.SerializeObject(payload));
+
+            var payload =
+                new
+                {
+                    header = message,
+                    body = promise.Workload
+                };
+
+            RabbitMqServiceBus.Instance.Publish(JsonConvert.SerializeObject(payload, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+
         }
 
         private enum RabbitLogLevel

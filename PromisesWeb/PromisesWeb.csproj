@@ -46,9 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyNetQ">
-      <HintPath>..\packages\EasyNetQ.0.40.6.355\lib\net40\EasyNetQ.dll</HintPath>
-    </Reference>
     <Reference Include="FluentValidation">
       <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
@@ -94,9 +91,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5512.40560\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.ZMQ, Version=0.0.5513.15836, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.ZMQ, Version=0.0.5514.10479, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.ZMQ.0.0.5513.15836\lib\net45\Termine.Promises.ZMQ.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.ZMQ.0.0.5514.10479\lib\net45\Termine.Promises.ZMQ.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
