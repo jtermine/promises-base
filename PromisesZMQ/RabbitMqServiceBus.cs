@@ -31,12 +31,12 @@ namespace Termine.Promises.ZMQ
             get { return _instance; }
         }
 
-        public void Publish(string message)
+        public void Publish(string message, string routingKey)
         {
             if (IsBrokerDisconnected()) Connect();
             
             byte[] encodedMessage = Encoding.ASCII.GetBytes(message);
-            _channel.BasicPublish(ExchangeName, RoutingKey, null, encodedMessage);
+            _channel.BasicPublish(ExchangeName, routingKey, null, encodedMessage);
             //Disconnect();
         }
 
@@ -47,12 +47,12 @@ namespace Termine.Promises.ZMQ
         // "localhost" if rabbitMq is installed on the same server,
         // else enter the ip address of the server where it is installed.
         private static string HostName = "localhost";
-        private static string ExchangeName = "test-exchange";
-        private static string ExchangeTypeVal = ExchangeType.Direct;
+        private static string ExchangeName = "promise-fan";
+        private static string ExchangeTypeVal = ExchangeType.Fanout;
         private static string QueueName = "SomeQueue";
         private static bool QueueExclusive = false;
-        private static bool QueueDurable = false;
-        private static bool QueueDelete = false;
+        private static bool QueueDurable = true;
+        private static bool QueueDelete = true;
         private static string RoutingKey = "yasser";
 
         private static IModel _channel;
@@ -73,9 +73,9 @@ namespace Termine.Promises.ZMQ
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.ExchangeDeclare(ExchangeName, ExchangeTypeVal);
-            _channel.QueueDeclare(QueueName, QueueDurable, QueueExclusive, QueueDelete, null);
-            _channel.QueueBind(QueueName, ExchangeName, RoutingKey);
+            //_channel.ExchangeDeclare(ExchangeName, ExchangeTypeVal);
+            //_channel.QueueDeclare(QueueName, QueueDurable, QueueExclusive, QueueDelete, null);
+            //_channel.QueueBind(QueueName, ExchangeName, RoutingKey);
         }
         private static void Disconnect()
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NClone;
+using Newtonsoft.Json;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
 
@@ -135,6 +136,11 @@ namespace Termine.Promises
 
         public virtual void Init()
         {
+        }
+
+        public virtual void Start(string json)
+        {
+            _workload = JsonConvert.DeserializeObject<TW>(json);
         }
 
         /// <summary>

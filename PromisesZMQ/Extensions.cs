@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Globalization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
@@ -59,14 +61,12 @@ namespace Termine.Promises.ZMQ
             where TW : class, IAmAPromiseWorkload, new()
         {
 
-            var payload =
-                new
-                {
-                    header = message,
-                    body = promise.Workload
-                };
+            var body = JsonConvert.SerializeObject(promise.Workload, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+            
+            var fs = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}", DateTime.Now.ToString("O"), promise.PromiseId, message.EventId,
+                message.EventPublicMessage, message.EventPublicDetails, message.IsPublicMessage, body);
 
-            RabbitMqServiceBus.Instance.Publish(JsonConvert.SerializeObject(payload, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+            RabbitMqServiceBus.Instance.Publish(fs, message.EventId.ToString(CultureInfo.InvariantCulture));
 
         }
 

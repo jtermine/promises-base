@@ -5,6 +5,8 @@ namespace Termine.Promises.Interfaces
     public interface IHandlePromiseActions
     {
         void Init();
+
+        void Start(string json);
         
         void Block(IHandleEventMessage message);
         void Trace(IHandleEventMessage message);

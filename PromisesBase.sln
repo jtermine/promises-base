@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithFileTransaction
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithREST", "PromisesHTTPs\PromisesWithREST.csproj", "{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesTopshelf", "PromisesTopshelf\PromisesTopshelf.csproj", "{02A237AF-1999-4622-8290-8147E438C782}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A237AF-1999-4622-8290-8147E438C782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A237AF-1999-4622-8290-8147E438C782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A237AF-1999-4622-8290-8147E438C782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A237AF-1999-4622-8290-8147E438C782}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
