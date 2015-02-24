@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Ninject;
 using NLog;
 using RabbitMQ.Client;
@@ -21,11 +23,16 @@ namespace PromisesTopshelf
         private static Thread _threadTwo;
         private static Thread _threadThree;
         private static readonly IKernel Kernel = new StandardKernel();
-
+        
         public static void Start()
         {
             _mainThread = new Thread(StartQueue);
             _mainThread.Start();
+        }
+
+        private static void FileSystemWatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
+        {
+            Log.Info("file changed > {0} | {1}", fileSystemEventArgs.Name, fileSystemEventArgs.ChangeType);
         }
 
         public static void Stop()
@@ -75,8 +82,8 @@ namespace PromisesTopshelf
                         _threadTwo = new Thread(OpenChannel);
                         _threadThree = new Thread(OpenChannel);
 
-                        _threadOne.Start(new ConnectionState {Connection = connection, QueueName = "queue-1"});
-                        _threadTwo.Start(new ConnectionState {Connection = connection, QueueName = "queue-2"});
+                        //_threadOne.Start(new ConnectionState {Connection = connection, QueueName = "queue-1"});
+                        //_threadTwo.Start(new ConnectionState {Connection = connection, QueueName = "queue-2"});
                         _threadThree.Start(new ConnectionState {Connection = connection, QueueName = "queue-3"});
 
                         IsConnectedEvent.WaitOne();
@@ -107,6 +114,19 @@ namespace PromisesTopshelf
         {
             try
             {
+                var fileSystemWatcher = new FileSystemWatcher
+                {
+                    Path = AppDomain.CurrentDomain.BaseDirectory,
+                    Filter = "*.txt",
+                    NotifyFilter = NotifyFilters.Size | NotifyFilters.CreationTime | NotifyFilters.FileName,
+                    EnableRaisingEvents = true
+                };
+
+                fileSystemWatcher.Changed += FileSystemWatcherOnChanged;
+                fileSystemWatcher.Created += FileSystemWatcherOnChanged;
+                fileSystemWatcher.Renamed += FileSystemWatcherOnChanged;
+                fileSystemWatcher.Deleted += FileSystemWatcherOnChanged;
+
                 var connectionState = state as ConnectionState;
                 if (connectionState == null) return;
 
@@ -143,10 +163,14 @@ namespace PromisesTopshelf
                                     ? isPublicMessage
                                     : default(bool)
                         };
-                        
+
+                        var obj = JObject.Parse(logEntry.Body);
+
+                        Log.Warn(obj.Property("requestName").Value);
+
                         try
                         {
-                            var n = Kernel.Get<IHandlePromiseActions>(promiseName);
+                            var n = Kernel.Get<IHandlePromiseActions>(obj.Property("requestName").Value.ToString());
                             n.Start(logEntry.Body);
                         }
                         catch (Exception ex)
@@ -165,9 +189,15 @@ namespace PromisesTopshelf
                 Log.Trace("Connection terminated with RabbitMQ.");
                 if (_isConnected) IsConnectedEvent.Set();
             }
+
             catch (ThreadAbortException)
             {
                 Log.Trace("Thread aborted.  Exiting channel with RabbitMQ.");
+            }
+
+            catch (RabbitMQ.Client.Exceptions.AlreadyClosedException)
+            {
+                Log.Trace("Thread aborted.  Exiting channel with RabbitMQ.");   
             }
             catch (Exception ex)
             {
@@ -176,6 +206,7 @@ namespace PromisesTopshelf
             }
         }
 
+        
     }
 }
 
