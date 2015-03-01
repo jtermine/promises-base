@@ -22,7 +22,10 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Termine.Promises.Base.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,7 +50,10 @@
   <ItemGroup>
     <Compile Include="Generics\GenericRequest.cs" />
     <Compile Include="Generics\GenericWorkload.cs" />
-    <Compile Include="Interfaces\IDescribeAPromise.cs" />
+    <Compile Include="Handlers\PromiseHandler.cs" />
+    <Compile Include="Handlers\PromiseHandlerQueue.cs" />
+    <Compile Include="Handlers\WorkloadHandler.cs" />
+    <Compile Include="Handlers\WorkloadHandlerQueue.cs" />
     <Compile Include="Interfaces\IHandlePromiseActions.cs" />
     <Compile Include="PromiseMessages.cs" />
     <Compile Include="Generics\GenericEventMessage.cs" />

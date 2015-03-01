@@ -1,4 +1,5 @@
 ﻿using Termine.Promises.Base.Test.FalseLockPromiseObjects;
+using Termine.Promises.Interfaces;
 using Termine.Promises.NLogInstrumentation;
 
 namespace Termine.Promises.Base.Test.TestPromises
@@ -17,18 +18,18 @@ namespace Termine.Promises.Base.Test.TestPromises
                 .WithExecutor("6", Executor);
         }
 
-        private void Executor(FalseLockWorkload lockWorkload)
+        private void Executor(IHandlePromiseActions handlePromiseActions, FalseLockWorkload falseLockWorkload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(FalseLockWorkload lockWorkload)
+        private void Validator(IHandlePromiseActions handlePromiseActions, FalseLockWorkload falseLockWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
-            lockWorkload.IsTerminated = true;
+            falseLockWorkload.IsTerminated = true;
         }
 
-        private void AuthChallenger(FalseLockWorkload lockWorkload)
+        private void AuthChallenger(IHandlePromiseActions handlePromiseActions, FalseLockWorkload falseLockWorkload)
         {
             AuthChallengerChecksum = 1;
         }

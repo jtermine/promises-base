@@ -2,13 +2,10 @@
 
 namespace Termine.Promises.Interfaces
 {
-    public interface IAmAPromise <TW>: IDescribeAPromise, IHandlePromiseActions
+    public interface IAmAPromise <TW>: IHandlePromiseActions
         where TW : class, IAmAPromiseWorkload, new()
     {
-        Promise<TW>.PromiseContext Context { get; }
-
         TW Workload { get; }
-
         Task<IAmAPromise<TW>> RunAsync();
         IAmAPromise<TW> Run();
         void WithWorkload(TW workload);

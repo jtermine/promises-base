@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using NLog;
 using Termine.Promises.Interfaces;
 
@@ -24,45 +23,42 @@ namespace Termine.Promises.NLogInstrumentation
             var log = LogManager.GetLogger(loggerName);
             
             promise.WithBlockHandler("nlog.block",
-                (w, m) => m.LogEvent(log, LogLevel.Trace, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Trace, w));
 
             promise.WithTraceHandler("nlog.trace",
-                (w, m) => m.LogEvent(log, LogLevel.Trace, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Trace, w));
 
             promise.WithDebugHandler("nlog.debug",
-                (w, m) => m.LogEvent(log, LogLevel.Debug, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Debug, w));
 
             promise.WithInfoHandler("nlog.info",
-                (w, m) => m.LogEvent(log, LogLevel.Info, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Info, w));
 
             promise.WithWarnHandler("nlog.warn",
-                (w, m) => m.LogEvent(log, LogLevel.Warn, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Warn, w));
 
             promise.WithErrorHandler("nlog.error",
-                (w, m) => m.LogEvent(log, LogLevel.Error, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Error, w));
 
             promise.WithFatalHandler("nlog.fatal",
-                (w, m) => m.LogEvent(log, LogLevel.Fatal, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Fatal, w));
 
             promise.WithAbortHandler("nlog.abort",
-                (w, m) => m.LogEvent(log, LogLevel.Info, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Info, w));
 
             promise.WithAbortOnAccessDeniedHandler("nlog.abortAccessDenied",
-                (w, m) => m.LogEvent(log, LogLevel.Info, w.PromiseId, m));
+                (w, m) => m.LogEvent(log, LogLevel.Info, w));
 
             return promise;
         }
 
-        private static void LogEvent<TT>(this TT message, Logger logger, LogLevel logLevel, string requestId,
-            params object[] options)
+        private static void LogEvent<TT>(this TT message, Logger logger, LogLevel logLevel, IHandlePromiseActions promise, params object[] options)
             where TT : IHandleEventMessage
         {
             var theEvent = new LogEventInfo(logLevel, logger.Name, CultureInfo.DefaultThreadCurrentCulture,
                 message.EventPublicMessage, options);
 
-            if (string.IsNullOrEmpty(requestId)) requestId = Guid.NewGuid().ToString("N");
-
-            theEvent.Properties.Add("RequestId", requestId);
+            theEvent.Properties.Add("RequestId", promise.PromiseId);
             theEvent.Properties.Add("EventTypeId", message.EventId);
             theEvent.Properties.Add("EventPublicDetails", message.EventPublicDetails);
 

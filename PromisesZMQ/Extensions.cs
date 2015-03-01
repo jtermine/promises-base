@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Termine.Promises.Generics;
 using Termine.Promises.Interfaces;
 
@@ -17,57 +15,53 @@ namespace Termine.Promises.ZMQ
         /// </summary>
         /// <typeparam name="TW">a type of promise workload (implemented IAmAWorkload)</typeparam>
         /// <param name="promise">a promise object</param>
-        /// <param name="bus">an instance of the connected message bus</param>
         /// <returns>the instance of that promise with the RabbitMQ enabled</returns>
         public static Promise<TW> WithRabbitMQ<TW>(this Promise<TW> promise)
             where TW : class, IAmAPromiseWorkload, new()
         {
 
             promise.WithBlockHandler("rabbitMq.block",
-                (w, m) => m.LogEvent(RabbitLogLevel.Trace, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Trace, p));
 
             promise.WithTraceHandler("rabbitMq.trace",
-                (w, m) => m.LogEvent(RabbitLogLevel.Trace, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Trace, p));
 
             promise.WithDebugHandler("rabbitMq.debug",
-                (w, m) => m.LogEvent(RabbitLogLevel.Debug, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Debug, p));
 
             promise.WithInfoHandler("rabbitMq.info",
-                (w, m) => m.LogEvent(RabbitLogLevel.Info, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Info, p));
 
             promise.WithWarnHandler("rabbitMq.warn",
-                (w, m) => m.LogEvent(RabbitLogLevel.Warn, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Warn, p));
 
             promise.WithErrorHandler("rabbitMq.error",
-                (w, m) => m.LogEvent(RabbitLogLevel.Error, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Error, p));
 
             promise.WithFatalHandler("rabbitMq.fatal",
-                (w, m) => m.LogEvent(RabbitLogLevel.Fatal, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Fatal, p));
 
             promise.WithAbortHandler("rabbitMq.abort",
-                (w, m) => m.LogEvent(RabbitLogLevel.Info, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Info, p));
 
             promise.WithAbortOnAccessDeniedHandler("rabbitMq.abortAccessDenied",
-                (w, m) => m.LogEvent(RabbitLogLevel.Info, w));
+                (p, m) => m.LogEvent(RabbitLogLevel.Info, p));
 
             promise.WithSuccessHandler("rabbitMq.success",
-                aPromise => LogEvent(new GenericEventMessage(6, "Success"), RabbitLogLevel.Success, aPromise));
+                (p, m) => LogEvent(new GenericEventMessage(6, "Success"), RabbitLogLevel.Success, p));
 
             return promise;
         }
 
-        private static void LogEvent<TT, TW>(this TT message, RabbitLogLevel rabbitLogLevel, IAmAPromise<TW> promise)
+        private static void LogEvent<TT, TW>(this TT message, RabbitLogLevel rabbitLogLevel, TW promise)
             where TT : IHandleEventMessage
-            where TW : class, IAmAPromiseWorkload, new()
+            where TW : class, IHandlePromiseActions
         {
 
-            var body = JsonConvert.SerializeObject(promise.Workload, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
-            
             var fs = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}", DateTime.Now.ToString("O"), promise.PromiseId, message.EventId,
-                message.EventPublicMessage, message.EventPublicDetails, message.IsPublicMessage, body);
+                message.EventPublicMessage, message.EventPublicDetails, message.IsPublicMessage, promise.SerializeJson());
 
             RabbitMqServiceBus.Instance.Publish(fs, message.EventId.ToString(CultureInfo.InvariantCulture));
-
         }
 
         private enum RabbitLogLevel

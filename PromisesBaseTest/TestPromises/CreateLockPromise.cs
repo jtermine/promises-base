@@ -1,4 +1,5 @@
 ﻿using Termine.Promises.Base.Test.CreateLockPromiseObjects;
+using Termine.Promises.Interfaces;
 using Termine.Promises.NLogInstrumentation;
 using Termine.Promises.ZMQ;
 
@@ -14,7 +15,7 @@ namespace Termine.Promises.Base.Test.TestPromises
         {
             this.WithNLogInstrumentation();
             //this.WithRest();
-            this.WithRabbitMQ();
+            //this.WithRabbitMQ();
         }
 
         public override void Init()
@@ -25,17 +26,17 @@ namespace Termine.Promises.Base.Test.TestPromises
                 .WithExecutor("3", Executor);
         }
 
-        private void Executor(CreateLockWorkload lockWorkload)
+        private void Executor(IHandlePromiseActions handlePromiseActions, CreateLockWorkload createLockWorkload)
         {
             ExecutorChecksum = AuthChallengerChecksum + ValidatorChecksum;
         }
 
-        private void Validator(CreateLockWorkload lockWorkload)
+        private void Validator(IHandlePromiseActions handlePromiseActions, CreateLockWorkload createLockWorkload)
         {
             ValidatorChecksum = AuthChallengerChecksum + 1;
         }
 
-        private void AuthChallenger(CreateLockWorkload lockWorkload)
+        private void AuthChallenger(IHandlePromiseActions handlePromiseActions, CreateLockWorkload createLockWorkload)
         {
             AuthChallengerChecksum = 1;
         }

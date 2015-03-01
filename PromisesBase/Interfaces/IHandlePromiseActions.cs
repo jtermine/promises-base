@@ -6,7 +6,14 @@ namespace Termine.Promises.Interfaces
     {
         void Init();
 
-        void Start(string json);
+        void DeserializeJson(string json);
+
+        string SerializeJson();
+
+        string PromiseId { get; }
+        int AuthChallengersCount { get; }
+        int ValidatorsCount { get; }
+        int ExecutorsCount { get; }
         
         void Block(IHandleEventMessage message);
         void Trace(IHandleEventMessage message);

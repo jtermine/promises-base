@@ -24,7 +24,7 @@ namespace Termine.Promises.Base.Test
                 new Promise<ClaimsBasedWorkload>();
 
             promise.WithValidator("1",
-                workload =>
+                (promiseActions, workload) =>
                 {
                     workload.IsTerminated = true;
                 });

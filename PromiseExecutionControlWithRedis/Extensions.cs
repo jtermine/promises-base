@@ -1,6 +1,7 @@
 ﻿using System;
 using ServiceStack.Redis;
 using Termine.Promises.ExectionControlWithRedis.Interfaces;
+using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.ExectionControlWithRedis
 {
@@ -16,7 +17,7 @@ namespace Termine.Promises.ExectionControlWithRedis
             where TW : class, ISupportRedis, new()
         {
             
-            var duplicationValidator = new Action<TW>(workload =>
+            var duplicationValidator = new Action<IHandlePromiseActions, TW>((promiseActions,workload) =>
             {
                 var requestId = workload.RequestId;
 
