@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens;
+using System.Net.Mime;
 using System.ServiceModel.Security.Tokens;
 using System.Text;
 using Termine.Promises.ClaimsBasedAuth.Interfaces;
@@ -10,12 +11,13 @@ namespace Termine.Promises.ClaimsBasedAuth
 {
     public static class Extensions
     {
-        public static Promise<TC, TW, TR> WithDefaultClaimsBasedAuth<TC, TW, TR>(this Promise<TC, TW, TR> promise)
+        public static Promise<TC, TW, TR, TE> WithDefaultClaimsBasedAuth<TC, TW, TR, TE>(this Promise<TC, TW, TR, TE> promise)
             where TC : class, IHandlePromiseConfig, new()
             where TW : class, ISupportClaims, new()
             where TR : class, IAmAPromiseRequest, new()
+            where TE: class, IAmAPromiseResponse, new()
         {
-            var authValidator = new Action<IHandlePromiseActions, TC, TW, TR>((promiseActions, config, workload, request) =>
+            var authValidator = new Action<IHandlePromiseActions, TC, TW, TR, TE>((promiseActions, config, workload, request, response) =>
             {
                 var supportClaimsValidator = new SupportClaimsValidator<TW>();
                 var validationResult = supportClaimsValidator.Validate(workload);
@@ -26,7 +28,7 @@ namespace Termine.Promises.ClaimsBasedAuth
 
             promise.WithAuthChallenger("claims.validator", authValidator);
 
-            var n = new Action<IHandlePromiseActions, TC, TW, TR>((promiseActions, config, workload, request) =>
+            var n = new Action<IHandlePromiseActions, TC, TW, TR, TE>((promiseActions, config, workload, request, response) =>
             {
                 try
                 {

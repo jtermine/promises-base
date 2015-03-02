@@ -50,12 +50,15 @@
   <ItemGroup>
     <Compile Include="Generics\GenericConfig.cs" />
     <Compile Include="Generics\GenericRequest.cs" />
+    <Compile Include="Generics\GenericResponse.cs" />
     <Compile Include="Generics\GenericWorkload.cs" />
     <Compile Include="Handlers\PromiseHandler.cs" />
     <Compile Include="Handlers\PromiseHandlerQueue.cs" />
     <Compile Include="Handlers\WorkloadHandler.cs" />
     <Compile Include="Handlers\WorkloadHandlerQueue.cs" />
+    <Compile Include="Interfaces\IAmAPromiseFactory.cs" />
     <Compile Include="Interfaces\IAmAPromiseRequest.cs" />
+    <Compile Include="Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Interfaces\IHandlePromiseActions.cs" />
     <Compile Include="Interfaces\IHandlePromiseConfig.cs" />
     <Compile Include="PromiseMessages.cs" />

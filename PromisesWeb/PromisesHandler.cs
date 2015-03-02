@@ -3,19 +3,15 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json;
 using Termine.Promises.Interfaces;
 
 namespace Termine.Promises.Web
 {
 
-    public class PromiseAsyncHandler<TT, TC, TW, TR> : IHttpAsyncHandler
-        where TT : IAmAPromise<TC, TW, TR>, new()
-        where TC : class, IHandlePromiseConfig, new()
-        where TW : class, IAmAPromiseWorkload, new()
-        where TR : class, IAmAPromiseRequest, new()
+    public sealed class PromiseAsyncHandler<TT> : IHttpAsyncHandler
+        where TT : IAmAPromiseFactory, new()
     {
-        public async virtual Task ProcessRequestAsync(HttpContext context)
+        public async Task ProcessRequestAsync(HttpContext context)
         {
             await Task.Run(() =>
             {
@@ -37,6 +33,9 @@ namespace Termine.Promises.Web
                     return;
                 }
 
+                byte[] body;
+                string json;
+
                 using (var stream = new MemoryStream())
                 {
                     var buffer = new byte[2048]; // read in chunks of 2KB
@@ -47,30 +46,22 @@ namespace Termine.Promises.Web
                         stream.Write(buffer, 0, bytesRead);
                     }
 
-                    byte[] body = stream.ToArray();
 
-                    var json = Encoding.UTF8.GetString(body);
-                    var workload = JsonConvert.DeserializeObject<TW>(json);
-
-                    var promise = new TT();
-
-                    promise.WithWorkload(workload);
-
-                    promise.Run();
-
-                    HandlePromise(body, webConstants, context);
+                    body = stream.ToArray();
+                    json = Encoding.UTF8.GetString(body);
                 }
+                
+                var promiseFactory = new TT();
 
-                context.Response.StatusCode = 204;
+                var response = promiseFactory.Run(json);
+
+                context.Response.AddHeader("Content-Type", "application/json");
+                context.Response.Write(response);
+                context.Response.StatusCode = 200;
                 context.Response.StatusDescription = "Completed without exception";
 
             });
 
-        }
-
-        public virtual void HandlePromise(byte[] body, WebConstants webConstants, HttpContext context)
-        {
-            
         }
 
         private Task ProcessRequestAsync(HttpContext context, AsyncCallback cb)

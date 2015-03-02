@@ -15,12 +15,14 @@ namespace Termine.Promises.NLogInstrumentation
         /// <typeparam name="TW">any workload that implements IAmAPromiseWorkload which can be initialized with generic constructor -- new()</typeparam>
         /// <typeparam name="TC">any configuration that implements IHandlePromiseConfig which can be initialized with a generic constructor -- new()</typeparam>
         /// <typeparam name="TR">any request class the implments a IAmAPromiseRequest which can be initialized with a generic constructor -- new()</typeparam>
+        /// <typeparam name="TE">any response class the implments a IAmAPromiseResponse which can be initialized with a generic constructor -- new()</typeparam>
         /// <param name="promise">the promise object</param>
         /// <returns>the promise that NLog has been added to</returns>
-        public static Promise<TC,TW, TR> WithNLogInstrumentation<TC, TW, TR>(this Promise<TC,TW, TR> promise)
+        public static Promise<TC,TW, TR, TE> WithNLogInstrumentation<TC, TW, TR, TE>(this Promise<TC,TW, TR, TE> promise)
             where TC : class, IHandlePromiseConfig, new()
             where TW : class, IAmAPromiseWorkload, new()
             where TR : class, IAmAPromiseRequest, new()
+            where TE: class, IAmAPromiseResponse, new()
         {
             var loggerName = string.Format("{0}.{1}", typeof (TW).FullName, promise.PromiseId);
 

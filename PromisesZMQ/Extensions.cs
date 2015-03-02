@@ -13,13 +13,17 @@ namespace Termine.Promises.ZMQ
         /// <summary>
         /// Adds support for broadcasting event states to RabbitMQ
         /// </summary>
-        /// <typeparam name="TW">a type of promise workload (implemented IAmAWorkload)</typeparam>
+        /// <typeparam name="TW">any workload that implements IAmAPromiseWorkload which can be initialized with generic constructor -- new()</typeparam>
+        /// <typeparam name="TC">any configuration that implements IHandlePromiseConfig which can be initialized with a generic constructor -- new()</typeparam>
+        /// <typeparam name="TR">any request class the implments a IAmAPromiseRequest which can be initialized with a generic constructor -- new()</typeparam>
+        /// <typeparam name="TE">any response class the implments a IAmAPromiseResponse which can be initialized with a generic constructor -- new()</typeparam>
         /// <param name="promise">a promise object</param>
         /// <returns>the instance of that promise with the RabbitMQ enabled</returns>
-        public static Promise<TC, TW, TR> WithRabbitMQ<TC, TW, TR>(this Promise<TC, TW, TR> promise)
+        public static Promise<TC, TW, TR, TE> WithRabbitMQ<TC, TW, TR, TE>(this Promise<TC, TW, TR, TE> promise)
             where TC : class, IHandlePromiseConfig, new()
             where TW : class, IAmAPromiseWorkload, new()
             where TR : class, IAmAPromiseRequest, new()
+            where TE : class, IAmAPromiseResponse, new()
         {
 
             promise.WithBlockHandler("rabbitMq.block",
@@ -61,7 +65,7 @@ namespace Termine.Promises.ZMQ
         {
 
             var fs = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}", DateTime.Now.ToString("O"), promise.PromiseId, message.EventId,
-                message.EventPublicMessage, message.EventPublicDetails, message.IsPublicMessage, promise.SerializeJson());
+                message.EventPublicMessage, message.EventPublicDetails, message.IsPublicMessage, promise.SerializeWorkload());
 
             RabbitMqServiceBus.Instance.Publish(fs, message.EventId.ToString(CultureInfo.InvariantCulture));
         }

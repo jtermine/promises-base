@@ -7,15 +7,16 @@ namespace Termine.Promises.ExectionControlWithRedis
 {
     public static class Extensions
     {
-        public static Promise<TC, TW, TR> WithDuplicatePrevention<TC,TW,TR>(this Promise<TC, TW, TR> promise)
+        public static Promise<TC, TW, TR, TE> WithDuplicatePrevention<TC,TW,TR,TE>(this Promise<TC, TW, TR, TE> promise)
             where TC : class, ISupportRedis, new()
             where TW : class, IAmAPromiseWorkload, new()
             where TR : class, IAmAPromiseRequest, new()
+            where TE : class, IAmAPromiseResponse, new()
         {
             
-            var duplicationValidator = new Action<IHandlePromiseActions, TC, TW, TR>((promiseActions,config,workload,request) =>
+            var duplicationValidator = new Action<IHandlePromiseActions, TC, TW, TR, TE>((promiseActions,config,workload,request,response) =>
             {
-                var requestId = workload.RequestId;
+                var requestId = promiseActions.PromiseId;
 
                 using (var redisClient = new RedisClient(config.RedisConnectionString))
                 {

@@ -12,18 +12,13 @@ namespace Termine.Promises.WithREST
     /// </summary>
     public static class Extensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TW"></typeparam>
-        /// <param name="promise"></param>
-        /// <returns></returns>
-        public static Promise<TC, TW, TR> WithRest<TC, TW, TR>(this Promise<TC, TW, TR> promise)
+        public static Promise<TC, TW, TR, TE> WithRest<TC, TW, TR, TE>(this Promise<TC, TW, TR,TE> promise)
             where TW : class, IAmAPromiseWorkload, new()
             where TC : class, IHandlePromiseConfig, new()
             where TR : class, IAmAPromiseRequest, new()
+            where TE : class, IAmAPromiseResponse, new()
         {
-            promise.WithXferAction("sendRest", (promiseActions, config, workload, request) =>
+            promise.WithXferAction("sendRest", (promiseActions, config, workload, request, response) =>
             {
                 using (var client = new HttpClient())
                 {
@@ -31,12 +26,12 @@ namespace Termine.Promises.WithREST
 
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    var response = client.PostAsync("http://localhost.fiddler:2950/TestPromise", content);
+                    var webResponse = client.PostAsync("http://localhost.fiddler:2950/TestPromise", content);
 
-                    if (response.Result.StatusCode != HttpStatusCode.NoContent)
+                    if (webResponse.Result.StatusCode != HttpStatusCode.NoContent)
                     {
-                        promiseActions.Block(new GenericEventMessage((int) response.Result.StatusCode,
-                            response.Result.Content.ReadAsStringAsync().Result));
+                        promiseActions.Block(new GenericEventMessage((int) webResponse.Result.StatusCode,
+                            webResponse.Result.Content.ReadAsStringAsync().Result));
                     }
                 }
             });

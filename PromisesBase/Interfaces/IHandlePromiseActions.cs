@@ -4,15 +4,20 @@ namespace Termine.Promises.Interfaces
 {
     public interface IHandlePromiseActions
     {
-        void DeserializeJson(string json);
 
-        string SerializeJson();
+        bool IsBlocked { get; }
+        bool IsTerminated { get; }
+
+        string SerializeWorkload();
+        string SerializeRequest();
+        string SerializeConfig();
+        string SerializeResponse();
 
         string PromiseId { get; }
         int AuthChallengersCount { get; }
         int ValidatorsCount { get; }
         int ExecutorsCount { get; }
-        
+
         void Block(IHandleEventMessage message);
         void Trace(IHandleEventMessage message);
         void Debug(IHandleEventMessage message);
