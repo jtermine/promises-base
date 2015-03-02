@@ -18,15 +18,15 @@ namespace Termine.Promises.WithREST
         /// <typeparam name="TW"></typeparam>
         /// <param name="promise"></param>
         /// <returns></returns>
-        public static Promise<TW> WithRest<TW>(this Promise<TW> promise)
+        public static Promise<TC, TW, TR> WithRest<TC, TW, TR>(this Promise<TC, TW, TR> promise)
             where TW : class, IAmAPromiseWorkload, new()
+            where TC : class, IHandlePromiseConfig, new()
+            where TR : class, IAmAPromiseRequest, new()
         {
-            promise.WithXferAction("sendRest", (promiseActions, workload) =>
+            promise.WithXferAction("sendRest", (promiseActions, config, workload, request) =>
             {
                 using (var client = new HttpClient())
                 {
-                    var request = workload.GetRequest();
-
                     var json = JsonConvert.SerializeObject(request);
 
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -35,7 +35,7 @@ namespace Termine.Promises.WithREST
 
                     if (response.Result.StatusCode != HttpStatusCode.NoContent)
                     {
-                        promiseActions.Block(new GenericEventMessage((int)response.Result.StatusCode,
+                        promiseActions.Block(new GenericEventMessage((int) response.Result.StatusCode,
                             response.Result.Content.ReadAsStringAsync().Result));
                     }
                 }

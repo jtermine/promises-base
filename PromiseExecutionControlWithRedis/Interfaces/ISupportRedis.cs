@@ -2,7 +2,7 @@
 
 namespace Termine.Promises.ExectionControlWithRedis.Interfaces
 {
-    public interface ISupportRedis: IAmAPromiseWorkload
+    public interface ISupportRedis: IHandlePromiseConfig
     {
         string RedisConnectionString { get; set; }
     }

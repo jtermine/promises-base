@@ -9,9 +9,11 @@ using Termine.Promises.Interfaces;
 namespace Termine.Promises.Web
 {
 
-    public class PromiseAsyncHandler<TT, TW> : IHttpAsyncHandler
-        where TT : IAmAPromise<TW>, new()
+    public class PromiseAsyncHandler<TT, TC, TW, TR> : IHttpAsyncHandler
+        where TT : IAmAPromise<TC, TW, TR>, new()
+        where TC : class, IHandlePromiseConfig, new()
         where TW : class, IAmAPromiseWorkload, new()
+        where TR : class, IAmAPromiseRequest, new()
     {
         public async virtual Task ProcessRequestAsync(HttpContext context)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Termine.Promises.Interfaces
 {
-    public interface IAmAPromiseResponse
+    public interface IHandlePromiseConfig
     {
     }
 }

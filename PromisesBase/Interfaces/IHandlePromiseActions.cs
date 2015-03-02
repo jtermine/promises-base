@@ -4,8 +4,6 @@ namespace Termine.Promises.Interfaces
 {
     public interface IHandlePromiseActions
     {
-        void Init();
-
         void DeserializeJson(string json);
 
         string SerializeJson();

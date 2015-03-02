@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Termine.Promises.Interfaces
+﻿namespace Termine.Promises.Interfaces
 {
     public interface IAmAPromiseWorkload
     {
@@ -9,9 +7,5 @@ namespace Termine.Promises.Interfaces
         string AppName { get; set; }
         bool IsTerminated { get; set; }
         bool IsBlocked { get; set; }
-
-        void WithRequestId(string requestId);
-
-        IAmAPromiseRequest GetRequest();
     }
 }

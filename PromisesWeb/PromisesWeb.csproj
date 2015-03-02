@@ -71,29 +71,29 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5538.19682, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5538.42910, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5538.19682\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5538.42910\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
     <Reference Include="Termine.Promises.Encryption, Version=0.0.5529.29874, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Termine.Promises.Encryption.0.0.5529.29874\lib\net45\Termine.Promises.Encryption.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5538.19797, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5538.42568, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5538.19797\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5538.42568\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5538.19897, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5538.42688, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5538.19897\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5538.42688\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.WithProtobuf, Version=0.0.5538.19914, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5538.19914\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
+    <Reference Include="Termine.Promises.WithProtobuf">
+      <HintPath>..\packages\Termine.Promises.WithProtobuf.0.0.5538.42569\lib\net45\Termine.Promises.WithProtobuf.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Termine.Promises.ZMQ, Version=0.0.5538.19990, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.ZMQ, Version=0.0.5538.42910, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.ZMQ.0.0.5538.19990\lib\net45\Termine.Promises.ZMQ.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.ZMQ.0.0.5538.42910\lib\net45\Termine.Promises.ZMQ.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

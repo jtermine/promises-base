@@ -10,10 +10,12 @@ namespace Termine.Promises.ClaimsBasedAuth
 {
     public static class Extensions
     {
-        public static Promise<TW> WithDefaultClaimsBasedAuth<TW>(this Promise<TW> promise)
+        public static Promise<TC, TW, TR> WithDefaultClaimsBasedAuth<TC, TW, TR>(this Promise<TC, TW, TR> promise)
+            where TC : class, IHandlePromiseConfig, new()
             where TW : class, ISupportClaims, new()
+            where TR : class, IAmAPromiseRequest, new()
         {
-            var authValidator = new Action<IHandlePromiseActions, TW>((promiseActions, workload) =>
+            var authValidator = new Action<IHandlePromiseActions, TC, TW, TR>((promiseActions, config, workload, request) =>
             {
                 var supportClaimsValidator = new SupportClaimsValidator<TW>();
                 var validationResult = supportClaimsValidator.Validate(workload);
@@ -24,7 +26,7 @@ namespace Termine.Promises.ClaimsBasedAuth
 
             promise.WithAuthChallenger("claims.validator", authValidator);
 
-            var n = new Action<IHandlePromiseActions, TW>((promiseActions, workload) =>
+            var n = new Action<IHandlePromiseActions, TC, TW, TR>((promiseActions, config, workload, request) =>
             {
                 try
                 {

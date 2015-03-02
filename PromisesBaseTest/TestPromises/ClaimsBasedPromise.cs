@@ -1,15 +1,16 @@
 ﻿using Termine.Promises.Base.Test.ClaimsBasePromiseObjects;
+using Termine.Promises.Generics;
 using Termine.Promises.NLogInstrumentation;
 using Termine.Promises.WithREST;
 
 namespace Termine.Promises.Base.Test.TestPromises
 {
-    public class ClaimsBasedPromise: Promise<ClaimsBasedWorkload>
+    public class ClaimsBasedPromise
     {
         public ClaimsBasedPromise()
         {
-            this.WithRest();
-            this.WithNLogInstrumentation();
+            var promise = new Promise<GenericConfig, ClaimsBasedWorkload, GenericRequest>();
+            promise.WithRest().WithNLogInstrumentation();
         }
     }
 }

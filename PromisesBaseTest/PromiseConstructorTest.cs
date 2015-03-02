@@ -11,6 +11,7 @@ using Termine.Promises.ClaimsBasedAuth;
 using Termine.Promises.ExectionControlWithRedis;
 using Termine.Promises.NLogInstrumentation;
 using Termine.Promises.WithProtobuf;
+using Termine.Promises.WithREST;
 
 namespace Termine.Promises.Base.Test
 {
@@ -60,17 +61,24 @@ namespace Termine.Promises.Base.Test
         [TestMethod]
         public void TestClaimsBasedAuthBase()
         {
-            var testClaimsPromise = new ClaimsBasedPromise();
+            var promise = new Promise<ClaimsBasedWorkload>();
 
-            testClaimsPromise
+            promise.WithRest()
                 .WithNLogInstrumentation()
-                .WithDefaultClaimsBasedAuth();
+                .WithDefaultClaimsBasedAuth()
+                .WithValidator("valid-1", (actions, workload) =>
+                {
+                    workload.HmacAudienceUri > 1
+                })
+                .WithExecutor("promise.1", (actions, workload) =>
+                {
+                    actions.Fatal();
+                });
 
-            testClaimsPromise.Workload.Request = new ClaimsBasedRequest {Claim = "1234"};
-            
-            testClaimsPromise.Run();
-            
-            Assert.IsTrue(testClaimsPromise.Workload.IsTerminated);
+            promise.Workload.Request = new ClaimsBasedRequest {Claim = "1234"};
+            promise.Run();
+
+            Assert.IsTrue(promise.Workload.IsTerminated);
         }
 
         [TestMethod]

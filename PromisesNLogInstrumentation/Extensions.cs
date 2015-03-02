@@ -12,11 +12,15 @@ namespace Termine.Promises.NLogInstrumentation
         /// <summary>
         /// Enables NLog instrumentation on a promise
         /// </summary>
-        /// <typeparam name="TW">any workload that implements IAmAPromiseWorkload which is a class that can be initialized with new()</typeparam>
+        /// <typeparam name="TW">any workload that implements IAmAPromiseWorkload which can be initialized with generic constructor -- new()</typeparam>
+        /// <typeparam name="TC">any configuration that implements IHandlePromiseConfig which can be initialized with a generic constructor -- new()</typeparam>
+        /// <typeparam name="TR">any request class the implments a IAmAPromiseRequest which can be initialized with a generic constructor -- new()</typeparam>
         /// <param name="promise">the promise object</param>
         /// <returns>the promise that NLog has been added to</returns>
-        public static Promise<TW> WithNLogInstrumentation<TW>(this Promise<TW> promise)
+        public static Promise<TC,TW, TR> WithNLogInstrumentation<TC, TW, TR>(this Promise<TC,TW, TR> promise)
+            where TC : class, IHandlePromiseConfig, new()
             where TW : class, IAmAPromiseWorkload, new()
+            where TR : class, IAmAPromiseRequest, new()
         {
             var loggerName = string.Format("{0}.{1}", typeof (TW).FullName, promise.PromiseId);
 

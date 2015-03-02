@@ -16,8 +16,10 @@ namespace Termine.Promises.ZMQ
         /// <typeparam name="TW">a type of promise workload (implemented IAmAWorkload)</typeparam>
         /// <param name="promise">a promise object</param>
         /// <returns>the instance of that promise with the RabbitMQ enabled</returns>
-        public static Promise<TW> WithRabbitMQ<TW>(this Promise<TW> promise)
+        public static Promise<TC, TW, TR> WithRabbitMQ<TC, TW, TR>(this Promise<TC, TW, TR> promise)
+            where TC : class, IHandlePromiseConfig, new()
             where TW : class, IAmAPromiseWorkload, new()
+            where TR : class, IAmAPromiseRequest, new()
         {
 
             promise.WithBlockHandler("rabbitMq.block",
