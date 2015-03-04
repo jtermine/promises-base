@@ -63,13 +63,30 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5539.30411, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Termine.Promises.Base, Version=0.0.5540.22053, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5539.30411\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5540.22053\lib\net45\Termine.Promises.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Generics\GenericModelWorkload.cs" />
+    <Compile Include="Harbor\HarborFixedRelationship.cs" />
+    <Compile Include="Harbor\HarborModel.cs" />
+    <Compile Include="Harbor\HarborProperty.cs" />
+    <Compile Include="Harbor\HarborTemporalRelationship.cs" />
+    <Compile Include="Interfaces\IAmAHarborFixedRelationship.cs" />
+    <Compile Include="Interfaces\IAmAHarborModel.cs" />
+    <Compile Include="Interfaces\IAmAHarborProperty.cs" />
+    <Compile Include="Interfaces\IAmAHarborRelationship.cs" />
+    <Compile Include="Interfaces\IAmAHarborTemporalRelationship.cs" />
+    <Compile Include="Interfaces\IAmAModelWorkload.cs" />
+    <Compile Include="Interfaces\ICanExtendAnyFixedRelationship.cs" />
+    <Compile Include="Interfaces\ICanExtendAnyHarborBaseType.cs" />
+    <Compile Include="Interfaces\ICanExtendAnyModel.cs" />
+    <Compile Include="Interfaces\ICanExtendAnyRelationship.cs" />
+    <Compile Include="Interfaces\ICanExtendAnyProperty.cs" />
+    <Compile Include="Interfaces\ICanExtendAnyTemporalRelationship.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

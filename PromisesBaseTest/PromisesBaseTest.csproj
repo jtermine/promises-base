@@ -93,10 +93,6 @@
       <Project>{5e05d603-6304-4d8c-94d7-05398c73d629}</Project>
       <Name>PromisesExecutionControlWithRedis</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PromisesBase\PromisesBase.csproj">
-      <Project>{eb7d739e-e8ef-4834-ad2e-06fe73cb3d20}</Project>
-      <Name>PromisesBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PromisesClaimsBasedAuth\PromisesClaimsBasedAuth.csproj">
       <Project>{c10182e3-068c-4bd5-9847-c2bd19059a91}</Project>
       <Name>PromisesClaimsBasedAuth</Name>
@@ -120,10 +116,6 @@
     <ProjectReference Include="..\PromisesWithProtobuf\PromisesWithProtobuf.csproj">
       <Project>{6794fe31-8623-4330-b2fa-d373e2c83821}</Project>
       <Name>PromisesWithProtobuf</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PromisesWithRedis\PromisesWithRedis.csproj">
-      <Project>{add596aa-7290-437a-8d2d-e9bf991152b7}</Project>
-      <Name>PromisesWithRedis</Name>
     </ProjectReference>
     <ProjectReference Include="..\PromisesZMQ\PromisesZMQ.csproj">
       <Project>{dd8ed2dd-38b7-41f3-b869-93452bb759c6}</Project>

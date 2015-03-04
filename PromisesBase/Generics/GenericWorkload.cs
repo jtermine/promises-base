@@ -2,7 +2,7 @@
 
 namespace Termine.Promises.Generics
 {
-    public abstract class GenericWorkload : IAmAPromiseWorkload
+    public class GenericWorkload : IAmAPromiseWorkload
     {
     }
 }

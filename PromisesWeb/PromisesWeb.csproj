@@ -71,9 +71,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5539.30411, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5539.30411\lib\net45\Termine.Promises.Base.dll</HintPath>
+    <Reference Include="Termine.Promises.Base">
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5540.22053\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Termine.Promises.Encryption, Version=0.0.5539.25829, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
