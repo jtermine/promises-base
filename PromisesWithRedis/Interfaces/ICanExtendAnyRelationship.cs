@@ -1,6 +1,6 @@
 ﻿namespace Termine.Promises.WithRedis.Interfaces
 {
-    public interface ICanExtendAnyRelationship : ICanExtendAnyHarborBaseType
+    public interface ICanExtendAnyRelationship : ICanExtendAnyHarborBaseType<IAmAHarborProperty>
     {
          
     }

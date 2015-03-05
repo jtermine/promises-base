@@ -47,11 +47,16 @@ namespace Termine.Promises.WithRedis.Harbor
             }
         }
 
-        private List<TT> HarborProperties { get; set; }
+        IAmAHarborBaseType ICanExtendAnyHarborBaseType<IAmAHarborProperty>.H
+        {
+            get { return H; }
+        }
+
+        public Dictionary<string, IAmAHarborProperty> Properties { get; private set; }
 
         public HarborModel()
         {
-            HarborProperties = new List<TT>();
+            Properties = new Dictionary<string, IAmAHarborProperty>();
         }
 
         public void Dispose()
@@ -68,5 +73,6 @@ namespace Termine.Promises.WithRedis.Harbor
         }
 
         public IAmAHarborModel H { get {return this;} }
+        
     }
 }

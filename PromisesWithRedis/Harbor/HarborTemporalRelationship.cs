@@ -9,5 +9,12 @@ namespace Termine.Promises.WithRedis.Harbor
 {
     public class HarborTemporalRelationship: IAmAHarborTemporalRelationship
     {
+        public IAmAHarborBaseType H { get { return this; } }
+        public Dictionary<string, IAmAHarborProperty> Properties { get; private set; }
+
+        public HarborTemporalRelationship()
+        {
+            Properties = new Dictionary<string, IAmAHarborProperty>();
+        }
     }
 }

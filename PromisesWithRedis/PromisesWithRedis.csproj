@@ -78,6 +78,7 @@
     <Compile Include="Harbor\HarborModel.cs" />
     <Compile Include="Harbor\HarborProperty.cs" />
     <Compile Include="Harbor\HarborTemporalRelationship.cs" />
+    <Compile Include="Interfaces\IAmAHarborBaseType.cs" />
     <Compile Include="Interfaces\IAmAHarborFixedRelationship.cs" />
     <Compile Include="Interfaces\IAmAHarborModel.cs" />
     <Compile Include="Interfaces\IAmAHarborProperty.cs" />

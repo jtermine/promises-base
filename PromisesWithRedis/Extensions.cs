@@ -27,16 +27,24 @@ namespace Termine.Promises.WithRedis
             return memberExpression.Member.Name;
         }
 
-        public static ICanExtendAnyProperty UpdateProperty<TT>(this TT harborModel, string name, string caption = "", string description = "") where TT: ICanExtendAnyHarborBaseType
+        public static IAmAHarborProperty UpdateProperty(this ICanExtendAnyHarborBaseType<IAmAHarborProperty> baseType, string name, string caption = "", string description = "")
         {
-            var property = new HarborProperty();
+            if (baseType.Properties.ContainsKey(name)) return baseType.Properties[name];
+
+            var property = new HarborProperty {Name = name, Caption = caption, Description = description};
+
+            baseType.Properties.Add(name, property);
 
             return property;
         }
 
-        public static ICanExtendAnyModel SetCollectionAsPublic(this ICanExtendAnyModel n)
+        public static TT SetCollectionAsPublic<TT>(this TT n)
+            where TT: ICanExtendAnyHarborBaseType<IAmAHarborProperty>
         {
-            n.H.IsPublic = true;
+            var harborModel = n as IAmAHarborModel;
+
+            if (harborModel != null) harborModel.IsPublic = true;
+
             return n;
         }
 

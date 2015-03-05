@@ -2,10 +2,11 @@
 
 namespace Termine.Promises.WithRedis.Interfaces
 {
-    public interface IAmAHarborProperty
+    public interface IAmAHarborProperty : ICanExtendAnyProperty
     {
         string Name { get; set; }
         string Caption { get; set; }
+        string Description { get; set; }
         HarborProperty.EnumAllowNull AllowNull { get; set; }
         HarborProperty.EnumVisibility Visibility { get; set; }
         HarborProperty.EnumIndexType IndexType { get; set; }

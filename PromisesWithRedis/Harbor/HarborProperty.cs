@@ -5,7 +5,7 @@ using Termine.Promises.WithRedis.Interfaces;
 
 namespace Termine.Promises.WithRedis.Harbor
 {
-    public sealed class HarborProperty: IAmAHarborProperty, ICanExtendAnyProperty, INotifyPropertyChanged
+    public sealed class HarborProperty: IAmAHarborProperty, INotifyPropertyChanged
     {
         private string _name;
         private string _caption;
@@ -18,6 +18,7 @@ namespace Termine.Promises.WithRedis.Harbor
         private bool _blockOnModelError;
         private bool _isImmutable;
         private string _regex;
+        private string _description;
 
         public enum EnumAllowNull
         {
@@ -89,6 +90,17 @@ namespace Termine.Promises.WithRedis.Harbor
             {
                 if (value == _caption) return;
                 _caption = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                if (value == _description) return;
+                _description = value;
                 OnPropertyChanged();
             }
         }
