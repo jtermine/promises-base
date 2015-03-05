@@ -2,6 +2,6 @@
 {
     public interface ICanExtendAnyModel : ICanExtendAnyHarborBaseType
     {
-         
+        IAmAHarborModel H { get; }
     }
 }

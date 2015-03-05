@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Termine.Promises.WithRedis.Interfaces
+﻿namespace Termine.Promises.WithRedis.Interfaces
 {
     public interface IAmAHarborModel: ICanExtendAnyModel
     {
+        string Name { get; set; }
+        string Caption { get; set; }
+        bool IsPublic { get; set; }
     }
 }

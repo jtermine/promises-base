@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq.Expressions;
-using Newtonsoft.Json.Linq;
 using Termine.Promises.WithRedis.Harbor;
 using Termine.Promises.WithRedis.Interfaces;
 
@@ -36,150 +34,206 @@ namespace Termine.Promises.WithRedis
             return property;
         }
 
-        public static ICanExtendAnyModel SetCollectionAsPublic(this ICanExtendAnyModel harborModel)
+        public static ICanExtendAnyModel SetCollectionAsPublic(this ICanExtendAnyModel n)
         {
-            return harborModel;
+            n.H.IsPublic = true;
+            return n;
         }
 
-        public static ICanExtendAnyProperty SetCaption(this ICanExtendAnyProperty harborModel, string caption)
+        public static ICanExtendAnyProperty SetCaption(this ICanExtendAnyProperty n, string caption)
         {
-            return harborModel;
+            n.Property.Caption = caption;
+            return n;
         }
 
-        public static ICanExtendAnyProperty AllowNullAndStoreAsNull(this ICanExtendAnyProperty harborModel)
-            
+        public static ICanExtendAnyProperty AllowNullAndStoreAsNull(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.AllowNull = HarborProperty.EnumAllowNull.AllowNullAndStoreAsNull;
+            return n;
         }
 
-        public static ICanExtendAnyProperty AllowNullAndOmitStoreAsNull(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty AllowNullAndOmitStoreAsNull(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.AllowNull = HarborProperty.EnumAllowNull.AllowNullAndOmitStoreAsNull;
+            return n;
         }
 
-        public static ICanExtendAnyProperty BlockNull(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty BlockNull(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.AllowNull = HarborProperty.EnumAllowNull.BlockNull;
+            return n;
         }
 
-        public static ICanExtendAnyProperty MakePublicProperty(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty MakePublicProperty(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.Visibility = HarborProperty.EnumVisibility.Public;
+            return n;
         }
 
-        public static ICanExtendAnyProperty MakePublicDerivedProperty(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty MakePublicCalculatedProperty(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.Visibility = HarborProperty.EnumVisibility.PublicCalculated;
+            return n;
         }
 
-        public static ICanExtendAnyProperty MakeSensitiveProperty(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty MakeSensitiveProperty(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.Visibility = HarborProperty.EnumVisibility.Sensitive;
+            return n;
         }
 
-        public static ICanExtendAnyProperty MakePrivateProperty(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty MakePrivateProperty(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.Visibility = HarborProperty.EnumVisibility.Private;
+            return n;
         }
 
-        public static ICanExtendAnyProperty MakePrivateSensitiveProperty(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty MakePrivateCalculatedProperty(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.Visibility = HarborProperty.EnumVisibility.PrivateCalculated;
+            return n;
         }
 
-        public static ICanExtendAnyProperty IndexWithNoDuplicatesUsingLIFO(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty MakePrivateSensitiveProperty(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.Visibility = HarborProperty.EnumVisibility.PrivateSensitive;
+            return n;
         }
 
-        public static ICanExtendAnyProperty IndexWithNoDuplicatesUsingFIFO(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty IndexWithNoDuplicatesUsingLIFO(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.IndexType = HarborProperty.EnumIndexType.IndexNoDuplicates_LIFO;
+            return n;
         }
 
-        public static ICanExtendAnyProperty NotIndexed(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty IndexWithNoDuplicatesUsingFIFO(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.IndexType = HarborProperty.EnumIndexType.IndexNoDuplicates_FIFO;
+            return n;
         }
 
-        public static ICanExtendAnyProperty TypeIsString(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty NotIndexed(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.IndexType = HarborProperty.EnumIndexType.NotIndexed;
+            return n;
         }
 
-        public static ICanExtendAnyProperty TypeIsInteger(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty IndexAllowDuplicates(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.IndexType = HarborProperty.EnumIndexType.IndexAllowDuplicates;
+            return n;
         }
 
-        public static ICanExtendAnyProperty TypeIsMoney(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsString(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.StringType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty TypeIsDecimalNotMoney(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsInteger(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.IntegerType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty TypeIsBoolean(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsMoney(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.MoneyType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty ValidateWithRegexAndIgnoreFalseMatch(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsDecimalNotMoney(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.DecimalType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty ValidateWithRegexAndBlockFalseMatch(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsDate(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.DateType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty WheNullOmitValue(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsDateTime(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.UTCDateTimeType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty WhenNullStoreAsNull(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsBinary(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.BinaryType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty WhenNullBlockChange(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty TypeIsFixedEnumerable(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.DataType = HarborProperty.EnumDataType.FixedEnumerable;
+            return n;
+        }
+        
+        public static ICanExtendAnyProperty TypeIsBoolean(this ICanExtendAnyProperty n)
+        {
+            n.Property.DataType = HarborProperty.EnumDataType.BooleanType;
+            return n;
         }
 
-        public static ICanExtendAnyProperty IsImmutable(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty ValidateWithRegexAndIgnoreFalseMatch(this ICanExtendAnyProperty n, string regex)
         {
-            return harborModel;
+            n.Property.ValidateWithRegex = true;
+            n.Property.BlockOnFalseRegexMatch = false;
+            n.Property.Regex = regex;
+            return n;
         }
 
-        public static ICanExtendAnyProperty IsNotImmutable(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty ValidateWithRegexAndBlockFalseMatch(this ICanExtendAnyProperty n, string regex)
         {
-            return harborModel;
+            n.Property.ValidateWithRegex = true;
+            n.Property.BlockOnFalseRegexMatch = true;
+            n.Property.Regex = regex;
+            return n;
         }
 
-        public static ICanExtendAnyProperty WhenErrorIgnore(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty WheNullOmitValue(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.AllowNull = HarborProperty.EnumAllowNull.AllowNullAndOmitStoreAsNull;
+            return n;
         }
 
-        public static ICanExtendAnyProperty WhenErrorBlockChange(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty WhenNullStoreAsNull(this ICanExtendAnyProperty n)
         {
-            return harborModel;
+            n.Property.AllowNull = HarborProperty.EnumAllowNull.AllowNullAndStoreAsNull;
+            return n;
         }
 
-        public static void Commit(this ICanExtendAnyModel harborModel)
+        public static ICanExtendAnyProperty WhenNullBlockChange(this ICanExtendAnyProperty n)
         {
-            
+            n.Property.AllowNull = HarborProperty.EnumAllowNull.BlockNull;
+            return n;
         }
 
-        public static void Commit(this ICanExtendAnyProperty harborModel)
+        public static ICanExtendAnyProperty IsImmutable(this ICanExtendAnyProperty n)
         {
-            
+            n.Property.IsImmutable = true;
+            return n;
+        }
+
+        public static ICanExtendAnyProperty IsNotImmutable(this ICanExtendAnyProperty n)
+        {
+            n.Property.IsImmutable = false;
+            return n;
+        }
+
+        public static ICanExtendAnyProperty WhenErrorIgnore(this ICanExtendAnyProperty n)
+        {
+            n.Property.BlockOnModelError = false;
+            return n;
+        }
+
+        public static ICanExtendAnyProperty WhenErrorBlockChange(this ICanExtendAnyProperty n)
+        {
+            n.Property.BlockOnModelError = true;
+            return n;
         }
 
         public static ICanExtendAnyFixedRelationship HarborFixedRelationship(this ICanExtendAnyModel harborModel, string name, string caption = "")
