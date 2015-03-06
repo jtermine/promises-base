@@ -41,17 +41,21 @@ namespace PromisesWithRedisTest
             }
         }
 
+		[TestMethod]
         public void TestHarborTemporalRelationship()
         {
             using (var harborModel = new HarborModel())
             {
                 harborModel
                     .HarborTemporalRelationship("widgets")
-                    .MakeActive()
+					.MakeActive()
                     .WhenMovedIntoAConflict_TakeOverSlot()
                     .MakeInactive()
                     .LinkModels("modelName-4", "modelName-5")
                     .UpdateProperty("property-name", "Property Name", "This is what you should call the property.");
+
+				Assert.IsTrue(harborModel.Relationships.Count > 0);
+				Assert.IsTrue(harborModel.Relationships["widgets"].Models.Count == 2);
             }
         }
     }

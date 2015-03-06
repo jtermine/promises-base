@@ -14,16 +14,20 @@ namespace Termine.Promises.WithRedis.Harbor
 	    private bool _isActive;
 	    private int _maxCapacity;
 	    private bool _canWaitlist;
+
 	    private EnumRelationship_SingletonMode _singletonMode;
 	    private EnumTemporalRelationship_ConflictMode _conflictMode;
+
 	    public IAmAHarborBaseType HarborBaseInstance => this;
-	    public Dictionary<string, IAmAHarborProperty> Properties { get; private set; }
+	    public Dictionary<string, IAmAHarborProperty> Properties { get; }
 	    public IDictionary<string, IAmAHarborRelationship> Relationships { get; }
 
 	    public HarborTemporalRelationship()
         {
             Properties = new Dictionary<string, IAmAHarborProperty>();
-        }
+			Relationships = new Dictionary<string, IAmAHarborRelationship>();
+			Models = new List<string>();
+		}
 
 	    public string Name
 	    {
@@ -92,8 +96,8 @@ namespace Termine.Promises.WithRedis.Harbor
 	    }
 
 	    public List<string> Models { get; set; }
-	    public IAmAHarborRelationship R { get; }
-	    public IAmAHarborTemporalRelationship T { get; }
+	    public IAmAHarborRelationship R => this;
+	    public IAmAHarborTemporalRelationship T => this;
 
 	    public EnumTemporalRelationship_ConflictMode ConflictMode
 	    {

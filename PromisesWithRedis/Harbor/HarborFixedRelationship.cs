@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ServiceStack;
 using Termine.Promises.WithRedis.Annotations;
 using Termine.Promises.WithRedis.Enumerables;
 using Termine.Promises.WithRedis.Interfaces;
@@ -22,6 +23,7 @@ namespace Termine.Promises.WithRedis.Harbor
 	    public HarborFixedRelationship()
         {
             Properties = new Dictionary<string, IAmAHarborProperty>();
+			Models = new List<string>();
         }
 
 	    public string Name
@@ -92,7 +94,7 @@ namespace Termine.Promises.WithRedis.Harbor
 
 	    public List<string> Models { get; set; }
 
-		public IAmAHarborRelationship R { get; }
+	    public IAmAHarborRelationship R => this;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

@@ -48,11 +48,11 @@ namespace Termine.Promises.WithRedis.Harbor
 
         IAmAHarborBaseType ICanExtendAnyHarborBaseType<IAmAHarborProperty>.HarborBaseInstance => HarborModelInstance;
 
-	    public IAmAHarborModel HarborModelInstance { get { return this; } }
+	    public IAmAHarborModel HarborModelInstance => this;
 
-        public Dictionary<string, IAmAHarborProperty> Properties { get; private set; }
+	    public Dictionary<string, IAmAHarborProperty> Properties { get; }
 
-        public IDictionary<string, IAmAHarborRelationship> Relationships { get; private set; } 
+        public IDictionary<string, IAmAHarborRelationship> Relationships { get; } 
 
         public HarborModel()
         {
