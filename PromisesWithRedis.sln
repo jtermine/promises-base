@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithRedis", "PromisesWithRedis\PromisesWithRedis.csproj", "{ADD596AA-7290-437A-8D2D-E9BF991152B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithRedisTest", "..\PromisesWithRedisTest\PromisesWithRedisTest.csproj", "{99986A0C-EAC0-40C1-A029-596205C04D56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithRedisTest", "PromisesWithRedisTest\PromisesWithRedisTest.csproj", "{99986A0C-EAC0-40C1-A029-596205C04D56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

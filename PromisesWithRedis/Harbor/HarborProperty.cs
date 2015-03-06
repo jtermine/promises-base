@@ -58,18 +58,15 @@ namespace Termine.Promises.WithRedis.Harbor
             FixedEnumerable = 9
         }
 
-        public IAmAHarborProperty Property
-        {
-            get { return this; }
-        }
+        public IAmAHarborProperty Property => this;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+	    public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+	        handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public string Name

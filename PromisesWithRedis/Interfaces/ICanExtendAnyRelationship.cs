@@ -2,6 +2,6 @@
 {
     public interface ICanExtendAnyRelationship : ICanExtendAnyHarborBaseType<IAmAHarborProperty>
     {
-         
+        IAmAHarborRelationship R { get; }
     }
 }

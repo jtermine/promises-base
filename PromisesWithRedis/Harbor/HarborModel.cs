@@ -7,8 +7,7 @@ using Termine.Promises.WithRedis.Interfaces;
 
 namespace Termine.Promises.WithRedis.Harbor
 {
-    public sealed class HarborModel<TT> : IAmAHarborModel, IDisposable, INotifyPropertyChanged
-        where TT : IAmAHarborProperty
+    public sealed class HarborModel : IAmAHarborModel, IDisposable, INotifyPropertyChanged
     {
         private bool _isPublic;
         private string _name;
@@ -47,16 +46,18 @@ namespace Termine.Promises.WithRedis.Harbor
             }
         }
 
-        IAmAHarborBaseType ICanExtendAnyHarborBaseType<IAmAHarborProperty>.H
-        {
-            get { return H; }
-        }
+        IAmAHarborBaseType ICanExtendAnyHarborBaseType<IAmAHarborProperty>.HarborBaseInstance => HarborModelInstance;
+
+	    public IAmAHarborModel HarborModelInstance { get { return this; } }
 
         public Dictionary<string, IAmAHarborProperty> Properties { get; private set; }
+
+        public IDictionary<string, IAmAHarborRelationship> Relationships { get; private set; } 
 
         public HarborModel()
         {
             Properties = new Dictionary<string, IAmAHarborProperty>();
+            Relationships = new Dictionary<string, IAmAHarborRelationship>();
         }
 
         public void Dispose()
@@ -72,7 +73,5 @@ namespace Termine.Promises.WithRedis.Harbor
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public IAmAHarborModel H { get {return this;} }
-        
     }
 }

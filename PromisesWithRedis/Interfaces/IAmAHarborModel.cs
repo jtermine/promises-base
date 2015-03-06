@@ -1,6 +1,8 @@
-﻿namespace Termine.Promises.WithRedis.Interfaces
+﻿using System.Collections.Generic;
+
+namespace Termine.Promises.WithRedis.Interfaces
 {
-    public interface IAmAHarborModel: IAmAHarborBaseType, ICanExtendAnyHarborBaseType<IAmAHarborProperty>, ICanExtendAnyModel
+    public interface IAmAHarborModel: IAmAHarborBaseType, ICanExtendAnyModel
     {
         string Name { get; set; }
         string Caption { get; set; }

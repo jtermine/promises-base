@@ -2,6 +2,6 @@
 {
     public interface ICanExtendAnyTemporalRelationship: ICanExtendAnyRelationship
     {
-         
+        IAmAHarborTemporalRelationship T { get; }
     }
 }

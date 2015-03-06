@@ -72,6 +72,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerables\EnumRelationship_SingletonMode.cs" />
+    <Compile Include="Enumerables\EnumTemporalRelationship_ConflictMode.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Generics\GenericModelWorkload.cs" />
     <Compile Include="Harbor\HarborFixedRelationship.cs" />
