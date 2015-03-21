@@ -9,13 +9,14 @@ using Termine.Promises.Interfaces;
 
 namespace Termine.Promises
 {
-    /// <summary>
-    /// The basic promise model
-    /// </summary>
-    /// <typeparam name="TW">a promise workload</typeparam>
-    /// <typeparam name="TC">a promise configuration object</typeparam>
-    /// <typeparam name="TR">a promise request</typeparam>
-    public sealed class Promise<TC, TW, TR, TE> : IAmAPromise<TC, TW, TR, TE>
+	/// <summary>
+	/// The basic promise model
+	/// </summary>
+	/// <typeparam name="TW">a promise workload</typeparam>
+	/// <typeparam name="TC">a promise configuration object</typeparam>
+	/// <typeparam name="TR">a promise request</typeparam>
+	/// <typeparam name="TE">a promise response object</typeparam>
+	public sealed class Promise<TC, TW, TR, TE> : IHandlePromiseActions
         where TC: class, IHandlePromiseConfig, new()
         where TW : class, IAmAPromiseWorkload, new()
         where TR: class, IAmAPromiseRequest, new()
@@ -150,7 +151,12 @@ namespace Termine.Promises
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public void WithResponse(TE response)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        public Promise<TC, TW, TR, TE> WithResponse(TE response)
         {
             throw new NotImplementedException();
         }
@@ -159,14 +165,20 @@ namespace Termine.Promises
         /// Deserializes the workload of this promise from Json
         /// </summary>
         /// <param name="json">workload of the promise in Json</param>
-        public IAmAPromise<TC, TW, TR, TE> DeserializeWorkload(string json)
+        public Promise<TC, TW, TR, TE> DeserializeWorkload(string json)
         {
             Workload = JsonConvert.DeserializeObject<TW>(json, _jsonSerializerSettings);
             return this;
         }
 
-        public bool IsBlocked { get; set; }
-        public bool IsTerminated { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsBlocked { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsTerminated { get; private set; }
 
        
         /// <summary>
@@ -182,7 +194,7 @@ namespace Termine.Promises
         /// Deserializes the request of this promise from Json
         /// </summary>
         /// <param name="json">workload of the promise in Json</param>
-        public IAmAPromise<TC, TW, TR, TE> DeserializeRequest(string json)
+        public Promise<TC, TW, TR, TE> DeserializeRequest(string json)
         {
             Request = JsonConvert.DeserializeObject<TR>(json, _jsonSerializerSettings);
             return this;
@@ -201,13 +213,19 @@ namespace Termine.Promises
         /// Deserializes the config of this promise from Json
         /// </summary>
         /// <param name="json">workload of the promise in Json</param>
-        public IAmAPromise<TC, TW, TR, TE> DeserializeConfig(string json)
+        public Promise<TC, TW, TR, TE> DeserializeConfig(string json)
         {
             Config = JsonConvert.DeserializeObject<TC>(json, _jsonSerializerSettings);
             return this;
         }
 
-        public IAmAPromise<TC, TW, TR, TE> DeserializeResponse(string json)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Promise<TC, TW, TR, TE> DeserializeResponse(string json)
         {
             throw new NotImplementedException();
         }
@@ -221,6 +239,10 @@ namespace Termine.Promises
             return JsonConvert.SerializeObject(Config, _jsonSerializerSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string SerializeResponse()
         {
             return JsonConvert.SerializeObject(Response, _jsonSerializerSettings);
@@ -229,7 +251,7 @@ namespace Termine.Promises
         /// <summary>
         /// The Id for the promise.  Gets sent to the requestId of the workload if one isn't already provided.
         /// </summary>
-        public string PromiseId { get; private set; }
+        public string PromiseId { get; }
 
         /// <summary>
         /// Exposes the promise's configuration
@@ -246,36 +268,49 @@ namespace Termine.Promises
         /// </summary>
         public TR Request { get; private set; }
 
-        public TE Response { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public TE Response { get; }
 
         /// <summary>
         /// Injects a workload obtained from a serializable source into this promise and resets the promiseId accordingly
         /// </summary>
         /// <param name="workload">the workload obtained from the serializable source</param>
-        public void WithWorkload(TW workload)
+        public Promise<TC, TW, TR, TE> WithWorkload(TW workload)
         {
             Workload = Clone.ObjectGraph(workload);
+	        return this;
         }
 
-        public void WithConfig(TC config)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public Promise<TC, TW, TR, TE> WithConfig(TC config)
         {
             Config = Clone.ObjectGraph(config);
+	        return this;
         }
 
-        public void WithRequest(TR request)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Promise<TC, TW, TR, TE> WithRequest(TR request)
         {
             Request = Clone.ObjectGraph(request);
+	        return this;
         }
 
         /// <summary>
         /// the number of authChallenger actions established on this promise
         /// </summary>
-        public int AuthChallengersCount
-        {
-            get { return _context.AuthChallengers.Count; }
-        }
+        public int AuthChallengersCount => _context.AuthChallengers.Count;
 
-        /// <summary>
+	    /// <summary>
         /// the number of validator actions established on this promise
         /// </summary>
         public int ValidatorsCount
@@ -286,16 +321,13 @@ namespace Termine.Promises
         /// <summary>
         /// the number of executor actions established on this promise
         /// </summary>
-        public int ExecutorsCount
-        {
-            get { return _context.Executors.Count; }
-        }
+        public int ExecutorsCount => _context.Executors.Count;
 
-        /// <summary>
+	    /// <summary>
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
         /// </summary>
         /// <returns>the async task that returns an instance of this promise object when it completes</returns>
-        public Task<IAmAPromise<TC, TW, TR, TE>> RunAsync()
+        public Task<Promise<TC, TW, TR, TE>> RunAsync()
         {
             return Task.Run(() => Run());
         }
@@ -304,7 +336,7 @@ namespace Termine.Promises
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks synchronously
         /// </summary>
         /// <returns>the instance of this promise object</returns>
-        public IAmAPromise<TC, TW, TR, TE> Run()
+        public Promise<TC, TW, TR, TE> Run()
         {
             try
             {
@@ -506,6 +538,12 @@ namespace Termine.Promises
             AbortOnAccessDenied(new GenericEventMessage(ex));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="actionId"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public Promise<TC, TW, TR, TE> WithPreStart(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -521,6 +559,12 @@ namespace Termine.Promises
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="actionId"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public Promise<TC, TW, TR, TE> WithPostEnd(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;

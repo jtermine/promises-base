@@ -18,9 +18,9 @@ namespace Termine.Promises.Handlers
             _queue.Add(item);
         }
 
-        public int Count { get { return _queue.Count; } }
+        public int Count => _queue.Count;
 
-        public void Invoke(IHandlePromiseActions promise, TC config, TW workload, TR request, TE response, bool ignoreBlockOrTermination = false)
+	    public void Invoke(IHandlePromiseActions promise, TC config, TW workload, TR request, TE response, bool ignoreBlockOrTermination = false)
         {
             _queue.ForEach(a =>
             {

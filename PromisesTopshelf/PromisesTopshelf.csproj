@@ -44,8 +44,9 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="RabbitMQ.Client">
-      <HintPath>..\packages\RabbitMQ.Client.3.4.3\lib\net35\RabbitMQ.Client.dll</HintPath>
+    <Reference Include="RabbitMQ.Client, Version=3.5.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.3.5.0\lib\net40\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,17 +55,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5540.22053, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5540.22053\lib\net45\Termine.Promises.Base.dll</HintPath>
+    <Reference Include="Termine.Promises.Base, Version=0.0.5554.20577, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5554.20577\lib\net45\Termine.Promises.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5532.41735, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5532.41735\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5554.19887, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5554.19887\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Termine.Promises.ZMQ, Version=0.0.5532.41738, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.ZMQ.0.0.5532.41738\lib\net45\Termine.Promises.ZMQ.dll</HintPath>
+    <Reference Include="Termine.Promises.ZMQ, Version=0.0.5539.31029, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Termine.Promises.ZMQ.0.0.5539.31029\lib\net45\Termine.Promises.ZMQ.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Topshelf">
       <HintPath>..\packages\Topshelf.3.1.4\lib\net40-full\Topshelf.dll</HintPath>

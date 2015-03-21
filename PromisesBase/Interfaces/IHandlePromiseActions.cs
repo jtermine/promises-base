@@ -37,5 +37,6 @@ namespace Termine.Promises.Interfaces
         void Fatal(Exception ex);
         void Abort(Exception ex);
         void AbortOnAccessDenied(Exception ex);
-    }
+
+			}
 }

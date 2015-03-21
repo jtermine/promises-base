@@ -76,25 +76,24 @@
     <Compile Include="Enumerables\EnumTemporalRelationship_ConflictMode.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Generics\GenericModelWorkload.cs" />
+    <Compile Include="Harbor\HarborContainer.cs" />
     <Compile Include="Harbor\HarborFixedRelationship.cs" />
     <Compile Include="Harbor\HarborModel.cs" />
     <Compile Include="Harbor\HarborProperty.cs" />
+    <Compile Include="Harbor\HarborRelationship.cs" />
     <Compile Include="Harbor\HarborTemporalRelationship.cs" />
     <Compile Include="Interfaces\IAmAHarborBaseType.cs" />
+    <Compile Include="Interfaces\IAmAHarborContainer.cs" />
     <Compile Include="Interfaces\IAmAHarborFixedRelationship.cs" />
     <Compile Include="Interfaces\IAmAHarborModel.cs" />
     <Compile Include="Interfaces\IAmAHarborProperty.cs" />
     <Compile Include="Interfaces\IAmAHarborRelationship.cs" />
     <Compile Include="Interfaces\IAmAHarborTemporalRelationship.cs" />
     <Compile Include="Interfaces\IAmAModelWorkload.cs" />
-    <Compile Include="Interfaces\ICanExtendAnyFixedRelationship.cs" />
-    <Compile Include="Interfaces\ICanExtendAnyHarborBaseType.cs" />
-    <Compile Include="Interfaces\ICanExtendAnyModel.cs" />
-    <Compile Include="Interfaces\ICanExtendAnyRelationship.cs" />
-    <Compile Include="Interfaces\ICanExtendAnyProperty.cs" />
-    <Compile Include="Interfaces\ICanExtendAnyTemporalRelationship.cs" />
+    <Compile Include="PropertyExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelationshipExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -63,7 +63,6 @@
     <Compile Include="Interfaces\IHandlePromiseConfig.cs" />
     <Compile Include="PromiseMessages.cs" />
     <Compile Include="Generics\GenericEventMessage.cs" />
-    <Compile Include="Interfaces\IAmAPromise.cs" />
     <Compile Include="Interfaces\IAmAPromiseWorkload.cs" />
     <Compile Include="Interfaces\IHandleEventMessage.cs" />
     <Compile Include="Promise.cs" />

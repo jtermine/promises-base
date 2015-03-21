@@ -62,8 +62,9 @@
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="RabbitMQ.Client">
+    <Reference Include="RabbitMQ.Client, Version=3.4.3.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.3.4.3\lib\net35\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sodium">
       <HintPath>..\packages\libsodium-net.0.6.0\lib\Net40\Sodium.dll</HintPath>
@@ -83,9 +84,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Termine.Promises.FluentValidation.0.0.5539.30931\lib\net45\Termine.Promises.FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5539.30932, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5539.30932\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+    <Reference Include="Termine.Promises.NLogInstrumentation, Version=0.0.5539.31022, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Termine.Promises.NLogInstrumentation.0.0.5539.31022\lib\net45\Termine.Promises.NLogInstrumentation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Termine.Promises.WithProtobuf, Version=0.0.5539.30936, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

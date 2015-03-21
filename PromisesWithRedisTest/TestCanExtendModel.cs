@@ -1,13 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Termine.Promises.WithRedis;
+﻿using NUnit.Framework;
 using Termine.Promises.WithRedis.Harbor;
 
 namespace PromisesWithRedisTest
 {
-    [TestClass]
+    [TestFixture]
     public class TestCanExtendModel
     {
-        [TestMethod]
+        [Test]
         public void TestHarborModel()
         {
             using (var harborModel = new HarborModel())
@@ -15,7 +14,7 @@ namespace PromisesWithRedisTest
                 harborModel
                     .UpdateProperty("new", "caption")
                     .SetCaption("caption-2")
-                    .AllowNullAndOmitStoreAsNull();
+                    .AllowNull_OmitStoreAsNull();
 
                 harborModel
                     .UpdateProperty("new-2", "caption")
@@ -35,13 +34,13 @@ namespace PromisesWithRedisTest
                     .SetCollectionAsPublic()
                     .UpdateProperty("name")
                     .IsImmutable()
-                    .IndexWithNoDuplicatesUsingLIFO();
+                    .IndexWithNoDuplicates_UsingLIFO();
 
                 Assert.IsTrue(harborModel.IsPublic);
             }
         }
 
-		[TestMethod]
+		[Test]
         public void TestHarborTemporalRelationship()
         {
             using (var harborModel = new HarborModel())
@@ -58,5 +57,35 @@ namespace PromisesWithRedisTest
 				Assert.IsTrue(harborModel.Relationships["widgets"].Models.Count == 2);
             }
         }
+
+	    [Test]
+	    public void TestHarborModelAndRelationship()
+	    {
+		    using (var harborContainer = new HarborContainer())
+		    {
+			    harborContainer
+				    .HarborModel("person")
+				    .SetCollectionAsPublic()
+				    .UpdateProperty("firstName", "First name")
+				    .AllowNull_OmitStoreAsNull();
+
+			    harborContainer
+				    .HarborFixedRelationship("city")
+				    .HasMaxCapacity(10);
+
+				harborContainer
+					.HarborModel("person2")
+					.HarborModelInstance
+
+			    harborContainer
+					.HarborModel("person")
+						.SetCollectionAsPublic()
+						.UpdateProperty("firstName", "First name")
+							.AllowNull_OmitStoreAsNull();
+
+					//.HarborModel("place")
+					//.HarborModel("thing")
+		    }
+	    }
     }
 }
