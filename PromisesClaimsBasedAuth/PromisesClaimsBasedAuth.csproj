@@ -56,8 +56,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Termine.Promises.Base, Version=0.0.5554.17850, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Termine.Promises.Base.0.0.5554.17850\lib\net45\Termine.Promises.Base.dll</HintPath>
+    <Reference Include="Termine.Promises.Base, Version=0.0.5559.15517, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Termine.Promises.Base.0.0.5559.15517\lib\net45\Termine.Promises.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Termine.Promises.FluentValidation, Version=0.0.5539.30931, Culture=neutral, processorArchitecture=MSIL">
