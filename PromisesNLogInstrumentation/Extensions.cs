@@ -65,7 +65,10 @@ namespace Termine.Promises.NLogInstrumentation
                 message.EventPublicMessage, options);
 
             theEvent.Properties.Add("RequestId", promise.PromiseId);
-            theEvent.Properties.Add("EventTypeId", message.EventId);
+
+			var messageNumber = $"{message.EventType}.{message.EventApplicationGroup}.{message.EventNumber}.{message.MinorEventNumber}";
+
+			theEvent.Properties.Add("EventTypeId", messageNumber);
             theEvent.Properties.Add("EventPublicDetails", message.EventPublicDetails);
 
             logger.Log(theEvent);

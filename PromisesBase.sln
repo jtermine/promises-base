@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D44D985-3239-45B3-A221-5709BFDA7C7A}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,15 +20,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesNLogInstrumentation
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesExecutionControlWithRedis", "PromiseExecutionControlWithRedis\PromisesExecutionControlWithRedis.csproj", "{5E05D603-6304-4D8C-94D7-05398C73D629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithProtobuf", "PromisesWithProtobuf\PromisesWithProtobuf.csproj", "{6794FE31-8623-4330-B2FA-D373E2C83821}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesEncryption", "PromisesEncryption\PromisesEncryption.csproj", "{0C13A532-7419-4943-85CF-C0292C01BD4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesZMQ", "PromisesZMQ\PromisesZMQ.csproj", "{DD8ED2DD-38B7-41F3-B869-93452BB759C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWeb", "PromisesWeb\PromisesWeb.csproj", "{A1D26B5D-7113-45CA-B158-55CAD8143BAD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithFileTransactionLog", "PromisesWithFileTransactionLog\PromisesWithFileTransactionLog.csproj", "{5D75BB33-6392-4C69-A29D-E678F0D23161}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromisesWithREST", "PromisesHTTPs\PromisesWithREST.csproj", "{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}"
 EndProject
@@ -60,10 +56,6 @@ Global
 		{5E05D603-6304-4D8C-94D7-05398C73D629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E05D603-6304-4D8C-94D7-05398C73D629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E05D603-6304-4D8C-94D7-05398C73D629}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6794FE31-8623-4330-B2FA-D373E2C83821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6794FE31-8623-4330-B2FA-D373E2C83821}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6794FE31-8623-4330-B2FA-D373E2C83821}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6794FE31-8623-4330-B2FA-D373E2C83821}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C13A532-7419-4943-85CF-C0292C01BD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,10 +68,6 @@ Global
 		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1D26B5D-7113-45CA-B158-55CAD8143BAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D75BB33-6392-4C69-A29D-E678F0D23161}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAF9E016-E4E1-44ED-AA7B-9D722EA79E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU

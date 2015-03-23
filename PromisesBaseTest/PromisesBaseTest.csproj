@@ -113,10 +113,6 @@
       <Project>{224354a5-3b29-42e3-9a29-f6ff35fbbd9e}</Project>
       <Name>PromisesNLogInstrumentation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PromisesWithProtobuf\PromisesWithProtobuf.csproj">
-      <Project>{6794fe31-8623-4330-b2fa-d373e2c83821}</Project>
-      <Name>PromisesWithProtobuf</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PromisesZMQ\PromisesZMQ.csproj">
       <Project>{dd8ed2dd-38b7-41f3-b869-93452bb759c6}</Project>
       <Name>PromisesZMQ</Name>

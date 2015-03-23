@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NClone;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Termine.Promises.Generics;
@@ -79,52 +78,52 @@ namespace Termine.Promises
             /// <summary>
             /// a dictionary of block handlers -- there are executed when a promise is blocked
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> BlockHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> BlockHandlers { get; }
             
             /// <summary>
             /// a dictionary of trace handlers -- these are executed whe na promise is tracing
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> TraceHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> TraceHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> DebugHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> DebugHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> InfoHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> InfoHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> WarnHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> WarnHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> ErrorHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> ErrorHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> FatalHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> FatalHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> AbortHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> AbortHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> AbortOnAccessDeniedHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> AbortOnAccessDeniedHandlers { get; }
             
             /// <summary>
             /// 
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> SuccessHandlers { get; private set; }
+            public PromiseHandlerQueue<IHandlePromiseActions> SuccessHandlers { get; }
 
             /// <summary>
             /// when a promise context is initialized, each of the dictionaries it contains are also initialized to make it easy to add the events to the promise
@@ -150,16 +149,6 @@ namespace Termine.Promises
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="response"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        public Promise<TC, TW, TR, TE> WithResponse(TE response)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Deserializes the workload of this promise from Json
@@ -253,57 +242,30 @@ namespace Termine.Promises
         /// </summary>
         public string PromiseId { get; }
 
+		/// <summary>
+		/// The application groupId that the promise will run under -- used when passing events across applications.
+		/// </summary>
+		public int ApplicationGroupId { get; set; }
+
         /// <summary>
         /// Exposes the promise's configuration
         /// </summary>
-        public TC Config { get; private set; }
+        private TC Config { get; set; }
 
         /// <summary>
         /// Exposes the promise's workload
         /// </summary>
-        public TW Workload { get; private set; }
+        private TW Workload { get; set; }
 
         /// <summary>
         /// Exposes the promise's request.
         /// </summary>
-        public TR Request { get; private set; }
+        private TR Request { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TE Response { get; }
-
-        /// <summary>
-        /// Injects a workload obtained from a serializable source into this promise and resets the promiseId accordingly
-        /// </summary>
-        /// <param name="workload">the workload obtained from the serializable source</param>
-        public Promise<TC, TW, TR, TE> WithWorkload(TW workload)
-        {
-            Workload = Clone.ObjectGraph(workload);
-	        return this;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithConfig(TC config)
-        {
-            Config = Clone.ObjectGraph(config);
-	        return this;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithRequest(TR request)
-        {
-            Request = Clone.ObjectGraph(request);
-	        return this;
-        }
+        private TE Response { get; }
 
         /// <summary>
         /// the number of authChallenger actions established on this promise
@@ -313,12 +275,9 @@ namespace Termine.Promises
 	    /// <summary>
         /// the number of validator actions established on this promise
         /// </summary>
-        public int ValidatorsCount
-        {
-            get { return _context.Validators.Count; }
-        }
+        public int ValidatorsCount => _context.Validators.Count;
 
-        /// <summary>
+		/// <summary>
         /// the number of executor actions established on this promise
         /// </summary>
         public int ExecutorsCount => _context.Executors.Count;
@@ -327,19 +286,23 @@ namespace Termine.Promises
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
         /// </summary>
         /// <returns>the async task that returns an instance of this promise object when it completes</returns>
-        public Task<Promise<TC, TW, TR, TE>> RunAsync()
+	    // ReSharper disable once UnusedMember.Global
+        public Task<Promise<TC, TW, TR, TE>> RunAsync(int applicationGroupId)
         {
-            return Task.Run(() => Run());
+            return Task.Run(() => Run(applicationGroupId));
         }
 
         /// <summary>
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks synchronously
         /// </summary>
         /// <returns>the instance of this promise object</returns>
-        public Promise<TC, TW, TR, TE> Run()
+        // ReSharper disable once MemberCanBePrivate.Global
+        public Promise<TC, TW, TR, TE> Run(int applicationGroupId)
         {
             try
             {
+	            ApplicationGroupId = applicationGroupId;
+
                 Trace(PromiseMessages.PromiseStarted);
 
                 _context.PreStartActions.Invoke(this, Config, Workload, Request, Response);
@@ -355,7 +318,7 @@ namespace Termine.Promises
             }
             catch (Exception ex)
             {
-                Error(new GenericEventMessage(ex));
+                Error(new GenericEventMessage(ApplicationGroupId, ex));
                 Trace(PromiseMessages.PromiseFail);
             }
 
@@ -461,7 +424,7 @@ namespace Termine.Promises
         /// <param name="ex"></param>
         public void Block(Exception ex)
         {
-            Block(new GenericEventMessage(ex));
+            Block(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -470,7 +433,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Trace(Exception ex)
         {
-            Trace(new GenericEventMessage(ex));
+            Trace(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -479,7 +442,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Debug(Exception ex)
         {
-            Debug(new GenericEventMessage(ex));
+            Debug(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -488,7 +451,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Info(Exception ex)
         {
-            Info(new GenericEventMessage(ex));
+            Info(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -497,7 +460,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Warn(Exception ex)
         {
-            Warn(new GenericEventMessage(ex));
+            Warn(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -506,7 +469,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Error(Exception ex)
         {
-            Error(new GenericEventMessage(ex));
+            Error(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -515,7 +478,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Fatal(Exception ex)
         {
-            Fatal(new GenericEventMessage(ex));
+            Fatal(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -525,7 +488,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void Abort(Exception ex)
         {
-            Abort(new GenericEventMessage(ex));
+            Abort(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -535,7 +498,7 @@ namespace Termine.Promises
         /// <param name="ex">an exception object</param>
         public void AbortOnAccessDenied(Exception ex)
         {
-            AbortOnAccessDenied(new GenericEventMessage(ex));
+            AbortOnAccessDenied(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
         /// <summary>
@@ -551,8 +514,8 @@ namespace Termine.Promises
             _context.PreStartActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.PreStartActionStopped(actionId),
-                StartMessage = PromiseMessages.PreStartActionStarted(actionId),
+                EndMessage = PromiseMessages.PreStartActionStopped(ApplicationGroupId, actionId),
+                StartMessage = PromiseMessages.PreStartActionStarted(ApplicationGroupId, actionId),
                 HandlerName = actionId
             });
 
@@ -572,14 +535,20 @@ namespace Termine.Promises
             _context.PostEndActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.PostEndActionStopped(actionId),
-                StartMessage = PromiseMessages.PostEndActionStarted(actionId),
+                EndMessage = PromiseMessages.PostEndActionStopped(ApplicationGroupId, actionId),
+                StartMessage = PromiseMessages.PostEndActionStarted(ApplicationGroupId, actionId),
                 HandlerName = actionId
             });
 
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithValidator(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -587,14 +556,20 @@ namespace Termine.Promises
             _context.Validators.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.ValidatorStopped(actionId),
-                StartMessage = PromiseMessages.ValidatorStarted(actionId),
+                EndMessage = PromiseMessages.ValidatorStopped(ApplicationGroupId, actionId),
+                StartMessage = PromiseMessages.ValidatorStarted(ApplicationGroupId, actionId),
                 HandlerName = actionId
             });
 
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithAuthChallenger(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -602,14 +577,20 @@ namespace Termine.Promises
             _context.AuthChallengers.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.AuthChallengerStopped(actionId),
-                StartMessage = PromiseMessages.AuthChallengerStarted(actionId),
+                EndMessage = PromiseMessages.AuthChallengerStopped(ApplicationGroupId, actionId),
+                StartMessage = PromiseMessages.AuthChallengerStarted(ApplicationGroupId, actionId),
                 HandlerName = actionId
             });
 
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithExecutor(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -617,14 +598,20 @@ namespace Termine.Promises
             _context.Executors.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.ExecutorStopped(actionId),
-                StartMessage = PromiseMessages.ExecutorStarted(actionId),
+                EndMessage = PromiseMessages.ExecutorStopped(ApplicationGroupId, actionId),
+                StartMessage = PromiseMessages.ExecutorStarted(ApplicationGroupId, actionId),
                 HandlerName = actionId
             });
 
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithXferAction(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -632,14 +619,20 @@ namespace Termine.Promises
             _context.XferActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.XferActionStopped(actionId),
-                StartMessage = PromiseMessages.XferActionStarted(actionId),
+                EndMessage = PromiseMessages.XferActionStopped(ApplicationGroupId, actionId),
+                StartMessage = PromiseMessages.XferActionStarted(ApplicationGroupId, actionId),
                 HandlerName = actionId
             });
 
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithBlockHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -653,6 +646,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithTraceHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -666,6 +665,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithDebugHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -679,6 +684,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithInfoHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -692,6 +703,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithWarnHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -705,6 +722,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithErrorHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -718,6 +741,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithFatalHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -731,6 +760,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithAbortHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -744,6 +779,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithAbortOnAccessDeniedHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
@@ -757,6 +798,12 @@ namespace Termine.Promises
             return this;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
         public Promise<TC, TW, TR, TE> WithSuccessHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action)
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
