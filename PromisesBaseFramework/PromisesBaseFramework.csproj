@@ -43,6 +43,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -65,12 +66,20 @@
     <Compile Include="Base\Interfaces\IAmAPromiseRequest.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseWorkload.cs" />
+    <Compile Include="Base\Interfaces\IConfigurePromise.cs" />
     <Compile Include="Base\Interfaces\IHandleEventMessage.cs" />
     <Compile Include="Base\Interfaces\IHandlePromiseActions.cs" />
     <Compile Include="Base\Interfaces\IHandlePromiseConfig.cs" />
+    <Compile Include="Base\Interfaces\IHandlePromiseEvents.cs" />
     <Compile Include="Base\Promise.cs" />
     <Compile Include="Base\PromiseMessages.cs" />
-    <Compile Include="Logging\Extensions.cs" />
+    <Compile Include="Config\PxApplicationGroup.cs" />
+    <Compile Include="Config\PxContext.cs" />
+    <Compile Include="Config\PxContextsCollection.cs" />
+    <Compile Include="Config\PxInit.cs" />
+    <Compile Include="Config\PxInitsCollection.cs" />
+    <Compile Include="Config\PxConfigSection.cs" />
+    <Compile Include="Logging\NLogPromiseConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@ namespace Termine.Promises.Base.Interfaces
 		string SerializeResponse();
 
 		string PromiseId { get; }
+		string LoggerName { get; }
 		int ApplicationGroupId { get; }
 		int AuthChallengersCount { get; }
 		int ValidatorsCount { get; }
