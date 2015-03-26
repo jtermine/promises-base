@@ -264,7 +264,8 @@ namespace Termine.Promises.Base
         /// </summary>
         public string PromiseId { get; }
 
-		public string LoggerName => $"{typeof(TW).FullName}.{PromiseId}";
+		public string PromiseName => $"{PromiseContext.PxConfigSection.PxApplicationGroup.Name}.{Request.RequestName}";
+		public string LoggerName => $"{PromiseName}.{PromiseId}";
 
 		/// <summary>
 		/// The application groupId that the promise will run under -- used when passing events across applications.

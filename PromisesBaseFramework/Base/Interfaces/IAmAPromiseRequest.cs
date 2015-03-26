@@ -3,7 +3,6 @@
     public interface IAmAPromiseRequest
     {
         string RequestId { get; set; }
-        string PromiseName { get; set; }
-        string AppName { get; set; }
+        string RequestName { get; set; }
     }
 }

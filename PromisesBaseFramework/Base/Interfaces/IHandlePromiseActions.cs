@@ -15,6 +15,7 @@ namespace Termine.Promises.Base.Interfaces
 
 		string PromiseId { get; }
 		string LoggerName { get; }
+		string PromiseName { get; }
 		int ApplicationGroupId { get; }
 		int AuthChallengersCount { get; }
 		int ValidatorsCount { get; }

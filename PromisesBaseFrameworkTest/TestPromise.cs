@@ -11,6 +11,12 @@ namespace PromisesBaseFrameworkTest
 		public void TestPromiseInitializer()
 		{
 			var promise = new Promise<GenericConfig, GenericWorkload, GenericRequest, GenericResponse>();
+
+			promise.WithAuthChallenger("auth", (actions, c, w, rq, rx) =>
+			{
+				rx.ResponseCode = 200;
+			});
+
 			promise.Run();
 
 			// var configSettings = (PxConfigSection)ConfigurationManager.GetSection("PxConfig");

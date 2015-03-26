@@ -6,6 +6,7 @@ namespace Termine.Promises.Base.Interfaces
 	{
 		string PromiseId { get; }
 		string LoggerName { get; }
+		string PromiseName { get; }
 
 		void WithBlockHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
         void WithTraceHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
