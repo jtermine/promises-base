@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -33,9 +33,26 @@ namespace Termine.Promises.Base
             Request = new TR();
             Workload = new TW();
             Response = new TE();
+	        Init();
         }
 
-        /// <summary>
+		private void Init()
+		{
+			var pxInits = PromiseContext.PxConfigSection.PxContexts.AsQueryable().First(f => f.Name == "default")?.PxInits;
+			if (pxInits == null) return;
+			
+			foreach (var assembly in
+				pxInits.OrderBy(f => f.Order)
+					.Select(pxInit => Type.GetType(pxInit.Type, false, true))
+					.Where(type => type != default(Type))
+					.Select(Activator.CreateInstance))
+			{
+				(assembly as IConfigurePromise)?.Configure(this);
+			}
+
+		}
+
+		/// <summary>
         /// The promise context stores instances of the actions (i.e. auth challengers, validators, executors) that a promise supports
         /// </summary>
         private class PromiseContext
@@ -145,7 +162,7 @@ namespace Termine.Promises.Base
                 SuccessHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
             }
 
-	        public PxConfigSection PxConfigSection => PxConfigSection.Get();
+	        public static PxConfigSection PxConfigSection => PxConfigSection.Get();
         }
 
         private readonly PromiseContext _context = new PromiseContext();
@@ -289,7 +306,7 @@ namespace Termine.Promises.Base
         /// </summary>
         public int ExecutorsCount => _context.Executors.Count;
 
-		public string Secret => _context.PxConfigSection.PxApplicationGroup.Secret;
+		public string Secret => PromiseContext.PxConfigSection.PxApplicationGroup.Secret;
 
 	    /// <summary>
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
