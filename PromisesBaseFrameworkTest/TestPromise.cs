@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
-using Termine.Promises.Base;
+using PromisesBaseFrameworkTest.TestPromiseComponents;
 using Termine.Promises.Base.Generics;
+using Termine.Promises.Base.Interfaces;
 
 namespace PromisesBaseFrameworkTest
 {
@@ -10,31 +11,24 @@ namespace PromisesBaseFrameworkTest
 		[Test]
 		public void TestPromiseInitializer()
 		{
-			var promise = new Promise<GenericConfig, GenericWorkload, GenericRequest, GenericResponse>();
+			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericWorkload, TestPromiseRequest, TestPromiseResponse>();
 
-			promise.WithAuthChallenger("auth", (actions, c, w, rq, rx) =>
+			promise.WithAuthChallenger("auth", (p, c, w, rq, rx) =>
 			{
 				rx.ResponseCode = 200;
 			});
 
+			promise.WithExecutor("exec", (p, c, w, rq, rx) =>
+			{
+				p.Trace(GenericEventMessage.New(p.PromiseName, EnumEventType.Info));
+				rx.OutputString = "new output";
+			});
+
 			promise.Run();
 
-			// var configSettings = (PxConfigSection)ConfigurationManager.GetSection("PxConfig");
+			var response = promise.SerializeResponse();
 
-			Assert.IsTrue(promise.Secret == "12345");
-
-			/*
-			foreach (var configElement in configSettings.ConfigElements.AsEnumerable())
-			{
-				Console.WriteLine(configElement.Key);
-				
-				foreach (var l_subElement in configElement.SubElements.AsEnumerable())
-				{
-					Console.WriteLine(l_subElement.Key);
-				}
-
-			}
-			*/
+			Assert.IsNotEmpty(response);
 
 		}
     }

@@ -23,6 +23,7 @@ namespace Termine.Promises.Base.Generics
 			EventType = EnumEventType.Info;
             EventNumber = eventId;
             EventPublicMessage = publicMessage;
+	        EventApplicationGroup = eventApplicationGroup;
         }
 
         public GenericEventMessage(int eventApplicationGroup, Exception ex)
@@ -31,7 +32,8 @@ namespace Termine.Promises.Base.Generics
 			EventNumber = -1;
             EventPublicMessage = ex.Message;
             EventPublicDetails = ex.ToString();
-        }
+			EventApplicationGroup = eventApplicationGroup;
+		}
 
         public GenericEventMessage(int eventApplicationGroup, int eventId, string publicMessage, bool isPublicMessage =  false)
         {
@@ -39,6 +41,13 @@ namespace Termine.Promises.Base.Generics
 			EventNumber = eventId;
             EventPublicMessage = publicMessage;
             IsPublicMessage = isPublicMessage;
-        }
+			EventApplicationGroup = eventApplicationGroup;
+		}
+
+	    public static GenericEventMessage New(string message, EnumEventType eventType)
+	    {
+		    var genericEventMessage = new GenericEventMessage(0, -1, message, false) {EventType = eventType};
+		    return genericEventMessage;
+	    }
     }
 }
