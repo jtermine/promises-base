@@ -21,10 +21,45 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 
 			_personModel.AddProperty(nameof(IsStudent), "Student?")
 				.TypeIsBoolean(true);
-
-
+			
 			_personModel.AddProperty(nameof(IsAthlete), "Athlete?")
 				.TypeIsBoolean(true);
+
+			_personModel.AddProperty(nameof(NumCorrect), "Num. Correct")
+				.TypeIsInteger(55);
+
+			_personModel.AddProperty(nameof(NumPossible), "Num. Possible")
+				.TypeIsInteger(200);
+
+			_personModel.AddProperty(nameof(Grade), "Grade")
+				.TypeIsComputedDecimal((model, response) =>
+				{
+					var result = new decimal(NumCorrect)/new decimal(NumPossible);
+					response.Value = result;
+				});
+
+			_personModel.AddProperty(nameof(DoubleGrade), "DoubleGrade")
+				.TypeIsComputedDecimal((model, response) =>
+				{
+					response.Value = Grade*2;
+				});
+
+			/*
+			_personModel.AddProperty(nameof(LetterGrade), "Letter Grade")
+				.TypeIsComputedString($"if({nameof(Grade)} > .9m, \"A\", \"F\")");
+				*/
+
+			_personModel.AddProperty(nameof(LetterGrade), "Letter Grade")
+				.TypeIsComputedString((model, response) =>
+				{
+					if (Grade >= 0 & Grade < .5m) response.Value = "N";
+					if (Grade >= .5m & Grade < .6m) response.Value = "F";
+					if (Grade >= .6m & Grade < .7m) response.Value = "D";
+					if (Grade >= .7m & Grade < .8m) response.Value = "C";
+					if (Grade >= .8m & Grade < .9m) response.Value = "B";
+					if (Grade >= .9m) response.Value = "A";
+				});
+
 
 		}
 
@@ -58,6 +93,27 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 			set { _personModel.Set(nameof(IsAthlete), value); }
 		}
 
+		public int NumCorrect
+		{
+			get { return _personModel.GetInt(nameof(NumCorrect)); }
+			set { _personModel.SetInt(nameof(NumCorrect), value); }
+		}
 
-	}
+		public int NumPossible {
+			get { return _personModel.GetInt(nameof(NumPossible)); }
+			set { _personModel.SetInt(nameof(NumPossible), value); }
+		}
+
+		//public decimal Grade => 
+		//	_personModel.GetDecimal(nameof(Grade));
+
+		//public decimal DoubleGrade => _personModel.GetDecimal(nameof(DoubleGrade));
+
+		public decimal Grade => _personModel.GetDecimal(nameof(Grade));
+
+		public decimal DoubleGrade => _personModel.GetDecimal(nameof(DoubleGrade));
+
+		public string LetterGrade => _personModel.GetString(nameof(LetterGrade));
+
+		}
 }

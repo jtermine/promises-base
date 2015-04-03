@@ -16,7 +16,8 @@ namespace HarborDataFrameworkTest
 				.AddTemporalRelationship("name")
 				.CanWaitlist()
 				.HasInfiniteCapacity()
-				.WhenMovedIntoAConflict_BlockMove();
+				.WhenMovedIntoAConflict_BlockMove()
+				;
 
 			harborContainer
 				.AddFixedRelationship("match")
@@ -25,7 +26,6 @@ namespace HarborDataFrameworkTest
 
 			Assert.IsTrue(harborContainer.TemporalRelationships.Count == 1);
 			Assert.IsTrue(harborContainer.FixedRelationships.Count == 1);
-
 		}
 
 		[Test]
@@ -47,6 +47,12 @@ namespace HarborDataFrameworkTest
 
 			Assert.IsTrue(personTestObject.FirstName == "Jacqueline");
 			Assert.IsTrue(personTestObject.LastName == "M");
+
+			personTestObject.NumCorrect = personTestObject.NumPossible - 2;
+
+			Assert.IsTrue(personTestObject.Grade == 0.99m);
+			Assert.IsTrue(personTestObject.DoubleGrade == 1.98m);
+			Assert.IsTrue(personTestObject.LetterGrade == "F");
 		}
 
     }

@@ -38,7 +38,7 @@ namespace Termine.Promises.Base
 
 		private void Init()
 		{
-			var pxInits = PromiseContext.PxConfigSection.PxContexts.AsQueryable().First(f => f.Name == "default")?.PxInits;
+			var pxInits = PromiseContext.PxConfigSection.PxContexts.AsQueryable().FirstOrDefault(f => f.Name == "default")?.PxInits;
 			if (pxInits == null) return;
 			
 			foreach (var assembly in
@@ -290,7 +290,7 @@ namespace Termine.Promises.Base
         /// <summary>
         /// 
         /// </summary>
-        private TE Response { get; }
+        public TE Response { get; }
 
         /// <summary>
         /// the number of authChallenger actions established on this promise

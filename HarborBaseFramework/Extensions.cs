@@ -1,28 +1,55 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Text;
 
 namespace Termine.HarborData
 {
-    public static partial class Extensions
+    public static class Extensions
     {
-        public static string PropertyName<TProperty>(Expression<Func<TProperty>> property)
-        {
-            var lambda = (LambdaExpression)property;
+	    public static decimal ConvertToDecimal(this byte[] bytes)
+	    {
+		    if (bytes == default(byte[])) return default(decimal);
 
-            MemberExpression memberExpression;
-            var body = lambda.Body as UnaryExpression;
-            
-            if (body != null)
-            {
-                var unaryExpression = body;
-                memberExpression = (MemberExpression)unaryExpression.Operand;
-            }
-            else
-            {
-                memberExpression = (MemberExpression)lambda.Body;
-            }
+			const int offset = 0;
 
-            return memberExpression.Member.Name;
-        }
-    }
+			var i1 = BitConverter.ToInt32(bytes, offset);
+			var i2 = BitConverter.ToInt32(bytes, offset + 4);
+			var i3 = BitConverter.ToInt32(bytes, offset + 8);
+			var i4 = BitConverter.ToInt32(bytes, offset + 12);
+
+			return new decimal(new[] { i1, i2, i3, i4 });
+		}
+
+	    public static byte[] ConvertToBytes(this decimal value)
+	    {
+			var intArray = decimal.GetBits(value);
+			var result = new byte[intArray.Length * sizeof(int)];
+			Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
+
+			return result;
+		}
+
+		public static int ConvertToInt(this byte[] bytes)
+		{
+			return bytes == default(byte[]) ? default(int) : BitConverter.ToInt32(bytes, 0);
+		}
+
+	    public static byte[] ConvertToBytes(this int value)
+		{
+			var intBytes = BitConverter.GetBytes(value);
+
+			return intBytes;
+		}
+
+		public static string ConvertToString(this byte[] bytes)
+		{
+			return bytes == default(byte[]) ? default(string) : Encoding.UTF8.GetString(bytes);
+		}
+
+	    public static byte[] ConvertToBytes(this string value)
+		{
+			var stringBytes = Encoding.UTF8.GetBytes(value);
+
+			return stringBytes;
+		}
+	}
 }
