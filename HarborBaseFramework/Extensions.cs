@@ -51,5 +51,17 @@ namespace Termine.HarborData
 
 			return stringBytes;
 		}
+
+		public static bool ConvertToBool(this byte[] bytes)
+		{
+			return bytes != default(byte[]) && BitConverter.ToBoolean(bytes, 0);
+		}
+
+		public static byte[] ConvertToBytes(this bool value)
+		{
+			var boolBytes = BitConverter.GetBytes(value);
+
+			return boolBytes;
+		}
 	}
 }

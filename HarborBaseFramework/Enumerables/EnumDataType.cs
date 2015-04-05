@@ -5,7 +5,7 @@
 		StringType = 1,
 		IntegerType = 2,
 		DateType = 3,
-		UTCDateTimeType = 4,
+		DateTimeUTCType = 4,
 		BooleanType = 5,
 		MoneyType = 6,
 		DecimalType = 7,
@@ -14,6 +14,8 @@
 		ComputedDecimal = 10,
 		ComputedInt = 11,
 		ComputedString = 12,
-		ComputedBool = 13
+		ComputedBool = 13,
+		ComputedDateTimeUTC = 14,
+		ComputedDate = 15
 	}
 }

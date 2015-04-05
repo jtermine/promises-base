@@ -1,77 +1,141 @@
 ﻿using System;
-using System.Text;
 using Termine.HarborData.Enumerables;
+using Termine.HarborData.Interfaces;
+using Termine.HarborData.PropertyValueTypes;
 
 namespace Termine.HarborData.Models
 {
-	public class HarborPropertyValue
+	public class HarborPropertyValue : HarborPropertyValue<IAmAHarborPropertyValueType>
 	{
-		public HarborPropertyValue(HarborProperty harborProperty)
+		public HarborPropertyValue(HarborProperty harborProperty) : base(harborProperty)
+		{
+			switch (harborProperty.DataType)
+			{
+				case EnumDataType.ComputedBool:
+					I = new ComputedBoolPVType(harborProperty);
+					break;
+				case EnumDataType.BooleanType:
+					I = new BoolPVType(harborProperty);
+					break;
+				case EnumDataType.ComputedDecimal:
+					I = new ComputedDecimalPVType(harborProperty);
+					break;
+				case EnumDataType.DecimalType:
+					I = new DecimalPVType(harborProperty);
+					break;
+				case EnumDataType.ComputedInt:
+					I = new ComputedIntPVType(harborProperty);
+					break;
+				case EnumDataType.IntegerType:
+					I = new IntPVType(harborProperty);
+					break;
+				case EnumDataType.ComputedString:
+					I = new ComputedStringPVType(harborProperty);
+					break;
+				case EnumDataType.StringType:
+					I = new StringPVType(harborProperty);
+					break;
+				case EnumDataType.BinaryType:
+					I = new BinaryPVType(harborProperty);
+					break;
+				case EnumDataType.DateType:
+				case EnumDataType.DateTimeUTCType:
+					I = new DateTimePVType(harborProperty);
+					break;
+				case EnumDataType.ComputedDate:
+				case EnumDataType.ComputedDateTimeUTC:
+					I = new ComputedDateTimePVType(harborProperty);
+					break;
+				default:
+					I = new NullPVType(harborProperty);
+					break;
+			}
+		}
+	}
+
+
+	public class HarborPropertyValue<TT> : IAmAHarborPropertyValueType where TT : IAmAHarborPropertyValueType
+	{
+		protected HarborPropertyValue(HarborProperty harborProperty)
 		{
 			HarborProperty = harborProperty;
 		}
 
-		public string Name { get; set; }
-		public byte[] Bytes { get; set; }
-		public EnumPropertyValueState ValueState { get; set; } = EnumPropertyValueState.None;
-		public int PropertyVersion { get; set; } = -1;
+		public TT I;
+
 		public HarborProperty HarborProperty { get; }
 
-		public enum EnumPropertyValueState
+		public EnumPropertyValueState ValueState => I.ValueState;
+
+		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			None = 0,
-			Default = 1,
-			Loaded = 2,
-			Changed = 3
+			I.Set(value, valueState);
 		}
 
-		public string GetLuaVariableExpression()
+		public void Set(bool value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			string expressionVariable;
-
-			switch (HarborProperty.DataType)
-			{
-				case EnumDataType.StringType:
-					expressionVariable = (Bytes == null) ? "\"\"" : $"\"{Encoding.UTF8.GetString(Bytes)}\"";
-					break;
-				case EnumDataType.ComputedDecimal:
-				case EnumDataType.MoneyType:
-				case EnumDataType.DecimalType:
-
-					if (Bytes == null)
-					{
-						expressionVariable = "0";
-						break;
-					}
-
-					const int offset = 0;
-
-					var i1 = BitConverter.ToInt32(Bytes, offset);
-					var i2 = BitConverter.ToInt32(Bytes, offset + 4);
-					var i3 = BitConverter.ToInt32(Bytes, offset + 8);
-					var i4 = BitConverter.ToInt32(Bytes, offset + 12);
-
-					var dec = new decimal(new[] {i1, i2, i3, i4});
-
-					expressionVariable = $"{dec}";
-					break;
-				case EnumDataType.IntegerType:
-
-					if (Bytes == null)
-					{
-						expressionVariable = "0";
-						break;
-					}
-
-					expressionVariable = $"{BitConverter.ToInt32(Bytes, 0)}";
-					break;
-				default:
-					return "";
-
-			}
-
-			return $"{HarborProperty.Name}={expressionVariable}";
+			I.Set(value, valueState);
 		}
 
+		public void Set(DateTime value, DateTimeKind kind = DateTimeKind.Local,
+			EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
+		{
+			I.Set(value, kind, valueState);
+		}
+
+		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
+		{
+			I.Set(value, valueState);
+		}
+
+		public void Set(int value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
+		{
+			I.Set(value, valueState);
+		}
+
+		public void Set(string value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
+		{
+			I.Set(value, valueState);
+		}
+
+		public void Set(object value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
+		{
+			I.Set(value, valueState);
+		}
+
+		public byte[] GetBinary()
+		{
+			return I.GetBinary();
+		}
+
+		public bool GetBool()
+		{
+			return I.GetBool();
+		}
+
+		public DateTime GetDateTime(DateTimeKind kind = DateTimeKind.Local)
+		{
+			return I.GetDateTime(kind);
+		}
+
+		public decimal GetDecimal()
+		{
+			return I.GetDecimal();
+		}
+
+		public int GetInt()
+		{
+			return I.GetInt();
+		}
+
+		public string GetString()
+		{
+			return I.GetString();
+		}
+
+		public object Get()
+		{
+			return I.Get();
+		}
 	}
 }

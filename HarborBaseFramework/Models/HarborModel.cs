@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Termine.HarborData.Enumerables;
+using System.ComponentModel;
+using Termine.HarborData.Properties;
 using Termine.Promises.Base.Generics;
 using static System.String;
 
 namespace Termine.HarborData.Models
 {
-	public sealed class HarborModel : GenericWorkload, IDisposable
+	public sealed class HarborModel : GenericWorkload, IDisposable, INotifyPropertyChanged
 	{
 		public string Name => _harborModelInstance.Name;
 		public string Caption => _harborModelInstance.Caption;
 		public string Description => _harborModelInstance.Description;
 		public bool IsPublic => _harborModelInstance.IsPublic;
+		public object DirtyLock => _harborModelInstance.DirtyLock;
 		
 		public IDictionary<string, HarborProperty> Properties => _harborModelInstance.Properties;
-		public IDictionary<string, HarborPropertyValue> Instances => _harborModelInstance.Instances;
 
 		private sealed class HarborModelInstance
 		{
@@ -29,51 +29,24 @@ namespace Termine.HarborData.Models
 
 			public Dictionary<string, HarborProperty> Properties { get; } = new Dictionary<string, HarborProperty>();
 
-			public Dictionary<string, HarborPropertyValue> Instances { get; } = new Dictionary<string, HarborPropertyValue>();
+			public bool IsDirty { get; set; } = false;
 
-			public void SyncInstances()
+			public readonly object DirtyLock = new object();
+		}
+
+		public void MarkDirty()
+		{
+			lock (_harborModelInstance.DirtyLock)
 			{
-				foreach (var harborProperty in Properties)
-				{
-					SyncInstance(harborProperty.Key);
-				}
+				_harborModelInstance.IsDirty = true;
 			}
+		}
 
-			public bool MustSyncInstance(string name)
+		public void MarkClean()
+		{
+			lock (_harborModelInstance.DirtyLock)
 			{
-				if (!Properties.ContainsKey(name)) return false;
-				if (!Instances.ContainsKey(name)) return true;
-				return Instances[name].PropertyVersion != Properties[name].Version;
-			}
-
-			public void SyncInstance(string name)
-			{
-				if (!Properties.ContainsKey(name)) return;
-
-				var property = Properties[name];
-
-				if (!Instances.ContainsKey(name))
-				{
-					Instances.Add(name,
-						new HarborPropertyValue(property)
-						{
-							Name = property.Name,
-							ValueState = HarborPropertyValue.EnumPropertyValueState.Default,
-							Bytes = property.GetDefaultInBytes(),
-							PropertyVersion = property.Version
-						});
-					return;
-				}
-
-				var instance = Instances[name];
-
-				if (instance == null || instance.PropertyVersion == property.Version ||
-				    instance.ValueState == HarborPropertyValue.EnumPropertyValueState.Loaded ||
-				    instance.ValueState == HarborPropertyValue.EnumPropertyValueState.Changed) return;
-
-				instance.ValueState = HarborPropertyValue.EnumPropertyValueState.Default;
-				instance.Bytes = property.GetDefaultInBytes();
-				instance.PropertyVersion = property.Version;
+				_harborModelInstance.IsDirty = false;
 			}
 		}
 
@@ -106,8 +79,6 @@ namespace Termine.HarborData.Models
 
 			_harborModelInstance.Properties.Add(name, property);
 
-			_harborModelInstance.SyncInstance(name);
-
 			return property;
 		}
 
@@ -115,9 +86,15 @@ namespace Termine.HarborData.Models
 		{
 		}
 
+		/*
 		public bool GetBool(string propertyName)
 		{
 			if (_harborModelInstance.MustSyncInstance(propertyName)) _harborModelInstance.SyncInstance(propertyName);
+
+			if (Properties.ContainsKey(propertyName) && Properties[propertyName].DataType == EnumDataType.ComputedBool)
+			{
+				return Properties[propertyName].ComputeBool();
+			}
 
 			if (!Instances.ContainsKey(propertyName))
 				throw new InvalidOperationException("On HarborModel.GetBool, no instance was found in the collection");
@@ -147,6 +124,11 @@ namespace Termine.HarborData.Models
 		public int GetInt(string propertyName)
 		{
 			if (_harborModelInstance.MustSyncInstance(propertyName)) _harborModelInstance.SyncInstance(propertyName);
+
+			if (Properties.ContainsKey(propertyName) && Properties[propertyName].DataType == EnumDataType.ComputedInt)
+			{
+				return Properties[propertyName].ComputeInt();
+			}
 
 			if (!Instances.ContainsKey(propertyName))
 				throw new InvalidOperationException("On HarborModel.GetInt, no instance was found in the collection");
@@ -260,6 +242,8 @@ namespace Termine.HarborData.Models
 
 			Instances[propertyName].Bytes = stringBytes;
 			Instances[propertyName].ValueState = HarborPropertyValue.EnumPropertyValueState.Changed;
+
+			OnPropertyChanged(propertyName);
 		}
 
 		public void SetInt(string propertyName, int value)
@@ -273,6 +257,8 @@ namespace Termine.HarborData.Models
 
 			Instances[propertyName].Bytes = intBytes;
 			Instances[propertyName].ValueState = HarborPropertyValue.EnumPropertyValueState.Changed;
+
+			OnPropertyChanged(propertyName);
 		}
 
 		public void SetDecimal(string propertyName, decimal value)
@@ -287,6 +273,8 @@ namespace Termine.HarborData.Models
 			Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
 
 			Instances[propertyName].Bytes = result;
+
+			OnPropertyChanged(propertyName);
 		}
 
 		public void SetMoney(string propertyName, decimal value)
@@ -301,6 +289,8 @@ namespace Termine.HarborData.Models
 			Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
 
 			Instances[propertyName].Bytes = result;
+
+			OnPropertyChanged(propertyName);
 		}
 
 		public void Set(string propertyName, DateTime value)
@@ -314,6 +304,23 @@ namespace Termine.HarborData.Models
 		public void Set(string propertyName, byte[] value)
 		{
 		}
+		*/
 
+		public HarborPropertyValue this[string propertyName] => Get(propertyName);
+
+		public HarborPropertyValue Get(string propertyName)
+		{
+			return Properties.ContainsKey(propertyName) ? Properties[propertyName].PropertyValue : default(HarborPropertyValue);
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[NotifyPropertyChangedInvocator]
+		private void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		
 	}
 }

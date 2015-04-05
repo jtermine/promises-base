@@ -33,6 +33,11 @@ namespace HarborDataFrameworkTest
 		{
 			var personTestObject = new PersonTestObject();
 
+			personTestObject.PropertyChanged += (sender, args) =>
+			{
+				Assert.IsTrue(!string.IsNullOrEmpty(args.PropertyName));
+			};
+
 			Assert.IsTrue(personTestObject.FirstName == "Joseph");
 			Assert.IsTrue(personTestObject.LastName == "Termine");
 			Assert.IsTrue(personTestObject.IsAthlete);
@@ -52,7 +57,8 @@ namespace HarborDataFrameworkTest
 
 			Assert.IsTrue(personTestObject.Grade == 0.99m);
 			Assert.IsTrue(personTestObject.DoubleGrade == 1.98m);
-			Assert.IsTrue(personTestObject.LetterGrade == "F");
+			Assert.IsTrue(personTestObject.LetterGrade == "A");
+			Assert.IsTrue(personTestObject.CanPlaySports);
 		}
 
     }

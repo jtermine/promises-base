@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
 using Termine.HarborData.Enumerables;
 using Termine.HarborData.Promises;
-using Termine.Promises.Base;
-using Termine.Promises.Base.Generics;
+using Termine.HarborData.PropertyValueTypes;
 
 namespace Termine.HarborData.Models
 {
@@ -15,17 +13,16 @@ namespace Termine.HarborData.Models
 	    }
 
 	    public string Name => _harborPropertyInstance.Name;
-	    public int Version => _harborPropertyInstance.Version;
 		public EnumDataType DataType => _harborPropertyInstance.DataType;
+	    public HarborModel HarborModel => _harborPropertyInstance.HarborModel;
+
+		public HarborPropertyValue PropertyValue => new HarborPropertyValue(this);
 
 	    private class HarborPropertyInstance
 	    {
 			public HarborModel HarborModel;
-			public readonly Promise<GenericConfig, HarborModel, GenericRequest, StringResponse> StringEvaluatorPromise = new Promise<GenericConfig, HarborModel, GenericRequest, StringResponse>();
-			public readonly Promise<GenericConfig, HarborModel, GenericRequest, DecimalResponse> DecimalEvaluatorPromise = new Promise<GenericConfig, HarborModel, GenericRequest, DecimalResponse>();
-			public readonly Promise<GenericConfig, HarborModel, GenericRequest, IntResponse> IntEvaluatorPromise = new Promise<GenericConfig, HarborModel, GenericRequest, IntResponse>();
 
-			public int Version { get; set; }
+			public int Version { get; private set; }
 
 		    public enum EnumAllowNull
 		    {
@@ -64,7 +61,6 @@ namespace Termine.HarborData.Models
 		    public bool BlockOnFalseRegexMatch { get; set; }
 		    public bool BlockOnModelError { get; set; }
 		    public bool IsImmutable { get; set; }
-		    public string LuaExpression { get; set; }
 		    public string DefaultStringValue { get; set; }
 		    public int DefaultIntValue { get; set; }
 		    public bool DefaultBoolValue { get; set; }
@@ -81,35 +77,16 @@ namespace Termine.HarborData.Models
 
 	    private readonly HarborPropertyInstance _harborPropertyInstance = new HarborPropertyInstance();
 
-	    public byte[] GetDefaultInBytes()
+	    public HarborProperty MarkDirty()
 	    {
-		    switch (_harborPropertyInstance.DataType)
-		    {
-			    case EnumDataType.BinaryType:
-				    return default(byte[]);
-			    case EnumDataType.BooleanType:
-				    return BitConverter.GetBytes(_harborPropertyInstance.DefaultBoolValue);
-			    case EnumDataType.DateType:
-				    return Encoding.UTF8.GetBytes(_harborPropertyInstance.DefaultDateValue.ToLongDateString());
-			    case EnumDataType.UTCDateTimeType:
-				    return Encoding.UTF8.GetBytes(_harborPropertyInstance.DefaultDateTimeValue.ToString("u"));
-			    case EnumDataType.DecimalType:
-				    var intArray = decimal.GetBits(_harborPropertyInstance.DefaultDecimalValue);
-				    var result = new byte[intArray.Length*sizeof (int)];
-				    Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
-				    return result;
-			    case EnumDataType.MoneyType:
-				    var intArray2 = decimal.GetBits(_harborPropertyInstance.DefaultDecimalValue);
-				    var result2 = new byte[intArray2.Length*sizeof (int)];
-				    Buffer.BlockCopy(intArray2, 0, result2, 0, result2.Length);
-				    return result2;
-			    case EnumDataType.IntegerType:
-				    return BitConverter.GetBytes(_harborPropertyInstance.DefaultIntValue);
-			    case EnumDataType.StringType:
-				    return (!string.IsNullOrEmpty(_harborPropertyInstance.DefaultStringValue)) ? Encoding.UTF8.GetBytes(_harborPropertyInstance.DefaultStringValue) : default(byte[]);
-			    default:
-				    return default(byte[]);
-		    }
+		    HarborModel.MarkDirty();
+		    return this;
+	    }
+
+	    public HarborProperty MarkClean()
+	    {
+		    HarborModel.MarkClean();
+			return this;;
 	    }
 
 	    public HarborProperty Update(string name, string caption = "", string description = "")
@@ -249,28 +226,12 @@ namespace Termine.HarborData.Models
 			return this;
 		}
 
-	    private void NullDefaultValues()
-	    {
-		    _harborPropertyInstance.LuaExpression = default(string);
-
-		    _harborPropertyInstance.DefaultStringValue = default(string);
-		    _harborPropertyInstance.DefaultBoolValue = default(bool);
-		    _harborPropertyInstance.DefaultIntValue = default(int);
-		    _harborPropertyInstance.DefaultDateTimeValue = default(DateTime);
-		    _harborPropertyInstance.DefaultDateValue = default(DateTime);
-		    _harborPropertyInstance.DefaultDecimalValue = default(decimal);
-		    _harborPropertyInstance.DefaultMoneyValue = default(decimal);
-
-			_harborPropertyInstance.IncrementVersion();
-		}
-
-		public HarborProperty TypeIsString(string defaultValue = "")
+	    public HarborProperty TypeIsString(string defaultValue = "")
 		{
 			_harborPropertyInstance.DataType = EnumDataType.StringType;
 
-			NullDefaultValues();
-
-			_harborPropertyInstance.DefaultStringValue = defaultValue;
+			PropertyValue.I = new StringPVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -279,9 +240,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.IntegerType;
 
-			NullDefaultValues();
-
-			_harborPropertyInstance.DefaultIntValue = defaultValue;
+			PropertyValue.I = new IntPVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -290,9 +250,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.MoneyType;
 
-			NullDefaultValues();
-
-			_harborPropertyInstance.DefaultMoneyValue = defaultValue;
+			PropertyValue.I = new DecimalPVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -301,37 +260,87 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.DecimalType;
 
-			NullDefaultValues();
-
-			_harborPropertyInstance.DefaultDecimalValue = defaultValue;
+			PropertyValue.I = new DecimalPVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
 
-	    public HarborProperty TypeIsComputedDecimal(Action<HarborModel, DecimalResponse> modelAction)
+	    public HarborProperty TypeIsComputedDecimal(Action<HarborModel, DecimalResponse> modelAction, string actionName = default(string), decimal defaultValue = decimal.Zero)
 	    {
+			if (string.IsNullOrEmpty(actionName)) actionName = $"decimalEvaluator.{Name}";
+
 			_harborPropertyInstance.DataType = EnumDataType.ComputedDecimal;
 
-			NullDefaultValues();
+			var computedType = new ComputedDecimalPVType(this);
 
-			_harborPropertyInstance.DecimalEvaluatorPromise.WithExecutor("decimalEvaluator", (actions, config, model, req, decimalResponse) =>
+			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, decimalResponse) =>
 			{
 				modelAction.Invoke(_harborPropertyInstance.HarborModel, decimalResponse);
 			});
 
+		    PropertyValue.I = computedType;
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			
 			return this;
 		}
 
-		public HarborProperty TypeIsComputedString(Action<HarborModel, StringResponse> modelAction)
+		public HarborProperty TypeIsComputedString(Action<HarborModel, StringResponse> modelAction, string actionName = default(string), string defaultValue = default(string))
 		{
+			if (string.IsNullOrEmpty(actionName)) actionName = $"stringEvaluator.{Name}";
+
 			_harborPropertyInstance.DataType = EnumDataType.ComputedString;
 
-			NullDefaultValues();
+			var computedType = new ComputedStringPVType(this);
 
-			_harborPropertyInstance.StringEvaluatorPromise.WithExecutor("stringEvaluator", (actions, config, model, req, stringResponse) =>
+			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, stringResponse) =>
 			{
 				modelAction.Invoke(_harborPropertyInstance.HarborModel, stringResponse);
 			});
+
+			PropertyValue.I = computedType;
+
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+
+			return this;
+		}
+		
+		public HarborProperty TypeIsComputedInt(Action<HarborModel, IntResponse> modelAction, string actionName = default(string), int defaultValue = default (int))
+		{
+			if (string.IsNullOrEmpty(actionName)) actionName = $"intEvaluator.{Name}";
+
+			_harborPropertyInstance.DataType = EnumDataType.ComputedInt;
+
+			var computedType = new ComputedIntPVType(this);
+
+			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, intResponse) =>
+			{
+				modelAction.Invoke(_harborPropertyInstance.HarborModel, intResponse);
+			});
+
+			PropertyValue.I = computedType;
+
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+
+			return this;
+		}
+
+		public HarborProperty TypeIsComputedBool(Action<HarborModel, BoolResponse> modelAction, string actionName = default(string), bool defaultValue = default(bool))
+		{
+			if (string.IsNullOrEmpty(actionName)) actionName = $"boolEvaluator.{Name}";
+
+			_harborPropertyInstance.DataType = EnumDataType.ComputedBool;
+
+			var computedType = new ComputedBoolPVType(this);
+
+			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, boolResponse) =>
+			{
+				modelAction.Invoke(_harborPropertyInstance.HarborModel, boolResponse);
+			});
+
+			PropertyValue.I = computedType;
+
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -340,20 +349,18 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.DateType;
 
-			NullDefaultValues();
-
-			_harborPropertyInstance.DefaultDateValue = defaultValue;
+			PropertyValue.I = new DateTimePVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
 
 		public HarborProperty TypeIsDateTime(DateTime defaultValue = default(DateTime))
 		{
-			_harborPropertyInstance.DataType = EnumDataType.UTCDateTimeType;
+			_harborPropertyInstance.DataType = EnumDataType.DateTimeUTCType;
 
-			NullDefaultValues();
-
-			_harborPropertyInstance.DefaultDateTimeValue = defaultValue;
+			PropertyValue.I = new DateTimePVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -361,6 +368,9 @@ namespace Termine.HarborData.Models
 		public HarborProperty TypeIsBinary()
 		{
 			_harborPropertyInstance.DataType = EnumDataType.BinaryType;
+
+			PropertyValue.I = new BinaryPVType(this);
+			
 			return this;
 		}
 
@@ -374,11 +384,10 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.BooleanType;
 
-			NullDefaultValues();
+			PropertyValue.I = new BoolPVType(this);
+			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
 
-			_harborPropertyInstance.DefaultBoolValue = defaultValue;
-
-            return this;
+			return this;
 		}
 
 		public HarborProperty ValidateWithRegexAndIgnoreFalseMatch(string regex)
@@ -466,6 +475,7 @@ namespace Termine.HarborData.Models
 			return this;
 		}
 
+		/*
 	    public string ComputeString()
 	    {
 		    switch (_harborPropertyInstance.DataType)
@@ -490,5 +500,29 @@ namespace Termine.HarborData.Models
 			}
 		}
 
+		public bool ComputeBool()
+		{
+			switch (_harborPropertyInstance.DataType)
+			{
+				case EnumDataType.ComputedBool:
+					var promise = _harborPropertyInstance.BoolEvaluatorPromise.Run();
+					return promise.Response.Value;
+				default:
+					return false;
+			}
+		}
+
+		public int ComputeInt()
+		{
+			switch (_harborPropertyInstance.DataType)
+			{
+				case EnumDataType.ComputedInt:
+					var promise = _harborPropertyInstance.IntEvaluatorPromise.Run();
+					return promise.Response.Value;
+				default:
+					return 0;
+			}
+		}
+		*/
 	}
 }

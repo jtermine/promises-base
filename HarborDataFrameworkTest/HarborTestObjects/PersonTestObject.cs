@@ -1,8 +1,12 @@
-﻿using Termine.HarborData.Models;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using HarborDataFrameworkTest.Annotations;
+using Termine.HarborData.Models;
 
 namespace HarborDataFrameworkTest.HarborTestObjects
 {
-	public class PersonTestObject
+	public sealed class PersonTestObject : INotifyPropertyChanged
 	{
 		private readonly HarborContainer _personContainer = new HarborContainer();
 		private readonly HarborModel _personModel;
@@ -10,6 +14,8 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 		public PersonTestObject()
 		{
 			_personModel = _personContainer.AddModel("person", "Person");
+
+			_personModel.PropertyChanged += PersonModelOnPropertyChanged;
 
 			_personModel.AddProperty(nameof(FirstName), "First Name")
 				.TypeIsString("Joseph")
@@ -21,7 +27,7 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 
 			_personModel.AddProperty(nameof(IsStudent), "Student?")
 				.TypeIsBoolean(true);
-			
+
 			_personModel.AddProperty(nameof(IsAthlete), "Athlete?")
 				.TypeIsBoolean(true);
 
@@ -44,11 +50,6 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 					response.Value = Grade*2;
 				});
 
-			/*
-			_personModel.AddProperty(nameof(LetterGrade), "Letter Grade")
-				.TypeIsComputedString($"if({nameof(Grade)} > .9m, \"A\", \"F\")");
-				*/
-
 			_personModel.AddProperty(nameof(LetterGrade), "Letter Grade")
 				.TypeIsComputedString((model, response) =>
 				{
@@ -60,7 +61,16 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 					if (Grade >= .9m) response.Value = "A";
 				});
 
+			_personModel.AddProperty(nameof(CanPlaySports), "CanPlaySports?")
+				.TypeIsComputedBool((model, response) =>
+				{
+					response.Value = new List<string> { "A", "B", "C" }.Contains(LetterGrade);
+				});
+		}
 
+		private void PersonModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+		{
+			OnPropertyChanged(propertyChangedEventArgs.PropertyName);
 		}
 
 		public void ChangeFirstName()
@@ -71,49 +81,54 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 
 		public string FirstName
 		{
-			get { return _personModel.GetString(nameof(FirstName)); }
-			set { _personModel.SetString(nameof(FirstName), value); }
+			get { return _personModel[nameof(FirstName)]?.GetString(); }
+			set { _personModel[nameof(FirstName)].Set(value); }
 		}
 
 		public string LastName
 		{
-			get { return _personModel.GetString(nameof(LastName)); }
-			set { _personModel.SetString(nameof(LastName), value); }
+			get { return _personModel[nameof(LastName)]?.GetString(); }
+			set { _personModel[nameof(LastName)].Set(value); }
 		}
 
 		public bool IsStudent
 		{
-			get { return _personModel.GetBool(nameof(IsStudent)); }
-			set { _personModel.Set(nameof(IsStudent), value); }
+			get { return _personModel[nameof(IsStudent)].GetBool(); }
+			set { _personModel[nameof(IsStudent)].Set(value); }
 		}
 
 		public bool IsAthlete
 		{
-			get { return _personModel.GetBool(nameof(IsAthlete)); }
-			set { _personModel.Set(nameof(IsAthlete), value); }
+			get { return _personModel[nameof(IsAthlete)].GetBool(); }
+			set { _personModel[nameof(IsAthlete)].Set(value); }
 		}
 
 		public int NumCorrect
 		{
-			get { return _personModel.GetInt(nameof(NumCorrect)); }
-			set { _personModel.SetInt(nameof(NumCorrect), value); }
+			get { return _personModel[nameof(NumCorrect)].GetInt(); }
+			set { _personModel[nameof(NumCorrect)].Set(value); }
 		}
 
-		public int NumPossible {
-			get { return _personModel.GetInt(nameof(NumPossible)); }
-			set { _personModel.SetInt(nameof(NumPossible), value); }
+		public int NumPossible
+		{
+			get { return _personModel[nameof(NumPossible)].GetInt(); }
+			set { _personModel[nameof(NumPossible)].Set(value); }
 		}
 
-		//public decimal Grade => 
-		//	_personModel.GetDecimal(nameof(Grade));
+		public decimal Grade => _personModel[nameof(Grade)].GetDecimal();
 
-		//public decimal DoubleGrade => _personModel.GetDecimal(nameof(DoubleGrade));
+		public decimal DoubleGrade => _personModel[nameof(DoubleGrade)].GetDecimal();
 
-		public decimal Grade => _personModel.GetDecimal(nameof(Grade));
+		public string LetterGrade => _personModel[nameof(LetterGrade)].GetString();
 
-		public decimal DoubleGrade => _personModel.GetDecimal(nameof(DoubleGrade));
+		public bool CanPlaySports => _personModel[nameof(CanPlaySports)].GetBool();
 
-		public string LetterGrade => _personModel.GetString(nameof(LetterGrade));
+		public event PropertyChangedEventHandler PropertyChanged;
 
+		[NotifyPropertyChangedInvocator]
+		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
+	}
 }

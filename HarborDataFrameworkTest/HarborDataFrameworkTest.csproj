@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarborTestObjects\PersonTestObject.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="TestContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

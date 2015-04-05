@@ -39,20 +39,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerables\EnumDataType.cs" />
+    <Compile Include="Enumerables\EnumPropertyValueState.cs" />
     <Compile Include="Enumerables\EnumRelationship_SingletonMode.cs" />
     <Compile Include="Enumerables\EnumTemporalRelationship_ConflictMode.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\IAmAHarborPropertyValueType.cs" />
     <Compile Include="Models\HarborContainer.cs" />
     <Compile Include="Models\HarborFixedRelationship.cs" />
     <Compile Include="Models\HarborModel.cs" />
     <Compile Include="Models\HarborProperty.cs" />
     <Compile Include="Models\HarborPropertyValue.cs" />
     <Compile Include="Models\HarborTemporalRelationship.cs" />
+    <Compile Include="Promises\BoolResponse.cs" />
     <Compile Include="Promises\IntResponse.cs" />
     <Compile Include="Promises\DecimalResponse.cs" />
+    <Compile Include="Promises\DateTimeResponse.cs" />
     <Compile Include="Promises\StringResponse.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyValueTypes\ComputedBoolPVType.cs" />
+    <Compile Include="PropertyValueTypes\ComputedIntPVType.cs" />
+    <Compile Include="PropertyValueTypes\ComputedDecimalPVType.cs" />
+    <Compile Include="PropertyValueTypes\ComputedDateTimePVType.cs" />
+    <Compile Include="PropertyValueTypes\DateTimePVType.cs" />
+    <Compile Include="PropertyValueTypes\BoolPVType.cs" />
+    <Compile Include="PropertyValueTypes\DecimalPVType.cs" />
+    <Compile Include="PropertyValueTypes\IntPVType.cs" />
+    <Compile Include="PropertyValueTypes\NullPVType.cs" />
+    <Compile Include="PropertyValueTypes\ComputedStringPVType.cs" />
+    <Compile Include="PropertyValueTypes\StringPVType.cs" />
+    <Compile Include="PropertyValueTypes\BinaryPVType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
