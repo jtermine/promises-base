@@ -1,4 +1,5 @@
-﻿using HarborDataFrameworkTest.HarborTestObjects;
+﻿using System;
+using HarborDataFrameworkTest.HarborTestObjects;
 using NUnit.Framework;
 using Termine.HarborData.Models;
 
@@ -49,6 +50,7 @@ namespace HarborDataFrameworkTest
 
 			personTestObject.FirstName = "Jacqueline";
 			personTestObject.LastName = "M";
+			personTestObject.NumTestingBlocksRequired = 4;
 
 			Assert.IsTrue(personTestObject.FirstName == "Jacqueline");
 			Assert.IsTrue(personTestObject.LastName == "M");
@@ -59,6 +61,10 @@ namespace HarborDataFrameworkTest
 			Assert.IsTrue(personTestObject.DoubleGrade == 1.98m);
 			Assert.IsTrue(personTestObject.LetterGrade == "A");
 			Assert.IsTrue(personTestObject.CanPlaySports);
+
+			Assert.IsTrue(personTestObject.TestingTimeRequired == 120);
+
+            Assert.IsTrue(personTestObject.TestingEndTime == new DateTime(2015, 4, 10, 10, 0, 0, DateTimeKind.Local));
 		}
 
     }

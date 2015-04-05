@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using HarborDataFrameworkTest.Annotations;
@@ -42,7 +43,7 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 				{
 					var result = new decimal(NumCorrect)/new decimal(NumPossible);
 					response.Value = result;
-				}, "d", 7m);
+				});
 
 			_personModel.AddProperty(nameof(DoubleGrade), "DoubleGrade")
 				.TypeIsComputedDecimal((model, response) =>
@@ -65,6 +66,26 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 				.TypeIsComputedBool((model, response) =>
 				{
 					response.Value = new List<string> { "A", "B", "C" }.Contains(LetterGrade);
+				});
+
+			_personModel.AddProperty(nameof(NumTestingBlocksRequired), "Num. Testing Blocks")
+				.TypeIsInteger(1);
+
+			_personModel.AddProperty(nameof(TestingTimeRequired), "Testing Time Req'd")
+				.TypeIsComputedInt((model, response) =>
+				{
+					response.Value = NumTestingBlocksRequired*30;
+				});
+
+			_personModel.AddProperty(nameof(TestingStartTime), "Testing Start Time")
+				.TypeIsDateTime(new DateTime(2015, 4, 10, 8, 0, 0, DateTimeKind.Local));
+
+			_personModel.AddProperty(nameof(TestingEndTime), "Testing End Time")
+				.TypeIsComputedDateTimeUTC((model, response) =>
+				{
+					var timeSpan = new TimeSpan(0, TestingTimeRequired, 0);
+
+					response.Value = TestingStartTime.Add(timeSpan);
 				});
 		}
 
@@ -114,6 +135,21 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 			get { return _personModel[nameof(NumPossible)].GetInt(); }
 			set { _personModel[nameof(NumPossible)].Set(value); }
 		}
+
+		public int NumTestingBlocksRequired {
+			get { return _personModel[nameof(NumTestingBlocksRequired)].GetInt(); }
+			set { _personModel[nameof(NumTestingBlocksRequired)].Set(value); }
+		}
+
+		public int TestingTimeRequired => _personModel[nameof(TestingTimeRequired)].GetInt();
+
+		public DateTime TestingStartTime
+		{
+			get { return _personModel[nameof(TestingStartTime)].GetDateTime(); }
+			set { _personModel[nameof(TestingStartTime)].Set(value); }
+		}
+
+		public DateTime TestingEndTime => _personModel[nameof(TestingEndTime)].GetDateTime();
 
 		public decimal Grade => _personModel[nameof(Grade)].GetDecimal();
 

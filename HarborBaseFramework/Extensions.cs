@@ -75,5 +75,48 @@ namespace Termine.HarborData
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return Convert.ToInt64((date - epoch).TotalSeconds);
 		}
+
+		public static DateTime ConvertToDateTime(this byte[] bytes, DateTimeKind kind = DateTimeKind.Local)
+		{
+			var strDateTime = bytes.ConvertToString();
+
+			try
+			{
+				DateTime dateTime;
+				if (!DateTime.TryParse(strDateTime, out dateTime)) return default(DateTime);
+
+				switch (kind)
+				{
+						case DateTimeKind.Local:
+						case DateTimeKind.Unspecified:
+						return dateTime.ToLocalTime();
+					default:
+						return dateTime;
+				}
+			}
+			catch
+			{
+				return default(DateTime);
+			}
+
+		}
+
+		public static byte[] ConvertToBytes(this DateTime value, DateTimeKind kind = DateTimeKind.Local)
+		{
+			string dtString;
+
+			switch (kind)
+			{
+					case DateTimeKind.Local:
+					case DateTimeKind.Unspecified:
+					dtString = value.ToUniversalTime().ToString("O");
+					break;
+				default:
+					dtString = value.ToString("0");
+					break;
+			}
+
+			return dtString.ConvertToBytes();
+		}
 	}
 }

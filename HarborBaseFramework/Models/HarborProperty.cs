@@ -269,7 +269,7 @@ namespace Termine.HarborData.Models
 			return this;
 		}
 
-	    public HarborProperty TypeIsComputedDecimal(Action<HarborModel, DecimalResponse> modelAction, string actionName = default(string), decimal defaultValue = decimal.Zero)
+	    public HarborProperty TypeIsComputedDecimal(Action<HarborModel, DecimalResponse> modelAction, decimal defaultValue = decimal.Zero, string actionName = default(string))
 	    {
 			if (string.IsNullOrEmpty(actionName)) actionName = $"decimalEvaluator.{Name}";
 
@@ -300,7 +300,7 @@ namespace Termine.HarborData.Models
 			return this;
 		}
 
-		public HarborProperty TypeIsComputedString(Action<HarborModel, StringResponse> modelAction, string actionName = default(string), string defaultValue = default(string))
+		public HarborProperty TypeIsComputedString(Action<HarborModel, StringResponse> modelAction, string defaultValue = default(string), string actionName = default(string))
 		{
 			if (string.IsNullOrEmpty(actionName)) actionName = $"stringEvaluator.{Name}";
 
@@ -329,7 +329,7 @@ namespace Termine.HarborData.Models
 			return this;
 		}
 		
-		public HarborProperty TypeIsComputedInt(Action<HarborModel, IntResponse> modelAction, string actionName = default(string), int defaultValue = default (int))
+		public HarborProperty TypeIsComputedInt(Action<HarborModel, IntResponse> modelAction, int defaultValue = default(int), string actionName = default(string))
 		{
 			if (string.IsNullOrEmpty(actionName)) actionName = $"intEvaluator.{Name}";
 
@@ -358,7 +358,7 @@ namespace Termine.HarborData.Models
 			return this;
 		}
 
-		public HarborProperty TypeIsComputedBool(Action<HarborModel, BoolResponse> modelAction, string actionName = default(string), bool defaultValue = default(bool))
+		public HarborProperty TypeIsComputedBool(Action<HarborModel, BoolResponse> modelAction, bool defaultValue = default(bool), string actionName = default(string))
 		{
 			if (string.IsNullOrEmpty(actionName)) actionName = $"boolEvaluator.{Name}";
 
@@ -371,6 +371,35 @@ namespace Termine.HarborData.Models
 			i.ComputeAction += (instance =>
 			{
 				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, BoolResponse>();
+
+				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				{
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+				});
+
+				promise.Run();
+
+				instance.Set(promise.Response.Value);
+			});
+
+			_harborPropertyInstance.PropertyValue = i;
+
+			return this;
+		}
+
+		public HarborProperty TypeIsComputedDateTimeUTC(Action<HarborModel, DateTimeResponse> modelAction, DateTime defaultValue = default(DateTime), string actionName = default(string))
+		{
+			if (string.IsNullOrEmpty(actionName)) actionName = $"dateTimeEvaluator.{Name}";
+
+			_harborPropertyInstance.DataType = EnumDataType.ComputedDateTimeUTC;
+
+			var i = new HarborPropertyValue(this);
+
+			i.Set(defaultValue, EnumPropertyValueState.Default);
+
+			i.ComputeAction += (instance =>
+			{
+				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, DateTimeResponse>();
 
 				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
 				{
