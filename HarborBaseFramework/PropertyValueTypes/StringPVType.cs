@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Text;
 using Termine.HarborData.Enumerables;
 using Termine.HarborData.Interfaces;
 using Termine.HarborData.Models;
@@ -13,77 +15,122 @@ namespace Termine.HarborData.PropertyValueTypes
 		}
 
 		public HarborProperty HarborProperty { get; }
-		public string Value { get; set; }
-		public EnumPropertyValueState ValueState { get; } = EnumPropertyValueState.None;
+		private string Value { get; set; }
+		public EnumPropertyValueState ValueState { get; private set; } = EnumPropertyValueState.None;
+		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
+
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(Encoding.UTF8.GetString(value), valueState);
 		}
 
 		public void Set(bool value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(value ? "true" : "false", valueState);
 		}
 
 		public void Set(DateTime value, DateTimeKind kind = DateTimeKind.Local,
 			EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			switch (kind)
+			{
+					case DateTimeKind.Local:
+					case DateTimeKind.Unspecified:
+					Set(value.ToUniversalTime().ToString("O"), valueState);
+					break;
+				default:
+					Set(value.ToString("0"), valueState);
+					break;
+			}
 		}
 
 		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(value.ToString(CultureInfo.InvariantCulture), valueState);
 		}
 
 		public void Set(int value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(Convert.ToString(value), valueState);
 		}
 
 		public void Set(string value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Value = value;
+			ValueState = valueState;
+			HarborProperty.MarkDirty();
 		}
 
 		public void Set(object value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(value.ToString(), valueState);
 		}
 
 		public byte[] GetBinary()
 		{
-			throw new NotImplementedException();
+			return GetString().ConvertToBytes();
 		}
 
 		public bool GetBool()
 		{
-			throw new NotImplementedException();
+			try
+			{
+				bool returnBool;
+				return bool.TryParse(GetString(), out returnBool) && returnBool;
+			}
+			catch
+			{
+				return default(bool);
+			}
 		}
 
 		public DateTime GetDateTime(DateTimeKind kind = DateTimeKind.Local)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				DateTime returnDateTime;
+				return DateTime.TryParse(GetString(), out returnDateTime) ? returnDateTime : default(DateTime);
+			}
+			catch
+			{
+				return default(DateTime);
+			}
 		}
 
 		public decimal GetDecimal()
 		{
-			throw new NotImplementedException();
+			try
+			{
+				decimal returnDecimal;
+				return decimal.TryParse(GetString(), out returnDecimal) ? returnDecimal : default(decimal);
+			}
+			catch
+			{
+				return default(decimal);
+			}
 		}
 
 		public int GetInt()
 		{
-			throw new NotImplementedException();
+			try
+			{
+				int returnInt;
+				return int.TryParse(GetString(), out returnInt) ? returnInt : default(int);
+			}
+			catch
+			{
+				return default(int);
+			}
 		}
 
 		public string GetString()
 		{
-			throw new NotImplementedException();
+			return Value;
 		}
 
 		public object Get()
 		{
-			throw new NotImplementedException();
+			return GetString();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Termine.HarborData.Enumerables;
 using Termine.HarborData.Interfaces;
 using Termine.HarborData.Models;
@@ -13,77 +14,91 @@ namespace Termine.HarborData.PropertyValueTypes
 		}
 
 		public HarborProperty HarborProperty { get; }
-		public decimal Value { get; set; }
-		public EnumPropertyValueState ValueState { get; }
+		private decimal Value { get; set; }
+		public EnumPropertyValueState ValueState { get; private set; }
+		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
+
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(value.ConvertToDecimal(), valueState);
 		}
 
 		public void Set(bool value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Set(value ? 1m : 0m, valueState);
 		}
 
+		[Obsolete("Cannot reliably convert a DateTime to a decimal, so this function will perform no action.")]
 		public void Set(DateTime value, DateTimeKind kind = DateTimeKind.Local,
 			EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
 		}
-
+		
 		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			Value = value;
+			ValueState = valueState;
+			HarborProperty.MarkDirty();
 		}
 
 		public void Set(int value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+
+			Set(Convert.ToDecimal(value), valueState);
 		}
 
 		public void Set(string value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				decimal parsed;
+				if (decimal.TryParse(value, out parsed)) Set(parsed, valueState);
+			}
+			catch
+			{
+				Set(default(decimal));
+			}
 		}
 
+		[Obsolete("Cannot reliably convert an untyped object to a decimal, so this function will perform no action.  Convert it first to a supported type.")]
 		public void Set(object value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			throw new NotImplementedException();
 		}
 
 		public byte[] GetBinary()
 		{
-			throw new NotImplementedException();
+			return GetDecimal().ConvertToBytes();
 		}
 
 		public bool GetBool()
 		{
-			throw new NotImplementedException();
+			return (GetDecimal() != 0m);
 		}
 
+		[Obsolete("Cannot reliably convert a decimal to a DateTime value, so this will always return a default(DateTime)")]
 		public DateTime GetDateTime(DateTimeKind kind = DateTimeKind.Local)
 		{
-			throw new NotImplementedException();
+			return default(DateTime);
 		}
 
 		public decimal GetDecimal()
 		{
-			throw new NotImplementedException();
+			return Value;
 		}
 
 		public int GetInt()
 		{
-			throw new NotImplementedException();
+			return Convert.ToInt32(GetDecimal());
 		}
 
 		public string GetString()
 		{
-			throw new NotImplementedException();
+			return GetDecimal().ToString(CultureInfo.InvariantCulture);
 		}
 
 		public object Get()
 		{
-			throw new NotImplementedException();
+			return GetDecimal();
 		}
 	}
 }

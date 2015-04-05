@@ -14,6 +14,7 @@ namespace Termine.HarborData.PropertyValueTypes
 
 		public HarborProperty HarborProperty { get; }
 		public EnumPropertyValueState ValueState { get; } = EnumPropertyValueState.None;
+		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
 
 		[Obsolete("Functions on the NullPVType produce null results.  Choose the appropriate PropertyValueType for the task at hand.")]
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)

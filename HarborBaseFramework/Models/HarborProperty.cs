@@ -1,7 +1,9 @@
 ﻿using System;
 using Termine.HarborData.Enumerables;
+using Termine.HarborData.Interfaces;
 using Termine.HarborData.Promises;
-using Termine.HarborData.PropertyValueTypes;
+using Termine.Promises.Base;
+using Termine.Promises.Base.Generics;
 
 namespace Termine.HarborData.Models
 {
@@ -15,8 +17,7 @@ namespace Termine.HarborData.Models
 	    public string Name => _harborPropertyInstance.Name;
 		public EnumDataType DataType => _harborPropertyInstance.DataType;
 	    public HarborModel HarborModel => _harborPropertyInstance.HarborModel;
-
-		public HarborPropertyValue PropertyValue => new HarborPropertyValue(this);
+	    public HarborPropertyValue PropertyValue => _harborPropertyInstance.PropertyValue;
 
 	    private class HarborPropertyInstance
 	    {
@@ -73,6 +74,8 @@ namespace Termine.HarborData.Models
 		    {
 			    Version++;
 		    }
+
+		    public HarborPropertyValue PropertyValue { get; set; }
 	    }
 
 	    private readonly HarborPropertyInstance _harborPropertyInstance = new HarborPropertyInstance();
@@ -230,8 +233,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.StringType;
 
-			PropertyValue.I = new StringPVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -240,8 +243,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.IntegerType;
 
-			PropertyValue.I = new IntPVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -250,8 +253,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.MoneyType;
 
-			PropertyValue.I = new DecimalPVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -260,8 +263,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.DecimalType;
 
-			PropertyValue.I = new DecimalPVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -272,16 +275,28 @@ namespace Termine.HarborData.Models
 
 			_harborPropertyInstance.DataType = EnumDataType.ComputedDecimal;
 
-			var computedType = new ComputedDecimalPVType(this);
+			var i = new HarborPropertyValue(this);
 
-			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, decimalResponse) =>
+			i.Set(defaultValue, EnumPropertyValueState.Default);
+			
+
+			i.ComputeAction += (instance =>
 			{
-				modelAction.Invoke(_harborPropertyInstance.HarborModel, decimalResponse);
+				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, DecimalResponse>();
+
+				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				{
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+				});
+
+				promise.Run();
+
+				instance.Set(promise.Response.Value);
 			});
 
-		    PropertyValue.I = computedType;
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
-			
+
+			_harborPropertyInstance.PropertyValue = i;
+
 			return this;
 		}
 
@@ -291,16 +306,25 @@ namespace Termine.HarborData.Models
 
 			_harborPropertyInstance.DataType = EnumDataType.ComputedString;
 
-			var computedType = new ComputedStringPVType(this);
+			var i = new HarborPropertyValue(this);
 
-			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, stringResponse) =>
+			i.Set(defaultValue, EnumPropertyValueState.Default);
+
+			i.ComputeAction += (instance =>
 			{
-				modelAction.Invoke(_harborPropertyInstance.HarborModel, stringResponse);
+				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, StringResponse>();
+
+				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				{
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+				});
+
+				promise.Run();
+
+				instance.Set(promise.Response.Value);
 			});
 
-			PropertyValue.I = computedType;
-
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = i;
 
 			return this;
 		}
@@ -311,16 +335,25 @@ namespace Termine.HarborData.Models
 
 			_harborPropertyInstance.DataType = EnumDataType.ComputedInt;
 
-			var computedType = new ComputedIntPVType(this);
+			var i = new HarborPropertyValue(this);
 
-			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, intResponse) =>
+			i.Set(defaultValue, EnumPropertyValueState.Default);
+
+			i.ComputeAction += (instance =>
 			{
-				modelAction.Invoke(_harborPropertyInstance.HarborModel, intResponse);
+				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, IntResponse>();
+
+				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				{
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+				});
+
+				promise.Run();
+
+				instance.Set(promise.Response.Value);
 			});
 
-			PropertyValue.I = computedType;
-
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = i;
 
 			return this;
 		}
@@ -331,16 +364,25 @@ namespace Termine.HarborData.Models
 
 			_harborPropertyInstance.DataType = EnumDataType.ComputedBool;
 
-			var computedType = new ComputedBoolPVType(this);
+			var i = new HarborPropertyValue(this);
 
-			computedType.Promise.WithExecutor(actionName, (actions, config, model, req, boolResponse) =>
+			i.Set(defaultValue, EnumPropertyValueState.Default);
+
+			i.ComputeAction += (instance =>
 			{
-				modelAction.Invoke(_harborPropertyInstance.HarborModel, boolResponse);
+				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, BoolResponse>();
+
+				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				{
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+				});
+
+				promise.Run();
+
+				instance.Set(promise.Response.Value);
 			});
 
-			PropertyValue.I = computedType;
-
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = i;
 
 			return this;
 		}
@@ -349,8 +391,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.DateType;
 
-			PropertyValue.I = new DateTimePVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -359,8 +401,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.DateTimeUTCType;
 
-			PropertyValue.I = new DateTimePVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}
@@ -369,7 +411,7 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.BinaryType;
 
-			PropertyValue.I = new BinaryPVType(this);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
 			
 			return this;
 		}
@@ -384,8 +426,8 @@ namespace Termine.HarborData.Models
 		{
 			_harborPropertyInstance.DataType = EnumDataType.BooleanType;
 
-			PropertyValue.I = new BoolPVType(this);
-			PropertyValue.I.Set(defaultValue, EnumPropertyValueState.Default);
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(defaultValue, EnumPropertyValueState.Default);
 
 			return this;
 		}

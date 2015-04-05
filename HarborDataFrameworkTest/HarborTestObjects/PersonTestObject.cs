@@ -42,7 +42,7 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 				{
 					var result = new decimal(NumCorrect)/new decimal(NumPossible);
 					response.Value = result;
-				});
+				}, "d", 7m);
 
 			_personModel.AddProperty(nameof(DoubleGrade), "DoubleGrade")
 				.TypeIsComputedDecimal((model, response) =>

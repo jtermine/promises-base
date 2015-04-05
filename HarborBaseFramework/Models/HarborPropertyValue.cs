@@ -61,11 +61,15 @@ namespace Termine.HarborData.Models
 			HarborProperty = harborProperty;
 		}
 
-		public TT I;
+		protected TT I;
 
 		public HarborProperty HarborProperty { get; }
 
 		public EnumPropertyValueState ValueState => I.ValueState;
+		public Action<IAmAHarborPropertyValueType> ComputeAction {
+			get { return I.ComputeAction; }
+			set { I.ComputeAction = value; }
+		}
 
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{

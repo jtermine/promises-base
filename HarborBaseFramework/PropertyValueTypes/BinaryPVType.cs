@@ -17,6 +17,7 @@ namespace Termine.HarborData.PropertyValueTypes
 		private byte[] Value { get; set; }
 
 		public EnumPropertyValueState ValueState { get; private set; } = EnumPropertyValueState.None;
+		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
 
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{

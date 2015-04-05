@@ -2,9 +2,6 @@
 using Termine.HarborData.Enumerables;
 using Termine.HarborData.Interfaces;
 using Termine.HarborData.Models;
-using Termine.HarborData.Promises;
-using Termine.Promises.Base;
-using Termine.Promises.Base.Generics;
 
 namespace Termine.HarborData.PropertyValueTypes
 {
@@ -16,9 +13,9 @@ namespace Termine.HarborData.PropertyValueTypes
 		}
 
 		public HarborProperty HarborProperty { get; }
-		public DateTime Value { get; set; }
-		private readonly Promise<GenericConfig, HarborModel, GenericRequest, DateTimeResponse> _promise = new Promise<GenericConfig, HarborModel, GenericRequest, DateTimeResponse>();
+		private DateTime Value { get; set; }
 		public EnumPropertyValueState ValueState { get; private set; } = EnumPropertyValueState.None;
+		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
 
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{

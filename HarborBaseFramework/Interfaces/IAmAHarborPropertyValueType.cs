@@ -8,6 +8,7 @@ namespace Termine.HarborData.Interfaces
 	{
 		HarborProperty HarborProperty { get; }
 		EnumPropertyValueState ValueState { get; }
+		Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
 
 		void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed);
 		void Set(bool value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed);
