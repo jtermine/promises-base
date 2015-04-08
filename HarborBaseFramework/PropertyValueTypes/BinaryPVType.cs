@@ -24,18 +24,16 @@ namespace Termine.HarborData.PropertyValueTypes
 			ValueState = valueState;
 			Value = value;
 			HarborProperty.MarkDirty();
+			HarborProperty.HarborModel.OnPropertyChanged(HarborProperty.Name);
 		}
 
 		public void Set(bool value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			ValueState = valueState;
-			Set(BitConverter.GetBytes(value));
-			HarborProperty.MarkDirty();
+			Set(BitConverter.GetBytes(value), valueState);
 		}
 
 		public void Set(DateTime value, DateTimeKind kind = DateTimeKind.Local, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			ValueState = valueState;
 			switch (kind)
 			{
 					case DateTimeKind.Local:
@@ -45,37 +43,28 @@ namespace Termine.HarborData.PropertyValueTypes
 			}
 
 			var strValue = value.ToString("O");
-			Set(Encoding.UTF8.GetBytes(strValue));
-			HarborProperty.MarkDirty();
+			Set(Encoding.UTF8.GetBytes(strValue), valueState);
 		}
 		
 		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			ValueState = valueState;
-			Set(value.ConvertToBytes());
-			HarborProperty.MarkDirty();
+			Set(value.ConvertToBytes(), valueState);
 		}
 
 		public void Set(int value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			ValueState = valueState;
-			Set(BitConverter.GetBytes(value));
-			HarborProperty.MarkDirty();
+			Set(BitConverter.GetBytes(value), valueState);
 		}
 
 		public void Set(string value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			ValueState = valueState;
-			Set(Encoding.UTF8.GetBytes(value));
-			HarborProperty.MarkDirty();
+			Set(Encoding.UTF8.GetBytes(value), valueState);
 		}
 
 		[Obsolete("One cannot reliably set an generic object to a byte array unless the object.ToString() method has been implemented.  Convert it first and choose Set(bytes[] value).")]
 		public void Set(object value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			ValueState = valueState;
-			Set(value.ToString());
-			HarborProperty.MarkDirty();
+			Set(value.ToString(), valueState);
 		}
 
 		public byte[] GetBinary()

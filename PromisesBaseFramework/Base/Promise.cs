@@ -57,17 +57,22 @@ namespace Termine.Promises.Base
         /// </summary>
         private class PromiseContext
         {
-            /*
+			/*
             /// <summary>
             /// this dictionary of generic objects travels with the promise context and can be accessed by any object that inherits the promise
             /// </summary>
             public Dictionary<string, object> Objects = new Dictionary<string, object>();
              */
 
-            /// <summary>
-            /// a collection of AuthChallengers -- these are executed in sequence to determine whether the promise has the authority to run
-            /// </summary>
-            public readonly WorkloadHandlerQueue<TC, TW, TR, TE> AuthChallengers = new WorkloadHandlerQueue<TC, TW, TR, TE>();
+			/// <summary>
+			/// a collection of actions that execute in sequence before a promise starts
+			/// </summary>
+			public readonly WorkloadHandlerQueue<TC, TW, TR, TE> WorkloadCtors = new WorkloadHandlerQueue<TC, TW, TR, TE>();
+
+			/// <summary>
+			/// a collection of AuthChallengers -- these are executed in sequence to determine whether the promise has the authority to run
+			/// </summary>
+			public readonly WorkloadHandlerQueue<TC, TW, TR, TE> AuthChallengers = new WorkloadHandlerQueue<TC, TW, TR, TE>();
 
 			/// <summary>
 			/// a collection of Validators -- these are executed in sequenced to determine whether the promise workload contains valid information
@@ -97,72 +102,59 @@ namespace Termine.Promises.Base
 			/// <summary>
 			/// a collection of block handlers -- there are executed when a promise is blocked
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> BlockHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> BlockHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of trace handlers -- these are executed when a promise is tracing
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> TraceHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> TraceHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of debug handlers -- these are executed when a promise is reporting a debug event
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> DebugHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> DebugHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of info handlers -- these are executed when a promise is reporting an info event (e.g. system event log)
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> InfoHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> InfoHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
             
             /// <summary>
             /// a collection of warn
             ///  handlers -- these are executed when a promise is tracing
             /// </summary>
-            public PromiseHandlerQueue<IHandlePromiseActions> WarnHandlers { get; }
+            public PromiseHandlerQueue<IHandlePromiseActions> WarnHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of error handlers -- these are executed when a promise is reporting an error event (e.g. system event log)
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> ErrorHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> ErrorHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of error handlers -- these are executed when a promise is reporting a fatal event (e.g. system event log)
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> FatalHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> FatalHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of abort handlers -- these are executed when a promise is aborting for reasons other than AccessDenied
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> AbortHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> AbortHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of abort handlers -- these are executed when a promise is aborting because of AccessDenied condition
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> AbortOnAccessDeniedHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> AbortOnAccessDeniedHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
 			/// <summary>
 			/// a collection of handlers that fire when a promise executed successfully
 			/// </summary>
-			public PromiseHandlerQueue<IHandlePromiseActions> SuccessHandlers { get; }
+			public PromiseHandlerQueue<IHandlePromiseActions> SuccessHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
-            /// <summary>
-            /// when a promise context is initialized, each of the dictionaries it contains are also initialized to make it easy to add the events to the promise
-            /// </summary>
-            public PromiseContext()
-            {
-                BlockHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                TraceHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                DebugHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                InfoHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                WarnHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                ErrorHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                FatalHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                AbortHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                AbortOnAccessDeniedHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-                SuccessHandlers = new PromiseHandlerQueue<IHandlePromiseActions>();
-            }
+			/// <summary>
+			/// when a promise context is initialized, each of the dictionaries it contains are also initialized to make it easy to add the events to the promise
+			/// </summary>
 
-	        public static PxConfigSection PxConfigSection => PxConfigSection.Get();
+			public static PxConfigSection PxConfigSection => PxConfigSection.Get();
         }
 
         private readonly PromiseContext _context = new PromiseContext();
@@ -228,17 +220,6 @@ namespace Termine.Promises.Base
         {
             Config = JsonConvert.DeserializeObject<TC>(json, _jsonSerializerSettings);
             return this;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="json"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Promise<TC, TW, TR, TE> DeserializeResponse(string json)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -330,6 +311,7 @@ namespace Termine.Promises.Base
             {
                 Trace(PromiseMessages.PromiseStarted);
 
+				_context.WorkloadCtors.Invoke(this, Config, Workload, Request, Response);
                 _context.PreStartActions.Invoke(this, Config, Workload, Request, Response);
                 _context.AuthChallengers.Invoke(this, Config, Workload, Request, Response);
                 _context.Validators.Invoke(this, Config, Workload, Request, Response);
@@ -524,7 +506,28 @@ namespace Termine.Promises.Base
         {
             AbortOnAccessDenied(new GenericEventMessage(ApplicationGroupId, ex));
         }
-		
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionId"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
+		public Promise<TC, TW, TR, TE> WithWorkloadCtor(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+		{
+			if (string.IsNullOrEmpty(actionId) || action == null) return this;
+
+			_context.WorkloadCtors.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
+			{
+				Action = action,
+				EndMessage = PromiseMessages.PreStartActionStopped(ApplicationGroupId, actionId),
+				StartMessage = PromiseMessages.PreStartActionStarted(ApplicationGroupId, actionId),
+				HandlerName = actionId
+			});
+
+			return this;
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>

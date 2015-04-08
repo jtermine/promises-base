@@ -53,6 +53,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			Value = setValue;
 			ValueState = valueState;
 			HarborProperty.MarkDirty();
+			HarborProperty.HarborModel.OnPropertyChanged(HarborProperty.Name);
 		}
 
 		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)

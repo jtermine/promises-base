@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarborDataFramework", "Harb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarborDataFrameworkTest", "HarborDataFrameworkTest\HarborDataFrameworkTest.csproj", "{7BA18A4A-0C59-4B94-9479-5447DCE256D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tabular", "Tabular\Tabular.csproj", "{27878413-FB69-47F3-AEA0-944A15AC52D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7BA18A4A-0C59-4B94-9479-5447DCE256D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BA18A4A-0C59-4B94-9479-5447DCE256D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BA18A4A-0C59-4B94-9479-5447DCE256D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27878413-FB69-47F3-AEA0-944A15AC52D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27878413-FB69-47F3-AEA0-944A15AC52D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27878413-FB69-47F3-AEA0-944A15AC52D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27878413-FB69-47F3-AEA0-944A15AC52D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

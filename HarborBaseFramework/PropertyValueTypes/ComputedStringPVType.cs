@@ -18,6 +18,7 @@ namespace Termine.HarborData.PropertyValueTypes
 		private string Value { get; set; }
 		public EnumPropertyValueState ValueState { get; private set; } = EnumPropertyValueState.None;
 		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
+		private int Version { get; set; }
 
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
@@ -59,6 +60,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			Value = value;
 			ValueState = valueState;
 			HarborProperty.MarkDirty();
+			HarborProperty.HarborModel.OnPropertyChanged(HarborProperty.Name);
 		}
 
 		public void Set(object value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
@@ -125,7 +127,9 @@ namespace Termine.HarborData.PropertyValueTypes
 
 		public string GetString()
 		{
+			if (Version == HarborProperty.HarborModel.Version) return Value;
 			ComputeAction?.Invoke(this);
+			Version = HarborProperty.HarborModel.Version;
 			return Value;
 		}
 

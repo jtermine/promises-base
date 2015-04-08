@@ -52,6 +52,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			Value = value;
 			ValueState = valueState;
 			HarborProperty.MarkDirty();
+			HarborProperty.HarborModel.OnPropertyChanged(HarborProperty.Name);
 		}
 
 		public void Set(string value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
@@ -63,7 +64,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			}
 			catch 
 			{
-				Set(default(int));
+				Set(default(int), valueState);
 			}
 		}
 
@@ -75,7 +76,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			}
 			catch
 			{
-				Set(default(int));
+				Set(default(int), valueState);
 			}
 		}
 

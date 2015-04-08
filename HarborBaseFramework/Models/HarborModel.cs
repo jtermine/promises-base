@@ -14,6 +14,7 @@ namespace Termine.HarborData.Models
 		public string Description => _harborModelInstance.Description;
 		public bool IsPublic => _harborModelInstance.IsPublic;
 		public object DirtyLock => _harborModelInstance.DirtyLock;
+		public int Version => _harborModelInstance.Version;
 		
 		public IDictionary<string, HarborProperty> Properties => _harborModelInstance.Properties;
 
@@ -32,6 +33,8 @@ namespace Termine.HarborData.Models
 			public bool IsDirty { get; set; } = false;
 
 			public readonly object DirtyLock = new object();
+
+			public int Version { get; set; } = -1;
 		}
 
 		public void MarkDirty()
@@ -39,6 +42,7 @@ namespace Termine.HarborData.Models
 			lock (_harborModelInstance.DirtyLock)
 			{
 				_harborModelInstance.IsDirty = true;
+				_harborModelInstance.Version ++;
 			}
 		}
 
@@ -96,7 +100,7 @@ namespace Termine.HarborData.Models
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
-		private void OnPropertyChanged(string propertyName)
+		public void OnPropertyChanged(string propertyName)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}

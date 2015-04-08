@@ -16,6 +16,8 @@ namespace Termine.HarborData.PropertyValueTypes
 		
 		private bool Value { get; set; }
 
+		private int Version { get; set; }
+
 		public EnumPropertyValueState ValueState { get; private set; } = EnumPropertyValueState.None;
 		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
 
@@ -23,13 +25,13 @@ namespace Termine.HarborData.PropertyValueTypes
 		{
 			try
 			{
-				Set(value.ConvertToBool());
+				Set(value.ConvertToBool(), valueState);
 			}
 			catch
 			{
-				Set(false);
+				Set(false, valueState);
 			}
-			
+
 		}
 
 		public void Set(bool value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
@@ -37,6 +39,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			Value = value;
 			ValueState = valueState;
 			HarborProperty.MarkDirty();
+			HarborProperty.HarborModel.OnPropertyChanged(HarborProperty.Name);
 		}
 
 		[Obsolete("Cannot reliably convert a DateTime to a bool, so this function will perform no action.")]
@@ -47,12 +50,12 @@ namespace Termine.HarborData.PropertyValueTypes
 
 		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			Set(value != 0m);
+			Set(value != 0m, valueState);
 		}
 
 		public void Set(int value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
-			Set(value != 0);
+			Set(value != 0, valueState);
 		}
 
 		public void Set(string value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
@@ -60,11 +63,11 @@ namespace Termine.HarborData.PropertyValueTypes
 			try
 			{
 				bool parsedBool;
-				if (bool.TryParse(value, out parsedBool)) Set(parsedBool);
+				if (bool.TryParse(value, out parsedBool)) Set(parsedBool, valueState);
 			}
 			catch
 			{
-				Set(false);
+				Set(false, valueState);
 			}
 		}
 
@@ -72,14 +75,13 @@ namespace Termine.HarborData.PropertyValueTypes
 		{
 			try
 			{
-				Set((bool) value);
+				Set((bool)value, valueState);
 			}
 			catch
 			{
-				Set(false);
+				Set(false, valueState);
 			}
 		}
-
 		public byte[] GetBinary()
 		{
 			return GetBool().ConvertToBytes();
@@ -87,7 +89,9 @@ namespace Termine.HarborData.PropertyValueTypes
 
 		public bool GetBool()
 		{
+			if (Version == HarborProperty.HarborModel.Version) return Value;
 			ComputeAction?.Invoke(this);
+			Version = HarborProperty.HarborModel.Version;
 			return Value;
 		}
 

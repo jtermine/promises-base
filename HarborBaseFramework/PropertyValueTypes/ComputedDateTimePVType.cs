@@ -17,6 +17,8 @@ namespace Termine.HarborData.PropertyValueTypes
 		public EnumPropertyValueState ValueState { get; private set; } = EnumPropertyValueState.None;
 		public Action<IAmAHarborPropertyValueType> ComputeAction { get; set; }
 
+		private int Version { get; set; }
+
 		public void Set(byte[] value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
 		{
 			var dateTime = value.ConvertToDateTime(DateTimeKind.Utc);
@@ -53,6 +55,7 @@ namespace Termine.HarborData.PropertyValueTypes
 			Value = setValue;
 			ValueState = valueState;
 			HarborProperty.MarkDirty();
+			HarborProperty.HarborModel.OnPropertyChanged(HarborProperty.Name);
 		}
 
 		public void Set(decimal value, EnumPropertyValueState valueState = EnumPropertyValueState.Changed)
@@ -89,11 +92,15 @@ namespace Termine.HarborData.PropertyValueTypes
 
 		public DateTime GetDateTime(DateTimeKind kind = DateTimeKind.Local)
 		{
-			ComputeAction?.Invoke(this);
 			switch (kind)
 			{
 				case DateTimeKind.Local:
 				case DateTimeKind.Unspecified:
+					if (Version != HarborProperty.HarborModel.Version)
+					{
+						ComputeAction?.Invoke(this);
+						Version = HarborProperty.HarborModel.Version;
+					}
 					return Value.ToLocalTime();
 				default:
 					return Value;

@@ -1,13 +1,14 @@
 ﻿using System;
 using HarborDataFrameworkTest.HarborTestObjects;
+using NLog;
 using NUnit.Framework;
 using Termine.HarborData.Models;
 
 namespace HarborDataFrameworkTest
 {
 	[TestFixture]
-    public class TestContainer
-    {
+	public class TestContainer
+	{
 		[Test]
 		public void TestConstructContainer()
 		{
@@ -37,6 +38,7 @@ namespace HarborDataFrameworkTest
 			personTestObject.PropertyChanged += (sender, args) =>
 			{
 				Assert.IsTrue(!string.IsNullOrEmpty(args.PropertyName));
+				LogManager.GetCurrentClassLogger().Trace(args.PropertyName);
 			};
 
 			Assert.IsTrue(personTestObject.FirstName == "Joseph");
@@ -45,7 +47,7 @@ namespace HarborDataFrameworkTest
 			Assert.IsTrue(personTestObject.IsStudent);
 
 			personTestObject.ChangeFirstName();
-			
+
 			Assert.IsTrue(personTestObject.FirstName == "Justin");
 
 			personTestObject.FirstName = "Jacqueline";
@@ -64,8 +66,13 @@ namespace HarborDataFrameworkTest
 
 			Assert.IsTrue(personTestObject.TestingTimeRequired == 120);
 
-            Assert.IsTrue(personTestObject.TestingEndTime == new DateTime(2015, 4, 10, 10, 0, 0, DateTimeKind.Local));
-		}
 
-    }
+			for (int i = 0; i < 10; i++)
+			{
+				Assert.IsTrue(personTestObject.LetterGrade == "A");
+			}
+
+			Assert.IsTrue(personTestObject.TestingEndTime == new DateTime(2015, 4, 10, 10, 0, 0, DateTimeKind.Local));
+		}
+	}
 }
