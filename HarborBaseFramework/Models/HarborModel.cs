@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Termine.HarborData.Interfaces;
 using Termine.HarborData.Properties;
 using Termine.Promises.Base.Generics;
 using static System.String;
 
 namespace Termine.HarborData.Models
 {
-	public sealed class HarborModel : GenericWorkload, IDisposable, INotifyPropertyChanged
+	public sealed class HarborModel : GenericWorkload, IDisposable, IExposeHarborModel
 	{
 		public string Name => _harborModelInstance.Name;
 		public string Caption => _harborModelInstance.Caption;
@@ -30,7 +31,7 @@ namespace Termine.HarborData.Models
 
 			public Dictionary<string, HarborProperty> Properties { get; } = new Dictionary<string, HarborProperty>();
 
-			public bool IsDirty { get; set; } = false;
+			public bool IsDirty { get; set; }
 
 			public readonly object DirtyLock = new object();
 

@@ -1,8 +1,8 @@
 ﻿using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Columns;
-using Tabular.Types;
+using Termine.HarborTabularData.TabularPoperties;
 
-namespace Tabular.GridColumnExtensions
+namespace Termine.HarborTabularData.GridColumnExtensions
 {
     public class IdentityGridColumn: GridColumn
     {

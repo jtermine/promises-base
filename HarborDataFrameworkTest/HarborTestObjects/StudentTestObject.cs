@@ -7,12 +7,12 @@ using Termine.HarborData.Models;
 
 namespace HarborDataFrameworkTest.HarborTestObjects
 {
-	public sealed class PersonTestObject : INotifyPropertyChanged
+	public sealed class StudentTestObject : INotifyPropertyChanged
 	{
 		private readonly HarborContainer _studentContainer = new HarborContainer();
 		private readonly HarborModel _studentModel;
 
-		public PersonTestObject()
+		public StudentTestObject()
 		{
 			_studentModel = _studentContainer.AddModel("person", "Person");
 

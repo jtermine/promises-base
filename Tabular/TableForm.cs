@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using DevExpress.XtraBars;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
-using Tabular.GridColumnExtensions;
 using Tabular.Promises;
 using Tabular.TabModels;
 
@@ -11,26 +12,25 @@ namespace Tabular
 {
     public partial class TableForm : XtraForm
     {
-	    private readonly StudentTabModel _studentTabModel = new StudentTabModel();
-        private readonly DataSet _dataSet = new DataSet("columns");
+	    private readonly StudentHarborModel _model;
+	    private readonly ObservableCollection<StudentHarborModel> _dataSet = new ObservableCollection<StudentHarborModel>();
         private readonly EventSink _timer = new EventSink();
 
         public TableForm()
         {
             InitializeComponent();
 
-            _dataSet.Tables.Add("tableColumns");
+			_model = new StudentHarborModel();
 
-            var dataTable = _dataSet.Tables["tableColumns"];
-
-            dataTable.SyncColumns(new StudentTabModel());
-
-            bindingSource1.DataSource = dataTable;
+			bindingSource1.DataSource = _dataSet;
 
             gridControl1.DataSource = bindingSource1.DataSource;
             gridView1.Columns.Clear();
 
-            _studentTabModel.ForEach(type => gridView1.Columns.Add(type.AsGridColumn()));
+	        foreach (var tabularProperty in _model.TabularModel.TabularProperties)
+	        {
+		        gridView1.Columns.Add(tabularProperty.Value.PropertyEditor.GetColumn());
+	        }
 
             _timer.Tick += timer1_Tick;
         }
@@ -42,8 +42,7 @@ namespace Tabular
 		        .WithWorkloadCtor("workloadCtor", (actions, config, workload, req, res) =>
 		        {
 			        workload.FormActions = _timer.Queue;
-			        workload.DataTable = _dataSet.Tables["tableColumns"];
-			        workload.List = _studentTabModel;
+			        workload.StudentHarborModels = _dataSet;
 		        });
 
 	        addColumnPromise.Run();

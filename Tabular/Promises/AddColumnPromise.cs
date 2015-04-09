@@ -20,13 +20,13 @@ namespace Tabular.Promises
 
 	    private static void DataTableNotNull(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload dataTableWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
-	        if (dataTableWorkload.DataTable == null)
+	        if (dataTableWorkload.StudentHarborModels == null)
 		        actions.Abort(new GenericEventMessage(0, 1, "The datatable is null blocking the promise from executing."));
         }
 
         private static void AddColumn(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload dataTableWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
-			dataTableWorkload.FormActions.Enqueue(() => dataTableWorkload.DataTable.GetDataRow(dataTableWorkload.List));
+			dataTableWorkload.FormActions.Enqueue(() => dataTableWorkload.StudentHarborModels.Add(new StudentHarborModel()));
         }
     }
 }

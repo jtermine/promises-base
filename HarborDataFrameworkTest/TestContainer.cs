@@ -33,7 +33,7 @@ namespace HarborDataFrameworkTest
 		[Test]
 		public void TestPersonModel()
 		{
-			var personTestObject = new PersonTestObject();
+			var personTestObject = new StudentTestObject();
 
 			personTestObject.PropertyChanged += (sender, args) =>
 			{

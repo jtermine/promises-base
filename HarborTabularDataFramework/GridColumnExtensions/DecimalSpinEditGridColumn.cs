@@ -1,17 +1,17 @@
 ﻿using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Columns;
-using Tabular.Types;
+using Termine.HarborTabularData.TabularPoperties;
 
-namespace Tabular.GridColumnExtensions
+namespace Termine.HarborTabularData.GridColumnExtensions
 {
-    public class IntSpinEditGridColumn: GridColumn
+    public class DecimalSpinEditGridColumn: GridColumn
     {
-        public IntSpinEditGridColumn()
+        public DecimalSpinEditGridColumn()
         {
             Init();
         }
 
-        public IntSpinEditGridColumn(IntSpinEditType textEditType)
+        public DecimalSpinEditGridColumn(DecimalSpinEditType textEditType)
         {
             Init();
             Populate(textEditType);
@@ -22,7 +22,7 @@ namespace Tabular.GridColumnExtensions
             ColumnEdit = new RepositoryItemSpinEdit();
         }
 
-        private void Populate(IntSpinEditType textEditType)
+        private void Populate(DecimalSpinEditType textEditType)
         {
             Name = $"GridColumn_{textEditType.Name}";
             FieldName = textEditType.Name;
@@ -34,6 +34,7 @@ namespace Tabular.GridColumnExtensions
 
             repEditor.MinValue = textEditType.MinValue;
             repEditor.MaxValue = textEditType.MaxValue;
+            repEditor.IsFloatValue = true;
         }
     }
 }

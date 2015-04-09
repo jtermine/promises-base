@@ -1,8 +1,9 @@
-﻿using DevExpress.XtraEditors.Repository;
+﻿using System;
+using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Columns;
-using Tabular.Types;
+using Termine.HarborTabularData.TabularPoperties;
 
-namespace Tabular.GridColumnExtensions
+namespace Termine.HarborTabularData.GridColumnExtensions
 {
     public class ComboBoxGridColumn: GridColumn
     {
@@ -24,7 +25,7 @@ namespace Tabular.GridColumnExtensions
 
         private void Populate(ComboBoxType comboBoxType)
         {
-            Name = $"GridColumn_{comboBoxType.Name}";
+            Name = $"GridColumn_{comboBoxType.Name}_{Guid.NewGuid().ToString("N")}";
             FieldName = comboBoxType.Name;
             Caption = comboBoxType.Caption;
             Visible = true;

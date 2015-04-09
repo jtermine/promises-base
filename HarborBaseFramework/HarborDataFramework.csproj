@@ -38,18 +38,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerables\EnumVisibility.cs" />
+    <Compile Include="Enumerables\EnumAllowNull.cs" />
     <Compile Include="Enumerables\EnumDataType.cs" />
+    <Compile Include="Enumerables\EnumIndexType.cs" />
     <Compile Include="Enumerables\EnumPropertyValueState.cs" />
     <Compile Include="Enumerables\EnumRelationship_SingletonMode.cs" />
     <Compile Include="Enumerables\EnumTemporalRelationship_ConflictMode.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IAmAHarborPropertyValueType.cs" />
+    <Compile Include="Interfaces\IExposeHarborModel.cs" />
     <Compile Include="Models\HarborContainer.cs" />
     <Compile Include="Models\HarborFixedRelationship.cs" />
     <Compile Include="Models\HarborModel.cs" />
     <Compile Include="Models\HarborProperty.cs" />
     <Compile Include="Models\HarborPropertyValue.cs" />
     <Compile Include="Models\HarborTemporalRelationship.cs" />
+    <Compile Include="Interfaces\IAmAHarborProperty.cs" />
+    <Compile Include="Interfaces\IHarborProperty.cs" />
     <Compile Include="Promises\BoolResponse.cs" />
     <Compile Include="Promises\IntResponse.cs" />
     <Compile Include="Promises\DecimalResponse.cs" />

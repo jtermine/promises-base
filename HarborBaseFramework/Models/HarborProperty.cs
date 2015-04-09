@@ -7,50 +7,27 @@ using Termine.Promises.Base.Generics;
 
 namespace Termine.HarborData.Models
 {
-    public sealed class HarborProperty
-    {
+    public sealed class HarborProperty : IExposeHarborProperty
+	{
 	    public HarborProperty(HarborModel harborModel)
 	    {
-		    _harborPropertyInstance.HarborModel = harborModel;
+		    _harborPropertyInstance.SetHarborModel(harborModel);
 	    }
 
 	    public string Name => _harborPropertyInstance.Name;
+	    public string Caption => _harborPropertyInstance.Caption;
 		public EnumDataType DataType => _harborPropertyInstance.DataType;
 	    public HarborModel HarborModel => _harborPropertyInstance.HarborModel;
 	    public HarborPropertyValue PropertyValue => _harborPropertyInstance.PropertyValue;
 
-	    private class HarborPropertyInstance
+	    public IAmAHarborProperty Instance => _harborPropertyInstance;
+
+	    private class HarborPropertyInstance : IAmAHarborProperty
 	    {
-			public HarborModel HarborModel;
+		    public HarborModel HarborModel { get; private set; }
+		    private int Version { get; set; }
 
-			public int Version { get; private set; }
-
-		    public enum EnumAllowNull
-		    {
-			    AllowNullAndStoreAsNull = 0,
-			    AllowNullAndOmitStoreAsNull = 1,
-			    BlockNull = 2,
-		    }
-
-		    public enum EnumVisibility
-		    {
-			    Private = 0,
-			    PrivateSensitive = 1,
-			    PrivateCalculated = 2,
-			    Sensitive = 3,
-			    Public = 4,
-			    PublicCalculated = 5
-		    }
-
-		    public enum EnumIndexType
-		    {
-			    NotIndexed = 0,
-			    IndexNoDuplicates_FIFO = 1,
-			    IndexNoDuplicates_LIFO = 2,
-			    IndexAllowDuplicates = 3,
-		    }
-
-		    public string Name { get; set; }
+			public string Name { get; set; }
 		    public string Caption { get; set; }
 		    public string Description { get; set; }
 		    public EnumAllowNull AllowNull { get; set; } = EnumAllowNull.AllowNullAndOmitStoreAsNull;
@@ -62,20 +39,18 @@ namespace Termine.HarborData.Models
 		    public bool BlockOnFalseRegexMatch { get; set; }
 		    public bool BlockOnModelError { get; set; }
 		    public bool IsImmutable { get; set; }
-		    public string DefaultStringValue { get; set; }
-		    public int DefaultIntValue { get; set; }
-		    public bool DefaultBoolValue { get; set; }
-		    public decimal DefaultMoneyValue { get; set; }
-		    public decimal DefaultDecimalValue { get; set; }
-		    public DateTime DefaultDateTimeValue { get; set; }
-		    public DateTime DefaultDateValue { get; set; }
-
+			
 		    public void IncrementVersion()
 		    {
 			    Version++;
 		    }
 
 		    public HarborPropertyValue PropertyValue { get; set; }
+
+		    public void SetHarborModel(HarborModel harborModel)
+		    {
+			    HarborModel = harborModel;
+		    }
 	    }
 
 	    private readonly HarborPropertyInstance _harborPropertyInstance = new HarborPropertyInstance();
@@ -114,7 +89,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty AllowNull_StoreAsNull()
 		{
-			_harborPropertyInstance.AllowNull = HarborPropertyInstance.EnumAllowNull.AllowNullAndStoreAsNull;
+			_harborPropertyInstance.AllowNull = EnumAllowNull.AllowNullAndStoreAsNull;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -123,7 +98,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty AllowNull_OmitStoreAsNull()
 		{
-			_harborPropertyInstance.AllowNull = HarborPropertyInstance.EnumAllowNull.AllowNullAndOmitStoreAsNull;
+			_harborPropertyInstance.AllowNull = EnumAllowNull.AllowNullAndOmitStoreAsNull;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -132,7 +107,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty BlockNull()
 		{
-			_harborPropertyInstance.AllowNull = HarborPropertyInstance.EnumAllowNull.BlockNull;
+			_harborPropertyInstance.AllowNull = EnumAllowNull.BlockNull;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -141,7 +116,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty MakePublicProperty()
 		{
-			_harborPropertyInstance.Visibility = HarborPropertyInstance.EnumVisibility.Public;
+			_harborPropertyInstance.Visibility = EnumVisibility.Public;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -150,7 +125,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty MakePublicCalculatedProperty()
 		{
-			_harborPropertyInstance.Visibility = HarborPropertyInstance.EnumVisibility.PublicCalculated;
+			_harborPropertyInstance.Visibility = EnumVisibility.PublicCalculated;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -159,7 +134,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty MakeSensitiveProperty()
 		{
-			_harborPropertyInstance.Visibility = HarborPropertyInstance.EnumVisibility.Sensitive;
+			_harborPropertyInstance.Visibility = EnumVisibility.Sensitive;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -168,7 +143,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty MakePrivateProperty()
 		{
-			_harborPropertyInstance.Visibility = HarborPropertyInstance.EnumVisibility.Private;
+			_harborPropertyInstance.Visibility = EnumVisibility.Private;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -177,7 +152,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty MakePrivateCalculatedProperty()
 		{
-			_harborPropertyInstance.Visibility = HarborPropertyInstance.EnumVisibility.PrivateCalculated;
+			_harborPropertyInstance.Visibility = EnumVisibility.PrivateCalculated;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -186,7 +161,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty MakePrivateSensitiveProperty()
 		{
-			_harborPropertyInstance.Visibility = HarborPropertyInstance.EnumVisibility.PrivateSensitive;
+			_harborPropertyInstance.Visibility = EnumVisibility.PrivateSensitive;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -195,7 +170,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty IndexWithNoDuplicates_UsingLIFO()
 		{
-			_harborPropertyInstance.IndexType = HarborPropertyInstance.EnumIndexType.IndexNoDuplicates_LIFO;
+			_harborPropertyInstance.IndexType = EnumIndexType.IndexNoDuplicates_LIFO;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -204,7 +179,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty IndexWithNoDuplicates_UsingFIFO()
 		{
-			_harborPropertyInstance.IndexType = HarborPropertyInstance.EnumIndexType.IndexNoDuplicates_FIFO;
+			_harborPropertyInstance.IndexType = EnumIndexType.IndexNoDuplicates_FIFO;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -213,7 +188,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty NotIndexed()
 		{
-			_harborPropertyInstance.IndexType = HarborPropertyInstance.EnumIndexType.NotIndexed;
+			_harborPropertyInstance.IndexType = EnumIndexType.NotIndexed;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -222,7 +197,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty IndexAllowDuplicates()
 		{
-			_harborPropertyInstance.IndexType = HarborPropertyInstance.EnumIndexType.IndexAllowDuplicates;
+			_harborPropertyInstance.IndexType = EnumIndexType.IndexAllowDuplicates;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -485,7 +460,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty WheNullOmitValue()
 		{
-			_harborPropertyInstance.AllowNull = HarborPropertyInstance.EnumAllowNull.AllowNullAndOmitStoreAsNull;
+			_harborPropertyInstance.AllowNull = EnumAllowNull.AllowNullAndOmitStoreAsNull;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -494,7 +469,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty WhenNullStoreAsNull()
 		{
-			_harborPropertyInstance.AllowNull = HarborPropertyInstance.EnumAllowNull.AllowNullAndStoreAsNull;
+			_harborPropertyInstance.AllowNull = EnumAllowNull.AllowNullAndStoreAsNull;
 
 			_harborPropertyInstance.IncrementVersion();
 
@@ -503,7 +478,7 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty WhenNullBlockChange()
 		{
-			_harborPropertyInstance.AllowNull = HarborPropertyInstance.EnumAllowNull.BlockNull;
+			_harborPropertyInstance.AllowNull = EnumAllowNull.BlockNull;
 
 			_harborPropertyInstance.IncrementVersion();
 

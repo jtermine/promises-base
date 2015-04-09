@@ -1,6 +1,6 @@
-﻿namespace Tabular.Types
+﻿namespace Termine.HarborTabularData.Enumerables
 {
-    public enum ColumnValueType
+    public enum EnumColumnValueType
     {
         IdentityColumn,
         CheckedComboBoxEdit,

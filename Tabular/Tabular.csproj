@@ -80,25 +80,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataColumnExtensions\IdentityDataColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataColumnExtensions\IntSpinEditDataColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataColumnExtensions\DecimalSpinEditDataColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataColumnExtensions\TextEditDataColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataColumnExtensions\ComboBoxDataColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataColumnExtensions\DataColumnFactory.cs" />
-    <Compile Include="GridColumnExtensions\IdentityGridColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Promises\ChangeValuesPromise.cs" />
     <Compile Include="TableForm.cs">
       <SubType>Form</SubType>
@@ -106,39 +87,18 @@
     <Compile Include="TableForm.Designer.cs">
       <DependentUpon>TableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GridColumnExtensions\DecimalSpinEditGridColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GridColumnExtensions\GridColumnFactory.cs" />
-    <Compile Include="GridColumnExtensions\IntSpinEditGridColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GridColumnExtensions\TextEditGridColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GridColumnExtensions\ComboBoxGridColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Promises\AddColumnPromise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TabModels\EventSink.cs" />
-    <Compile Include="TabModels\StudentTabModel.cs" />
-    <Compile Include="TabModels\TabModelExtensions.cs" />
+    <Compile Include="TabModels\StudentHarborModel.cs" />
     <Compile Include="TabularMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TabularMainForm.Designer.cs">
       <DependentUpon>TabularMainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Types\AbstractColumnDefinitionType.cs" />
-    <Compile Include="Types\ColumnValueType.cs" />
-    <Compile Include="Types\ComboBoxType.cs" />
     <Compile Include="Types\IColumnDefinitionType.cs" />
-    <Compile Include="Types\DecimalSpinEditType.cs" />
-    <Compile Include="Types\IntSpinEditType.cs" />
-    <Compile Include="Types\IdentityColumnType.cs" />
-    <Compile Include="Types\TextEditType.cs" />
     <Compile Include="Workloads\DataTableWorkload.cs" />
     <Compile Include="Workloads\OpenTabularFileWorkload.cs" />
     <Compile Include="Workloads\SelectedCellsWorkload.cs" />
@@ -191,6 +151,10 @@
     <ProjectReference Include="..\HarborBaseFramework\HarborDataFramework.csproj">
       <Project>{8f38e7ec-8400-4bf2-a34b-2061f63537f1}</Project>
       <Name>HarborDataFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HarborTabularDataFramework\HarborTabularDataFramework.csproj">
+      <Project>{9a32bb1b-0e8b-4741-9683-78c29b09cf93}</Project>
+      <Name>HarborTabularDataFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\PromisesBaseFramework\PromisesBaseFramework.csproj">
       <Project>{aa43a7e2-9d7a-434a-adba-d113387d5f93}</Project>
