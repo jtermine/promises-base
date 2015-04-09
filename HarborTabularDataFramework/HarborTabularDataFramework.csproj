@@ -59,6 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GridColumnExtensions\CheckBoxGridColumn.cs">
+      <SubType>component</SubType>
+    </Compile>
     <Compile Include="GridColumnExtensions\ComboBoxGridColumn.cs">
       <SubType>component</SubType>
     </Compile>
@@ -80,6 +83,7 @@
     <Compile Include="TabularModels\TabularModel.cs" />
     <Compile Include="Enumerables\EnumColumnValueType.cs" />
     <Compile Include="TabularModels\TabularProperty.cs" />
+    <Compile Include="TabularPoperties\CheckBoxType.cs" />
     <Compile Include="TabularPoperties\ComboBoxType.cs" />
     <Compile Include="TabularPoperties\DecimalSpinEditType.cs" />
     <Compile Include="TabularPoperties\IdentityColumnType.cs" />

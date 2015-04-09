@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Termine.HarborData.Properties;
 using Termine.HarborTabularData.TabularModels;
 
@@ -28,10 +29,12 @@ namespace Tabular.TabModels
 					.WithLength(0, 5);
 
 			TabularModel.AddProperty(nameof(IsStudent), "Student?")
-				.TypeIsBoolean(true);
+				.TypeIsBoolean(true)
+				.UseCheckBox();
 				
 			TabularModel.AddProperty(nameof(IsAthlete), "Athlete?")
-				.TypeIsBoolean(true);
+				.TypeIsBoolean(true)
+				.UseCheckBox();
 
 			TabularModel.AddProperty(nameof(NumCorrect), "Num. Correct")
 				.TypeIsInteger(55);
@@ -93,6 +96,9 @@ namespace Tabular.TabModels
 		{
 			OnPropertyChanged(propertyChangedEventArgs.PropertyName);
 		}
+
+		[SuppressMessage("ReSharper", "InconsistentNaming")]
+		public string _id => TabularModel["_id"]?.GetString();
 
 		public string FirstName
 		{

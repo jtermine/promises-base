@@ -72,6 +72,7 @@
     <Compile Include="Base\Interfaces\IHandlePromiseConfig.cs" />
     <Compile Include="Base\Interfaces\IHandlePromiseEvents.cs" />
     <Compile Include="Base\Promise.cs" />
+    <Compile Include="Base\PromiseConfigurator.cs" />
     <Compile Include="Base\PromiseMessages.cs" />
     <Compile Include="Config\PxApplicationGroup.cs" />
     <Compile Include="Config\PxContext.cs" />

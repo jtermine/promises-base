@@ -347,6 +347,13 @@ namespace Termine.HarborTabularData.TabularModels
 			return this;
 		}
 
+		public CheckBoxType UseCheckBox()
+		{
+			PropertyEditor = new CheckBoxType(this);
+
+			return (CheckBoxType)PropertyEditor;
+		}
+
 		public ComboBoxType UseComboBox()
 		{
 			PropertyEditor = new ComboBoxType(this);

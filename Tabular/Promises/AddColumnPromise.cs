@@ -1,4 +1,5 @@
-﻿using Tabular.TabModels;
+﻿using NLog;
+using Tabular.TabModels;
 using Tabular.Workloads;
 using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;
@@ -26,7 +27,14 @@ namespace Tabular.Promises
 
         private static void AddColumn(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload dataTableWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
-			dataTableWorkload.FormActions.Enqueue(() => dataTableWorkload.StudentHarborModels.Add(new StudentHarborModel()));
+			var harborModel = new StudentHarborModel();
+
+	        //harborModel.PropertyChanged += (sender, args) =>
+	        //{
+		       // LogManager.GetCurrentClassLogger().Trace($"{args.PropertyName} changed to {harborModel[args.PropertyName]}");
+	        //};
+
+			dataTableWorkload.FormActions.Enqueue(() => dataTableWorkload.StudentHarborModels.Add(harborModel));
         }
     }
 }

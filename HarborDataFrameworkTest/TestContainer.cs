@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HarborDataFrameworkTest.HarborTestObjects;
 using NLog;
 using NUnit.Framework;
@@ -73,6 +74,34 @@ namespace HarborDataFrameworkTest
 			}
 
 			Assert.IsTrue(personTestObject.TestingEndTime == new DateTime(2015, 4, 10, 10, 0, 0, DateTimeKind.Local));
+		}
+
+		[Test]
+		public void TestCollection()
+		{
+			var modelCollection = new List<HarborModel>();
+			var model1 = new HarborModel();
+
+			model1.AddProperty("firstName", "First Name")
+				.TypeIsString("Joe");
+
+			Assert.IsTrue(string.Equals(model1["firstName"].GetString(), "Joe"));
+
+			modelCollection.Add(model1);
+
+			var model2 = new HarborModel();
+
+			model2.AddProperty("firstName", "First Name")
+				.TypeIsString("Justin");
+
+			modelCollection.Add(model2);
+
+			Assert.IsTrue(string.Equals(modelCollection[0]["firstName"].GetString(), "Joe"));
+			Assert.IsTrue(string.Equals(modelCollection[1]["firstName"].GetString(), "Justin"));
+
+			modelCollection[0]["firstName"].Set("Jacqueline");
+
+			Assert.IsTrue(string.Equals(modelCollection[0]["firstName"].GetString(), "Jacqueline"));
 		}
 	}
 }

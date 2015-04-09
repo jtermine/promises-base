@@ -10,6 +10,12 @@ namespace Termine.HarborData.Models
 {
 	public sealed class HarborModel : GenericWorkload, IDisposable, IExposeHarborModel
 	{
+		public HarborModel()
+		{
+			AddProperty("_id", "Id", "Id")
+				.TypeIsId();
+		}
+
 		public string Name => _harborModelInstance.Name;
 		public string Caption => _harborModelInstance.Caption;
 		public string Description => _harborModelInstance.Description;

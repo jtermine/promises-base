@@ -1,4 +1,5 @@
-﻿using DevExpress.XtraEditors.Repository;
+﻿using DevExpress.Utils;
+using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Columns;
 using Termine.HarborTabularData.TabularPoperties;
 
@@ -35,6 +36,8 @@ namespace Termine.HarborTabularData.GridColumnExtensions
             repEditor.MinValue = textEditType.MinValue;
             repEditor.MaxValue = textEditType.MaxValue;
             repEditor.IsFloatValue = true;
+			repEditor.DisplayFormat.FormatType = FormatType.Numeric;
+	        repEditor.DisplayFormat.FormatString = "n2";
         }
     }
 }

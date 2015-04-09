@@ -64,7 +64,7 @@ namespace Termine.HarborData.Models
 	    public HarborProperty MarkClean()
 	    {
 		    HarborModel.MarkClean();
-			return this;;
+			return this;
 	    }
 
 	    public HarborProperty Update(string name, string caption = "", string description = "")
@@ -417,6 +417,16 @@ namespace Termine.HarborData.Models
 
 			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
 			
+			return this;
+		}
+
+	    public HarborProperty TypeIsId()
+	    {
+			_harborPropertyInstance.DataType = EnumDataType.StringType;
+
+			_harborPropertyInstance.PropertyValue = new HarborPropertyValue(this);
+			_harborPropertyInstance.PropertyValue.Set(Guid.NewGuid().ToString("N"), EnumPropertyValueState.Default);
+
 			return this;
 		}
 

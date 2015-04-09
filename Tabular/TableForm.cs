@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using DevExpress.XtraBars;
@@ -12,25 +11,21 @@ namespace Tabular
 {
     public partial class TableForm : XtraForm
     {
-	    private readonly StudentHarborModel _model;
 	    private readonly ObservableCollection<StudentHarborModel> _dataSet = new ObservableCollection<StudentHarborModel>();
         private readonly EventSink _timer = new EventSink();
 
         public TableForm()
         {
-            InitializeComponent();
+	        InitializeComponent();
 
-			_model = new StudentHarborModel();
+			var model = new StudentHarborModel();
 
 			bindingSource1.DataSource = _dataSet;
 
             gridControl1.DataSource = bindingSource1.DataSource;
             gridView1.Columns.Clear();
 
-	        foreach (var tabularProperty in _model.TabularModel.TabularProperties)
-	        {
-		        gridView1.Columns.Add(tabularProperty.Value.PropertyEditor.GetColumn());
-	        }
+	        gridView1.Columns.AddRange(model.TabularModel.GetColumns());
 
             _timer.Tick += timer1_Tick;
         }

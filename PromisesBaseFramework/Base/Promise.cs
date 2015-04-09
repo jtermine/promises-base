@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Handlers;
 using Termine.Promises.Base.Interfaces;
-using Termine.Promises.Config;
 
 namespace Termine.Promises.Base
 {
@@ -38,18 +36,10 @@ namespace Termine.Promises.Base
 
 		private void Init()
 		{
-			var pxInits = PromiseContext.PxConfigSection.PxContexts.AsQueryable().FirstOrDefault(f => f.Name == "default")?.PxInits;
-			if (pxInits == null) return;
-			
-			foreach (var assembly in
-				pxInits.OrderBy(f => f.Order)
-					.Select(pxInit => Type.GetType(pxInit.Type, false, true))
-					.Where(type => type != default(Type))
-					.Select(Activator.CreateInstance))
+			foreach (var configurator in PromiseConfigurator.Instance.Configurators)
 			{
-				(assembly as IConfigurePromise)?.Configure(this);
+				configurator.Configure(this);
 			}
-
 		}
 
 		/// <summary>
@@ -150,11 +140,6 @@ namespace Termine.Promises.Base
 			/// </summary>
 			public PromiseHandlerQueue<IHandlePromiseActions> SuccessHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
-			/// <summary>
-			/// when a promise context is initialized, each of the dictionaries it contains are also initialized to make it easy to add the events to the promise
-			/// </summary>
-
-			public static PxConfigSection PxConfigSection => PxConfigSection.Get();
         }
 
         private readonly PromiseContext _context = new PromiseContext();
@@ -245,7 +230,7 @@ namespace Termine.Promises.Base
         /// </summary>
         public string PromiseId { get; }
 
-		public string PromiseName => $"{PromiseContext.PxConfigSection.PxApplicationGroup.Name}.{Request.RequestName}";
+		public string PromiseName => $"{PromiseConfigurator.PxConfigSection.PxApplicationGroup.Name}.{Request.RequestName}";
 		public string LoggerName => $"{PromiseName}.{PromiseId}";
 
 		/// <summary>
@@ -288,7 +273,7 @@ namespace Termine.Promises.Base
         /// </summary>
         public int ExecutorsCount => _context.Executors.Count;
 
-		public string Secret => PromiseContext.PxConfigSection.PxApplicationGroup.Secret;
+		public string Secret => PromiseConfigurator.PxConfigSection.PxApplicationGroup.Secret;
 
 	    /// <summary>
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
