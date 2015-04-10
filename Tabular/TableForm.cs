@@ -83,7 +83,6 @@ namespace Tabular
 		        });
 
 	        promise.Run();
-
         }
 
         private void timer1_Tick(object sender, Action action)

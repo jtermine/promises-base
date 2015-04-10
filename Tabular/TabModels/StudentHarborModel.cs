@@ -29,12 +29,10 @@ namespace Tabular.TabModels
 					.WithLength(0, 5);
 
 			TabularModel.AddProperty(nameof(IsStudent), "Student?")
-				.TypeIsBoolean(true)
-				.UseCheckBox();
-				
+				.TypeIsBoolean(true);
+
 			TabularModel.AddProperty(nameof(IsAthlete), "Athlete?")
-				.TypeIsBoolean(true)
-				.UseCheckBox();
+				.TypeIsBoolean(true);
 
 			TabularModel.AddProperty(nameof(NumCorrect), "Num. Correct")
 				.TypeIsInteger(55);
@@ -45,14 +43,8 @@ namespace Tabular.TabModels
 			TabularModel.AddProperty(nameof(Grade), "Grade")
 				.TypeIsComputedDecimal((model, response) =>
 				{
-					var result = new decimal(NumCorrect)/new decimal(NumPossible);
+					var result = new decimal(NumCorrect) / new decimal(NumPossible);
 					response.Value = result;
-				});
-
-			TabularModel.AddProperty(nameof(DoubleGrade), "DoubleGrade")
-				.TypeIsComputedDecimal((model, response) =>
-				{
-					response.Value = Grade*2;
 				});
 
 			TabularModel.AddProperty(nameof(LetterGrade), "Letter Grade")
@@ -66,10 +58,13 @@ namespace Tabular.TabModels
 					if (Grade >= .9m) response.Value = "A";
 				});
 
+			TabularModel.AddProperty(nameof(PrincipalOverride), "Principal override")
+				.TypeIsBoolean();
+
 			TabularModel.AddProperty(nameof(CanPlaySports), "CanPlaySports?")
 				.TypeIsComputedBool((model, response) =>
 				{
-					response.Value = new List<string> {"A", "B", "C"}.Contains(LetterGrade);
+					response.Value = new List<string> {"A", "B", "C"}.Contains(LetterGrade) || PrincipalOverride;
 				});
 
 			TabularModel.AddProperty(nameof(NumTestingBlocksRequired), "Num. Testing Blocks")
@@ -82,14 +77,16 @@ namespace Tabular.TabModels
 				});
 
 			TabularModel.AddProperty(nameof(TestingStartTime), "Testing Start Time")
-				.TypeIsDateTime(new DateTime(2015, 4, 10, 8, 0, 0, DateTimeKind.Local));
+				.TypeIsDateTime(new DateTime(2015, 4, 10, 8, 0, 0, DateTimeKind.Local))
+				.UseTimeEditType();
 
 			TabularModel.AddProperty(nameof(TestingEndTime), "Testing End Time")
 				.TypeIsComputedDateTimeUTC((model, response) =>
 				{
 					var timeSpan = new TimeSpan(0, TestingTimeRequired, 0);
 					response.Value = TestingStartTime.Add(timeSpan);
-				});
+				})
+				.UseTimeEditType();
 		}
 
 		private void StudentModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -116,6 +113,12 @@ namespace Tabular.TabModels
 		{
 			get { return TabularModel[nameof(IsStudent)].GetBool(); }
 			set { TabularModel[nameof(IsStudent)].Set(value); }
+		}
+
+		public bool PrincipalOverride
+		{
+			get { return TabularModel[nameof(PrincipalOverride)].GetBool(); }
+			set { TabularModel[nameof(PrincipalOverride)].Set(value); }
 		}
 
 		public bool IsAthlete
@@ -152,8 +155,6 @@ namespace Tabular.TabModels
 		public DateTime TestingEndTime => TabularModel[nameof(TestingEndTime)].GetDateTime();
 
 		public decimal Grade => TabularModel[nameof(Grade)].GetDecimal();
-
-		public decimal DoubleGrade => TabularModel[nameof(DoubleGrade)].GetDecimal();
 
 		public string LetterGrade => TabularModel[nameof(LetterGrade)].GetString();
 

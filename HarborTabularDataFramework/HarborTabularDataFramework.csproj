@@ -65,6 +65,9 @@
     <Compile Include="GridColumnExtensions\ComboBoxGridColumn.cs">
       <SubType>component</SubType>
     </Compile>
+    <Compile Include="GridColumnExtensions\TimeEditGridColumn.cs">
+      <SubType>component</SubType>
+    </Compile>
     <Compile Include="GridColumnExtensions\DecimalSpinEditGridColumn.cs">
       <SubType>component</SubType>
     </Compile>
@@ -72,6 +75,9 @@
       <SubType>component</SubType>
     </Compile>
     <Compile Include="GridColumnExtensions\IntSpinEditGridColumn.cs">
+      <SubType>component</SubType>
+    </Compile>
+    <Compile Include="GridColumnExtensions\DateEditGridColumn.cs">
       <SubType>component</SubType>
     </Compile>
     <Compile Include="GridColumnExtensions\TextEditGridColumn.cs">
@@ -85,9 +91,11 @@
     <Compile Include="TabularModels\TabularProperty.cs" />
     <Compile Include="TabularPoperties\CheckBoxType.cs" />
     <Compile Include="TabularPoperties\ComboBoxType.cs" />
+    <Compile Include="TabularPoperties\TimeEditType.cs" />
     <Compile Include="TabularPoperties\DecimalSpinEditType.cs" />
     <Compile Include="TabularPoperties\IdentityColumnType.cs" />
     <Compile Include="TabularPoperties\IntSpinEditType.cs" />
+    <Compile Include="TabularPoperties\DateEditType.cs" />
     <Compile Include="TabularPoperties\TextEditType.cs" />
   </ItemGroup>
   <ItemGroup>

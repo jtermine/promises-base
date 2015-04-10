@@ -165,7 +165,7 @@ namespace Termine.HarborTabularData.TabularModels
 		{
 			HarborProperty.TypeIsBoolean(defaultValue);
 
-			UseTextEditType();
+			UseCheckBox();
 			
 			return this;
 		}
@@ -174,7 +174,7 @@ namespace Termine.HarborTabularData.TabularModels
 		{
 			HarborProperty.TypeIsComputedBool(modelAction, defaultValue, actionName);
 
-			UseTextEditType();
+			UseCheckBox();
 
 			return this;
 		}
@@ -387,6 +387,20 @@ namespace Termine.HarborTabularData.TabularModels
 			PropertyEditor = new TextEditType(this);
 
 			return (TextEditType)PropertyEditor;
+		}
+
+		public DateEditType UseDateEditType()
+		{
+			PropertyEditor = new DateEditType(this);
+
+			return (DateEditType)PropertyEditor;
+		}
+
+		public TimeEditType UseTimeEditType()
+		{
+			PropertyEditor = new TimeEditType(this);
+
+			return (TimeEditType)PropertyEditor;
 		}
 	}
 }
