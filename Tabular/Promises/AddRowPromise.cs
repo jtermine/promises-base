@@ -7,7 +7,7 @@ using Termine.Promises.Base.Interfaces;
 
 namespace Tabular.Promises
 {
-    public static class AddColumnPromise
+    public static class AddRowPromise
     {
 		public static Promise<GenericConfig, DataTableWorkload, GenericRequest, GenericResponse> Get()
 	    {
@@ -25,16 +25,21 @@ namespace Tabular.Promises
 		        actions.Abort(new GenericEventMessage(0, 1, "The datatable is null blocking the promise from executing."));
         }
 
-        private static void AddColumn(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload dataTableWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static void AddColumn(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload workload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
-			var harborModel = new StudentHarborModel();
+	        for (var i = 0; i < workload.RowsToAdd; i++)
+	        {
+		        var harborModel = new StudentHarborModel {LastName = $"Termine_{i+workload.RowStart}"};
 
-	        //harborModel.PropertyChanged += (sender, args) =>
-	        //{
-		       // LogManager.GetCurrentClassLogger().Trace($"{args.PropertyName} changed to {harborModel[args.PropertyName]}");
-	        //};
+				/*
+				harborModel.PropertyChanged += (sender, args) =>
+				{
+					LogManager.GetCurrentClassLogger().Trace($"{args.PropertyName} changed to {harborModel[args.PropertyName]}");
+				};
+				*/
 
-			dataTableWorkload.FormActions.Enqueue(() => dataTableWorkload.StudentHarborModels.Add(harborModel));
+				workload.FormActions.Enqueue(() => workload.StudentHarborModels.Add(harborModel));
+			}
         }
     }
 }

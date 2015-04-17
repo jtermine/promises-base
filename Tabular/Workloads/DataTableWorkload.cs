@@ -13,5 +13,8 @@ namespace Tabular.Workloads
         public ObservableCollection<StudentHarborModel> StudentHarborModels { get; set; }
         public ConcurrentQueue<Action> FormActions { get; set; }
         public List<IColumnDefinitionType> List { get; set; }
+
+	    public int RowsToAdd { get; set; }
+	    public int RowStart { get; set; }
     }
 }

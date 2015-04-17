@@ -13,6 +13,8 @@ namespace Termine.HarborData.Models
 
 		private sealed class HarborContainerInstance : IDisposable
 		{
+			public string Name { get; set; }
+
 			public Dictionary<string, HarborModel> Models { get; set; } = new Dictionary<string, HarborModel>();
 
 			public Dictionary<string, HarborFixedRelationship> FixedRelationships { get; set; } = new Dictionary<string, HarborFixedRelationship>();
@@ -100,6 +102,12 @@ namespace Termine.HarborData.Models
 			AddTemporalRelationship(temporalRelationship);
 
 			return temporalRelationship;
+		}
+
+		public HarborContainer WithName(string name)
+		{
+			_harborContainerInstance.Name = name;
+			return this;	
 		}
 
 	}

@@ -65,7 +65,7 @@ namespace Termine.HarborData.Models
 
 		public HarborModel Update(string name, string caption = "", string description = "")
 		{
-			if (!IsNullOrEmpty(name)) _harborModelInstance.Name = name;
+			if (!IsNullOrEmpty(name)) _harborModelInstance.Name = name.ToLowerInvariant();
 
 			_harborModelInstance.Description = description;
 			_harborModelInstance.Caption = caption;
@@ -82,6 +82,8 @@ namespace Termine.HarborData.Models
 
 		public HarborProperty AddProperty(string name, string caption = "", string description = "")
 		{
+			name = name.ToLowerInvariant();
+
 			if (_harborModelInstance.Properties.ContainsKey(name)) return _harborModelInstance.Properties[name];
 
 			var property = new HarborProperty(this);
@@ -101,6 +103,7 @@ namespace Termine.HarborData.Models
 
 		private HarborPropertyValue Get(string propertyName)
 		{
+			propertyName = propertyName.ToLowerInvariant();
 			return Properties.ContainsKey(propertyName) ? Properties[propertyName].PropertyValue : default(HarborPropertyValue);
 		}
 

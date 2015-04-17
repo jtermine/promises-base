@@ -22,11 +22,17 @@ namespace Tabular.TabModels
 				.UseTextEditType()
 					.WithLength(0, 50);
 
-			TabularModel.AddProperty(nameof(LastName), "LastName")
+			TabularModel.AddProperty(nameof(LastName), "Last Name")
 				.TypeIsString("Termine")
 				.BlockNull()
 				.UseTextEditType()
 					.WithLength(0, 5);
+
+			TabularModel.AddProperty(nameof(HomeTown), "Hometown")
+				.TypeIsString("Baton Rouge")
+				.BlockNull()
+				.UseTextEditType()
+					.WithLength(0, 25);
 
 			TabularModel.AddProperty(nameof(IsStudent), "Student?")
 				.TypeIsBoolean(true);
@@ -61,7 +67,7 @@ namespace Tabular.TabModels
 			TabularModel.AddProperty(nameof(PrincipalOverride), "Principal override")
 				.TypeIsBoolean();
 
-			TabularModel.AddProperty(nameof(CanPlaySports), "CanPlaySports?")
+			TabularModel.AddProperty(nameof(CanPlaySports), "Can Play Sports?")
 				.TypeIsComputedBool((model, response) =>
 				{
 					response.Value = new List<string> {"A", "B", "C"}.Contains(LetterGrade) || PrincipalOverride;
@@ -107,6 +113,12 @@ namespace Tabular.TabModels
 		{
 			get { return TabularModel[nameof(LastName)]?.GetString(); }
 			set { TabularModel[nameof(LastName)].Set(value); }
+		}
+
+		public string HomeTown
+		{
+			get { return TabularModel[nameof(HomeTown)]?.GetString(); }
+			set { TabularModel[nameof(HomeTown)].Set(value); }
 		}
 
 		public bool IsStudent

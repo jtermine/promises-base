@@ -13,6 +13,7 @@ namespace Tabular
     {
 	    private readonly ObservableCollection<StudentHarborModel> _dataSet = new ObservableCollection<StudentHarborModel>();
         private readonly EventSink _timer = new EventSink();
+	    private int _rowStart;
 
         public TableForm()
         {
@@ -30,15 +31,22 @@ namespace Tabular
             _timer.Tick += timer1_Tick;
         }
 
-        private void barAddColumn_ItemClick(object sender, ItemClickEventArgs e)
+        private void barAddRow_ItemClick(object sender, ItemClickEventArgs e)
         {
 
-	        var addColumnPromise = AddColumnPromise.Get()
-		        .WithWorkloadCtor("workloadCtor", (actions, config, workload, req, res) =>
-		        {
-			        workload.FormActions = _timer.Queue;
-			        workload.StudentHarborModels = _dataSet;
-		        });
+			var addColumnPromise = AddRowPromise.Get()
+				.WithWorkloadCtor("workloadCtor", (actions, config, workload, req, res) =>
+				{
+					workload.FormActions = _timer.Queue;
+					workload.StudentHarborModels = _dataSet;
+					workload.RowsToAdd = 1000;
+					workload.RowStart = _rowStart;
+				})
+				.WithExecutor("updateRowStart", (actions, config, workload, req, res) =>
+				{
+					_rowStart = _rowStart + workload.RowsToAdd;
+				});
+
 
 	        addColumnPromise.Run();
         }
