@@ -19,13 +19,13 @@ namespace Termine.Promises.Base
 
 		public List<IConfigurePromise> Configurators { get; private set; } = new List<IConfigurePromise>(); 
 
-		public static bool IsCofigured { get; set; }
+		public static bool IsConfigured { get; set; }
 
 		private void Configure()
 		{
-			if (IsCofigured) return;
+			if (IsConfigured) return;
 			var pxInits = PxConfigSection.PxContexts.AsQueryable().FirstOrDefault(f => f.Name == "default")?.PxInits;
-			IsCofigured = true;
+			IsConfigured = true;
 			if (pxInits == null) return;
 
 			Configurators = pxInits.OrderBy(f => f.Order)

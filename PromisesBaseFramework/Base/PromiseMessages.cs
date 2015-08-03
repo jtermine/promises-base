@@ -91,19 +91,25 @@ namespace Termine.Promises.Base
         public static readonly GenericEventMessage PromiseBlocked = new GenericEventMessage(0, 14,
             "The promise was blocked from processing.");
 
-		/// <summary>
-		/// AuthChallenger started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the authChallenger that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage AuthChallengerStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// The promise was aborted.
+        /// </summary>
+        public static readonly GenericEventMessage PromiseAborted = new GenericEventMessage(0, 14,
+            "The promise was aborted.");
+
+        /// <summary>
+        /// AuthChallenger started {actionId}
+        /// </summary>
+        /// <param name="applicationGroupId">the applicationGroupId of the promise</param>
+        /// <param name="actionId">the actionId of the authChallenger that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage AuthChallengerStarted(int applicationGroupId, string actionId)
         {
             return new GenericEventMessage
             {
 				EventApplicationGroup = applicationGroupId,
                 EventNumber = 100,
-                EventPublicMessage = string.Format("AuthChallenger started {0}", actionId)
+                EventPublicMessage = $"AuthChallenger started {actionId}"
             };
         }
 
@@ -119,7 +125,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
-                EventPublicMessage = string.Format("AuthChallenger stopped {0}", actionId)
+                EventPublicMessage = $"AuthChallenger stopped {actionId}"
             };
         }
 
@@ -135,7 +141,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 100,
-                EventPublicMessage = string.Format("Validator started {0}", actionId)
+                EventPublicMessage = $"Validator started {actionId}"
             };
         }
 
@@ -151,7 +157,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
-                EventPublicMessage = string.Format("Validator stopped {0}", actionId)
+                EventPublicMessage = $"Validator stopped {actionId}"
             };
         }
 
@@ -167,7 +173,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 100,
-                EventPublicMessage = string.Format("Executor started {0}", actionId)
+                EventPublicMessage = $"Executor started {actionId}"
             };
         }
 
@@ -183,7 +189,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
-                EventPublicMessage = string.Format("Executor stopped {0}", actionId)
+                EventPublicMessage = $"Executor stopped {actionId}"
             };
         }
 
@@ -199,7 +205,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 100,
-                EventPublicMessage = string.Format("XferAction started {0}", actionId)
+                EventPublicMessage = $"XferAction started {actionId}"
             };
         }
 
@@ -215,7 +221,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
-                EventPublicMessage = string.Format("XferAction stopped {0}", actionId)
+                EventPublicMessage = $"XferAction stopped {actionId}"
             };
         }
 
@@ -231,7 +237,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 102,
-                EventPublicMessage = string.Format("PreStartAction started {0}", actionId)
+                EventPublicMessage = $"PreStartAction started {actionId}"
             };
         }
 
@@ -247,7 +253,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 103,
-                EventPublicMessage = string.Format("PreStartAction stopped {0}", actionId)
+                EventPublicMessage = $"PreStartAction stopped {actionId}"
             };
         }
 
@@ -263,7 +269,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 102,
-                EventPublicMessage = string.Format("PostEndAction started {0}", actionId)
+                EventPublicMessage = $"PostEndAction started {actionId}"
             };
         }
 
@@ -279,7 +285,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 103,
-                EventPublicMessage = string.Format("PostEndAction stopped {0}", actionId)
+                EventPublicMessage = $"PostEndAction stopped {actionId}"
             };
         }
 
@@ -295,7 +301,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 104,
-                EventPublicMessage = string.Format("SuccessAction started {0}", actionId)
+                EventPublicMessage = $"SuccessAction started {actionId}"
             };
         }
 
@@ -311,7 +317,7 @@ namespace Termine.Promises.Base
             {
 				EventApplicationGroup = applicationGroupId,
 				EventNumber = 105,
-                EventPublicMessage = string.Format("SuccessAction stopped {0}", actionId)
+                EventPublicMessage = $"SuccessAction stopped {actionId}"
             };
         }
 

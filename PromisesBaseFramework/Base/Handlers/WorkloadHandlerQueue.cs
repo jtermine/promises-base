@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Handlers
@@ -24,10 +25,21 @@ namespace Termine.Promises.Base.Handlers
         {
             _queue.ForEach(a =>
             {
-                if (ignoreBlockOrTermination || promise.IsTerminated || promise.IsBlocked) return;
-               
+                promise.CancellationToken.ThrowIfCancellationRequested();
+
+                if (!ignoreBlockOrTermination & (promise.IsTerminated || promise.IsBlocked)) return;
+
                 promise.Trace(a.StartMessage);
-                a.Action.Invoke(promise, config, workload, request, response);
+
+                if (a.Control != default(Control))
+                {
+                    a.Control?.Invoke(a.Action, promise, config, workload, request, response);
+                }
+                else
+                {
+                    a.Action.Invoke(promise, config, workload, request, response);
+                }
+                
                 promise.Trace(a.EndMessage);
             });
         }

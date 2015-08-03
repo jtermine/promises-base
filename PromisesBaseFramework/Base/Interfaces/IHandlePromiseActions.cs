@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading;
 
 namespace Termine.Promises.Base.Interfaces
 {
 	public interface IHandlePromiseActions
 	{
-
+        CancellationToken CancellationToken { get; }
 		bool IsBlocked { get; }
 		bool IsTerminated { get; }
 
@@ -30,6 +31,7 @@ namespace Termine.Promises.Base.Interfaces
 		void Fatal(IHandleEventMessage message);
 		void Abort(IHandleEventMessage message);
 		void AbortOnAccessDenied(IHandleEventMessage message);
+	    void Stop();
 
 		void Block(Exception ex);
 		void Trace(Exception ex);

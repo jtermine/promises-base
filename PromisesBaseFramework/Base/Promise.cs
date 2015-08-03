@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Termine.Promises.Base.Generics;
@@ -15,7 +17,7 @@ namespace Termine.Promises.Base
 	/// <typeparam name="TC">a promise configuration object</typeparam>
 	/// <typeparam name="TR">a promise request</typeparam>
 	/// <typeparam name="TE">a promise response object</typeparam>
-	public sealed class Promise<TC, TW, TR, TE> : IHandlePromiseActions, IHandlePromiseEvents
+	public sealed class Promise<TC, TW, TR, TE> : IHandlePromiseActions, IHandlePromiseEvents, IDisposable
         where TC: class, IHandlePromiseConfig, new()
         where TW : class, IAmAPromiseWorkload, new()
         where TR: class, IAmAPromiseRequest, new()
@@ -47,17 +49,19 @@ namespace Termine.Promises.Base
         /// </summary>
         private class PromiseContext
         {
-			/*
+            /*
             /// <summary>
             /// this dictionary of generic objects travels with the promise context and can be accessed by any object that inherits the promise
             /// </summary>
             public Dictionary<string, object> Objects = new Dictionary<string, object>();
              */
+             
+            public readonly CancellationTokenSource TokenSource = new CancellationTokenSource();
 
-			/// <summary>
-			/// a collection of actions that execute in sequence before a promise starts
-			/// </summary>
-			public readonly WorkloadHandlerQueue<TC, TW, TR, TE> WorkloadCtors = new WorkloadHandlerQueue<TC, TW, TR, TE>();
+            /// <summary>
+            /// a collection of actions that execute in sequence before a promise starts
+            /// </summary>
+            public readonly WorkloadHandlerQueue<TC, TW, TR, TE> WorkloadCtors = new WorkloadHandlerQueue<TC, TW, TR, TE>();
 
 			/// <summary>
 			/// a collection of AuthChallengers -- these are executed in sequence to determine whether the promise has the authority to run
@@ -159,7 +163,9 @@ namespace Termine.Promises.Base
             return this;
         }
 
-        /// <summary>
+	    public CancellationToken CancellationToken => _context.TokenSource.Token;
+
+	    /// <summary>
         /// Reports whether the promise has been blocked from executing
         /// </summary>
         public bool IsBlocked { get; private set; }
@@ -273,16 +279,16 @@ namespace Termine.Promises.Base
         /// </summary>
         public int ExecutorsCount => _context.Executors.Count;
 
-		public string Secret => PromiseConfigurator.PxConfigSection.PxApplicationGroup.Secret;
+        public string Secret => PromiseConfigurator.PxConfigSection.PxApplicationGroup.Secret;
 
 	    /// <summary>
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
         /// </summary>
         /// <returns>the async task that returns an instance of this promise object when it completes</returns>
 	    // ReSharper disable once UnusedMember.Global
-        public Task<Promise<TC, TW, TR, TE>> RunAsync(string context = "default")
+        public Task<Promise<TC, TW, TR, TE>> RunAsync()
         {
-            return Task.Run(() => Run(context));
+            return Task.Run(() => Run(), CancellationToken);
         }
 
         /// <summary>
@@ -290,30 +296,41 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the instance of this promise object</returns>
         // ReSharper disable once MemberCanBePrivate.Global
-        public Promise<TC, TW, TR, TE> Run(string context = "default")
+        public Promise<TC, TW, TR, TE> Run()
         {
-            try
-            {
-                Trace(PromiseMessages.PromiseStarted);
+            Execute();
+            return this;
+        }
 
-				_context.WorkloadCtors.Invoke(this, Config, Workload, Request, Response);
-                _context.PreStartActions.Invoke(this, Config, Workload, Request, Response);
-                _context.AuthChallengers.Invoke(this, Config, Workload, Request, Response);
-                _context.Validators.Invoke(this, Config, Workload, Request, Response);
-                _context.Executors.Invoke(this, Config, Workload, Request, Response);
+	    private void Execute()
+	    {
+	        try
+	        {
+	            IsTerminated = false;
+	            IsBlocked = false;
+
+	            Trace(PromiseMessages.PromiseStarted);
+
+	            _context.WorkloadCtors.Invoke(this, Config, Workload, Request, Response);
+	            _context.PreStartActions.Invoke(this, Config, Workload, Request, Response);
+	            _context.AuthChallengers.Invoke(this, Config, Workload, Request, Response);
+	            _context.Validators.Invoke(this, Config, Workload, Request, Response);
+	            _context.Executors.Invoke(this, Config, Workload, Request, Response);
                 _context.XferActions.Invoke(this, Config, Workload, Request, Response);
                 _context.SuccessHandlers.Invoke(this, PromiseMessages.PromiseSuccess);
-                _context.PostEndActions.Invoke(this, Config, Workload, Request, Response);
+                _context.PostEndActions.Invoke(this, Config, Workload, Request, Response, true);
 
-                Trace(PromiseMessages.PromiseSuccess);
-            }
+	            Trace(PromiseMessages.PromiseSuccess);
+	        }
+	        catch (OperationCanceledException)
+	        {
+	            Trace(PromiseMessages.PromiseAborted);
+	        }
             catch (Exception ex)
             {
                 Error(new GenericEventMessage(ApplicationGroupId, ex));
                 Trace(PromiseMessages.PromiseFail);
             }
-
-            return this;
         }
 
         /// <summary>
@@ -395,6 +412,7 @@ namespace Termine.Promises.Base
         {
             IsTerminated = true;
             _context.AbortHandlers.Invoke(this, message);
+            _context.TokenSource.Cancel();
         }
 
         /// <summary>
@@ -408,6 +426,12 @@ namespace Termine.Promises.Base
             _context.AbortOnAccessDeniedHandlers.Invoke(this, message);
         }
 
+	    public void Stop()
+	    {
+	        IsTerminated = true;
+	        IsBlocked = true;
+	    }
+        
         /// <summary>
         /// Submits a message to the 'block' instrumentation handler.
         /// Notifies the promise to abort processing.
@@ -416,6 +440,7 @@ namespace Termine.Promises.Base
         public void Block(Exception ex)
         {
             Block(new GenericEventMessage(ApplicationGroupId, ex));
+            _context.TokenSource.Cancel();
         }
 
         /// <summary>
@@ -492,13 +517,14 @@ namespace Termine.Promises.Base
             AbortOnAccessDenied(new GenericEventMessage(ApplicationGroupId, ex));
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-		public Promise<TC, TW, TR, TE> WithWorkloadCtor(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithWorkloadCtor(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
 		{
 			if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
@@ -507,19 +533,21 @@ namespace Termine.Promises.Base
 				Action = action,
 				EndMessage = PromiseMessages.PreStartActionStopped(ApplicationGroupId, actionId),
 				StartMessage = PromiseMessages.PreStartActionStarted(ApplicationGroupId, actionId),
-				HandlerName = actionId
-			});
+				HandlerName = actionId,
+                Control = control
+            });
 
 			return this;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-		public Promise<TC, TW, TR, TE> WithPreStart(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithPreStart(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
@@ -528,19 +556,21 @@ namespace Termine.Promises.Base
                 Action = action,
                 EndMessage = PromiseMessages.PreStartActionStopped(ApplicationGroupId, actionId),
                 StartMessage = PromiseMessages.PreStartActionStarted(ApplicationGroupId, actionId),
-                HandlerName = actionId
+                HandlerName = actionId,
+                Control = control
             });
 
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="actionId"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithPostEnd(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithPostEnd(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
@@ -549,19 +579,21 @@ namespace Termine.Promises.Base
                 Action = action,
                 EndMessage = PromiseMessages.PostEndActionStopped(ApplicationGroupId, actionId),
                 StartMessage = PromiseMessages.PostEndActionStarted(ApplicationGroupId, actionId),
-                HandlerName = actionId
+                HandlerName = actionId,
+                Control = control
             });
 
             return this;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithValidator(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithValidator(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
@@ -570,19 +602,21 @@ namespace Termine.Promises.Base
                 Action = action,
                 EndMessage = PromiseMessages.ValidatorStopped(ApplicationGroupId, actionId),
                 StartMessage = PromiseMessages.ValidatorStarted(ApplicationGroupId, actionId),
-                HandlerName = actionId
+                HandlerName = actionId,
+                Control = control
             });
 
             return this;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithAuthChallenger(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithAuthChallenger(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
@@ -597,13 +631,14 @@ namespace Termine.Promises.Base
             return this;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithExecutor(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithExecutor(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control) )
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return this;
 
@@ -612,7 +647,8 @@ namespace Termine.Promises.Base
                 Action = action,
                 EndMessage = PromiseMessages.ExecutorStopped(ApplicationGroupId, actionId),
                 StartMessage = PromiseMessages.ExecutorStarted(ApplicationGroupId, actionId),
-                HandlerName = actionId
+                HandlerName = actionId,
+                Control = control
             });
 
             return this;
@@ -818,5 +854,10 @@ namespace Termine.Promises.Base
             });
 
         }
+
+	    public void Dispose()
+	    {
+	        if (!IsTerminated) Abort(new OperationCanceledException("Promise disposed", _context.TokenSource.Token));
+	    }
     }
 }

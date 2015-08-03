@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Handlers
@@ -13,5 +14,6 @@ namespace Termine.Promises.Base.Handlers
         public string HandlerName { get; set; }
         public IHandleEventMessage StartMessage { get; set; }
         public IHandleEventMessage EndMessage { get; set; }
+        public Control Control { get; set; }
     }
 }
