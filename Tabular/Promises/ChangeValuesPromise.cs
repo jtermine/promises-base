@@ -45,7 +45,7 @@ namespace Tabular.Promises
         {
             foreach (var gridCell in selectedCellsWorkload.GridCells)
             {
-                actions.Trace(new GenericEventMessage(0, 0, gridCell.Column.FieldName));
+                actions.Trace(new GenericEventMessage(gridCell.Column.FieldName));
 
                 if (gridCell.RowHandle < 0) continue;
 
@@ -65,9 +65,8 @@ namespace Tabular.Promises
         {
             public SelectedCellsDoNotExist()
             {
-                EventApplicationGroup = 1;
                 EventPublicMessage = "No selected cells were passed to the promise.";
-                IsPublicMessage = true;
+                IsSensitiveMessage = true;
             }
         }
 
@@ -75,7 +74,6 @@ namespace Tabular.Promises
         {
             public DataSourceHasNoRows()
             {
-                EventApplicationGroup = 2;
 				EventPublicMessage = "The datasource provided to the promise does not have any rows.";
             }
         }

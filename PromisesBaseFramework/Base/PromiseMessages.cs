@@ -10,312 +10,269 @@ namespace Termine.Promises.Base
         /// <summary>
         /// The promise started processing.
         /// </summary>
-        public static readonly GenericEventMessage PromiseStarted = new GenericEventMessage(0, 0,
-            "The promise started processing.");
+        public static readonly GenericEventMessage PromiseStarted = new GenericEventMessage("The promise started processing.");
 
         /// <summary>
         /// A web socket transmission has started against {someIp}
         /// </summary>
-        public static readonly GenericEventMessage PromiseStartTransmitting = new GenericEventMessage(0, 2,
-            "A web socket transmission has started against > {0}.");
+        public static readonly GenericEventMessage PromiseStartTransmitting = new GenericEventMessage("A web socket transmission has started against > {0}.", 2);
 
         /// <summary>
         /// A web socket transmission has stopped.
         /// </summary>
-        public static readonly GenericEventMessage PromiseStopTransmitting = new GenericEventMessage(0, 3,
-            "A web socket transmission has stopped.");
+        public static readonly GenericEventMessage PromiseStopTransmitting = new GenericEventMessage("A web socket transmission has stopped.", 3);
 
         /// <summary>
         /// {Error Message} [Error {number}]
         /// </summary>
-        public static readonly GenericEventMessage PromiseErrorTransmitting = new GenericEventMessage(0, 4,
-            "{0} [Error {1}]");
+        public static readonly GenericEventMessage PromiseErrorTransmitting = new GenericEventMessage("{0} [Error {1}]", 4);
 
         /// <summary>
         /// The operation is taking longer than expected to complete.
         /// </summary>
-        public static readonly GenericEventMessage PromiseDelayOccurred = new GenericEventMessage(0, 5,
-            "The operation is taking longer than expected to complete.");
+        public static readonly GenericEventMessage PromiseDelayOccurred = new GenericEventMessage("The operation is taking longer than expected to complete.", 5);
 
         /// <summary>
         /// The operation timed out and was aborted.
         /// </summary>
-        public static readonly GenericEventMessage PromiseTimeoutOccurred = new GenericEventMessage(0, 6,
-            "The operation timed out and was aborted.");
+        public static readonly GenericEventMessage PromiseTimeoutOccurred = new GenericEventMessage("The operation timed out and was aborted.", 6);
 
         /// <summary>
         /// Promise told its listening object to be in READY state.
         /// </summary>
-        public static readonly GenericEventMessage PromiseReady = new GenericEventMessage(0, 7,
-            "Promise told its listening object to be in READY state.");
+        public static readonly GenericEventMessage PromiseReady = new GenericEventMessage("Promise told its listening object to be in READY state.", 7);
 
         /// <summary>
         /// Promise told its listening object to be in NOT READY state.
         /// </summary>
-        public static readonly GenericEventMessage PromiseNotReady = new GenericEventMessage(0, 8,
-            "Promise told its listening object to be in NOT READY state.");
+        public static readonly GenericEventMessage PromiseNotReady = new GenericEventMessage("Promise told its listening object to be in NOT READY state.", 8);
 
         /// <summary>
         /// The operation was successful.
         /// </summary>
-        public static readonly GenericEventMessage PromiseSuccess = new GenericEventMessage(0, 9,
-            "The operation was successful.");
+        public static readonly GenericEventMessage PromiseSuccess = new GenericEventMessage("The operation was successful.", 9);
 
         /// <summary>
         /// The operation did not complete successfully.
         /// </summary>
-        public static readonly GenericEventMessage PromiseFail = new GenericEventMessage(0, 10,
-            "The operation did not complete successfully.");
+        public static readonly GenericEventMessage PromiseFail = new GenericEventMessage("The operation did not complete successfully.", 10);
 
         /// <summary>
         /// Access denied : The operation could not be completed.
         /// </summary>
-        public static readonly GenericEventMessage PromiseAccessDenied = new GenericEventMessage(0, 13,
-            "Access denied : The operation could not be completed.");
+        public static readonly GenericEventMessage PromiseAccessDenied = new GenericEventMessage("Access denied : The operation could not be completed.", 13);
 
         /// <summary>
         /// The promise received an http response with code 200 OK.
         /// </summary>
-        public static readonly GenericEventMessage PromiseReceivedHttp200 = new GenericEventMessage(0, 11,
-            "The promise received an http response with code 200 OK.");
+        public static readonly GenericEventMessage PromiseReceivedHttp200 = new GenericEventMessage("The promise received an http response with code 200 OK.", 11);
 
         /// <summary>
         /// The promise received an http response corresponding to an an error code.  See body for details.
         /// </summary>
-        public static readonly GenericEventMessage PromiseReceivedHttpError = new GenericEventMessage(0, 12,
-            "The promise received an http response corresponding to an an error code.  See body for details.");
+        public static readonly GenericEventMessage PromiseReceivedHttpError = new GenericEventMessage("The promise received an http response corresponding to an an error code.  See body for details.", 12);
 
         /// <summary>
         /// The promise was blocked from processing.
         /// </summary>
-        public static readonly GenericEventMessage PromiseBlocked = new GenericEventMessage(0, 14,
-            "The promise was blocked from processing.");
+        public static readonly GenericEventMessage PromiseBlocked = new GenericEventMessage("The promise was blocked from processing.", 14);
 
         /// <summary>
         /// The promise was aborted.
         /// </summary>
-        public static readonly GenericEventMessage PromiseAborted = new GenericEventMessage(0, 14,
-            "The promise was aborted.");
+        public static readonly GenericEventMessage PromiseAborted = new GenericEventMessage("The promise was aborted.", 14);
 
         /// <summary>
         /// AuthChallenger started {actionId}
         /// </summary>
-        /// <param name="applicationGroupId">the applicationGroupId of the promise</param>
         /// <param name="actionId">the actionId of the authChallenger that started</param>
         /// <returns>an event message</returns>
-        public static GenericEventMessage AuthChallengerStarted(int applicationGroupId, string actionId)
+        public static GenericEventMessage AuthChallengerStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
                 EventNumber = 100,
                 EventPublicMessage = $"AuthChallenger started {actionId}"
             };
         }
 
-		/// <summary>
-		/// AuthChallenger stopped {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the authChallenger that stopped</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage AuthChallengerStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// AuthChallenger stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the authChallenger that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage AuthChallengerStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
                 EventPublicMessage = $"AuthChallenger stopped {actionId}"
             };
         }
 
-		/// <summary>
-		/// Validator started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the validator that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage ValidatorStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// Validator started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the validator that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage ValidatorStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 100,
                 EventPublicMessage = $"Validator started {actionId}"
             };
         }
 
-		/// <summary>
-		/// Validator started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the validator that stopped</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage ValidatorStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// Validator started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the validator that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage ValidatorStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
                 EventPublicMessage = $"Validator stopped {actionId}"
             };
         }
 
-		/// <summary>
-		/// Executor started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the executor that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage ExecutorStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// Executor started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage ExecutorStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 100,
                 EventPublicMessage = $"Executor started {actionId}"
             };
         }
 
-		/// <summary>
-		/// Executor stopped {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the executor that stopped</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage ExecutorStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// Executor stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage ExecutorStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
                 EventPublicMessage = $"Executor stopped {actionId}"
             };
         }
 
-		/// <summary>
-		/// XferAction started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the executor that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage XferActionStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// XferAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage XferActionStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 100,
                 EventPublicMessage = $"XferAction started {actionId}"
             };
         }
 
-		/// <summary>
-		/// XferAction stopped {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the executor that stopped</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage XferActionStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// XferAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage XferActionStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 101,
                 EventPublicMessage = $"XferAction stopped {actionId}"
             };
         }
 
-		/// <summary>
-		/// PreStartAction started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the PreStartAction that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage PreStartActionStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// PreStartAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PreStartAction that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PreStartActionStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 102,
                 EventPublicMessage = $"PreStartAction started {actionId}"
             };
         }
 
-		/// <summary>
-		/// PreStartAction stopped {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the PreStartAction that stopped</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage PreStartActionStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// PreStartAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PreStartAction that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PreStartActionStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 103,
                 EventPublicMessage = $"PreStartAction stopped {actionId}"
             };
         }
 
-		/// <summary>
-		/// PostEndAction started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the PostEndAction that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage PostEndActionStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// PostEndAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PostEndAction that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PostEndActionStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 102,
                 EventPublicMessage = $"PostEndAction started {actionId}"
             };
         }
 
-		/// <summary>
-		/// PostEndAction stopped {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the PostEndAction that stopped</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage PostEndActionStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// PostEndAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the PostEndAction that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage PostEndActionStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 103,
                 EventPublicMessage = $"PostEndAction stopped {actionId}"
             };
         }
 
-		/// <summary>
-		/// SuccessAction started {actionId}
-		/// </summary>
-		/// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-		/// <param name="actionId">the actionId of the SuccessAction that started</param>
-		/// <returns>an event message</returns>
-		public static GenericEventMessage SuccessActionStarted(int applicationGroupId, string actionId)
+        /// <summary>
+        /// SuccessAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the SuccessAction that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage SuccessActionStarted(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 104,
                 EventPublicMessage = $"SuccessAction started {actionId}"
             };
         }
 
-	    /// <summary>
-	    /// SuccessAction stopped {actionId}
-	    /// </summary>
-	    /// <param name="applicationGroupId">the applicationGroupId of the promise</param>
-	    /// <param name="actionId">the actionId of the SuccessAction that stopped</param>
-	    /// <returns>an event message</returns>
-	    public static GenericEventMessage SuccessActionStopped(int applicationGroupId, string actionId)
+        /// <summary>
+        /// SuccessAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the SuccessAction that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage SuccessActionStopped(string actionId)
         {
             return new GenericEventMessage
             {
-				EventApplicationGroup = applicationGroupId,
 				EventNumber = 105,
                 EventPublicMessage = $"SuccessAction stopped {actionId}"
             };

@@ -19,7 +19,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseComponents
 				(p, c, w, rq, rx) =>
 				{
 					if (string.IsNullOrEmpty(rq.Claim))
-						p.AbortOnAccessDenied(GenericEventMessage.New("Claim is null or empty", EnumEventType.RequestError));
+						p.AbortOnAccessDenied(new GenericEventMessage("Claim is null or empty"));
 				});
 
 			return promise;

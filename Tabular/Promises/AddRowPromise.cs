@@ -22,7 +22,7 @@ namespace Tabular.Promises
 	    private static void DataTableNotNull(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload dataTableWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
 	        if (dataTableWorkload.StudentHarborModels == null)
-		        actions.Abort(new GenericEventMessage(0, 1, "The datatable is null blocking the promise from executing."));
+		        actions.Abort(new GenericEventMessage("The datatable is null blocking the promise from executing.", 1));
         }
 
         private static void AddColumn(IHandlePromiseActions actions, GenericConfig genericConfig, DataTableWorkload workload, GenericRequest genericRequest, GenericResponse genericResponse)

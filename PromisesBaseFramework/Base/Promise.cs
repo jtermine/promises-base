@@ -279,7 +279,6 @@ namespace Termine.Promises.Base
         /// </summary>
         public int ExecutorsCount => _context.Executors.Count;
 
-        public string Secret => PromiseConfigurator.PxConfigSection.PxApplicationGroup.Secret;
 
 	    /// <summary>
         /// Orders a promise to execute ('run') its validator, authChallenger, and exector tasks asynchronously
@@ -328,7 +327,7 @@ namespace Termine.Promises.Base
 	        }
             catch (Exception ex)
             {
-                Error(new GenericEventMessage(ApplicationGroupId, ex));
+                Error(new GenericEventMessage(ex));
                 Trace(PromiseMessages.PromiseFail);
             }
         }
@@ -439,7 +438,7 @@ namespace Termine.Promises.Base
         /// <param name="ex"></param>
         public void Block(Exception ex)
         {
-            Block(new GenericEventMessage(ApplicationGroupId, ex));
+            Block(new GenericEventMessage(ex));
             _context.TokenSource.Cancel();
         }
 
@@ -449,7 +448,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Trace(Exception ex)
         {
-            Trace(new GenericEventMessage(ApplicationGroupId, ex));
+            Trace(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -458,7 +457,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Debug(Exception ex)
         {
-            Debug(new GenericEventMessage(ApplicationGroupId, ex));
+            Debug(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -467,7 +466,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Info(Exception ex)
         {
-            Info(new GenericEventMessage(ApplicationGroupId, ex));
+            Info(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -476,7 +475,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Warn(Exception ex)
         {
-            Warn(new GenericEventMessage(ApplicationGroupId, ex));
+            Warn(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -485,7 +484,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Error(Exception ex)
         {
-            Error(new GenericEventMessage(ApplicationGroupId, ex));
+            Error(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -494,7 +493,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Fatal(Exception ex)
         {
-            Fatal(new GenericEventMessage(ApplicationGroupId, ex));
+            Fatal(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -504,7 +503,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void Abort(Exception ex)
         {
-            Abort(new GenericEventMessage(ApplicationGroupId, ex));
+            Abort(new GenericEventMessage(ex));
         }
 
         /// <summary>
@@ -514,7 +513,7 @@ namespace Termine.Promises.Base
         /// <param name="ex">an exception object</param>
         public void AbortOnAccessDenied(Exception ex)
         {
-            AbortOnAccessDenied(new GenericEventMessage(ApplicationGroupId, ex));
+            AbortOnAccessDenied(new GenericEventMessage(ex));
         }
 
 	    /// <summary>
@@ -531,8 +530,8 @@ namespace Termine.Promises.Base
 			_context.WorkloadCtors.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
 			{
 				Action = action,
-				EndMessage = PromiseMessages.PreStartActionStopped(ApplicationGroupId, actionId),
-				StartMessage = PromiseMessages.PreStartActionStarted(ApplicationGroupId, actionId),
+				EndMessage = PromiseMessages.PreStartActionStopped(actionId),
+				StartMessage = PromiseMessages.PreStartActionStarted(actionId),
 				HandlerName = actionId,
                 Control = control
             });
@@ -554,8 +553,8 @@ namespace Termine.Promises.Base
             _context.PreStartActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.PreStartActionStopped(ApplicationGroupId, actionId),
-                StartMessage = PromiseMessages.PreStartActionStarted(ApplicationGroupId, actionId),
+                EndMessage = PromiseMessages.PreStartActionStopped(actionId),
+                StartMessage = PromiseMessages.PreStartActionStarted(actionId),
                 HandlerName = actionId,
                 Control = control
             });
@@ -577,8 +576,8 @@ namespace Termine.Promises.Base
             _context.PostEndActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.PostEndActionStopped(ApplicationGroupId, actionId),
-                StartMessage = PromiseMessages.PostEndActionStarted(ApplicationGroupId, actionId),
+                EndMessage = PromiseMessages.PostEndActionStopped(actionId),
+                StartMessage = PromiseMessages.PostEndActionStarted(actionId),
                 HandlerName = actionId,
                 Control = control
             });
@@ -600,8 +599,8 @@ namespace Termine.Promises.Base
             _context.Validators.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.ValidatorStopped(ApplicationGroupId, actionId),
-                StartMessage = PromiseMessages.ValidatorStarted(ApplicationGroupId, actionId),
+                EndMessage = PromiseMessages.ValidatorStopped(actionId),
+                StartMessage = PromiseMessages.ValidatorStarted(actionId),
                 HandlerName = actionId,
                 Control = control
             });
@@ -623,8 +622,8 @@ namespace Termine.Promises.Base
             _context.AuthChallengers.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.AuthChallengerStopped(ApplicationGroupId, actionId),
-                StartMessage = PromiseMessages.AuthChallengerStarted(ApplicationGroupId, actionId),
+                EndMessage = PromiseMessages.AuthChallengerStopped(actionId),
+                StartMessage = PromiseMessages.AuthChallengerStarted(actionId),
                 HandlerName = actionId
             });
 
@@ -645,8 +644,8 @@ namespace Termine.Promises.Base
             _context.Executors.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.ExecutorStopped(ApplicationGroupId, actionId),
-                StartMessage = PromiseMessages.ExecutorStarted(ApplicationGroupId, actionId),
+                EndMessage = PromiseMessages.ExecutorStopped(actionId),
+                StartMessage = PromiseMessages.ExecutorStarted(actionId),
                 HandlerName = actionId,
                 Control = control
             });
@@ -667,8 +666,8 @@ namespace Termine.Promises.Base
             _context.XferActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
             {
                 Action = action,
-                EndMessage = PromiseMessages.XferActionStopped(ApplicationGroupId, actionId),
-                StartMessage = PromiseMessages.XferActionStarted(ApplicationGroupId, actionId),
+                EndMessage = PromiseMessages.XferActionStopped(actionId),
+                StartMessage = PromiseMessages.XferActionStarted(actionId),
                 HandlerName = actionId
             });
 

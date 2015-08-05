@@ -95,7 +95,7 @@ namespace HarborDataFrameworkTest.HarborTestObjects
 
 		public void ChangeFirstName()
 		{
-			_studentModel.Properties[nameof(FirstName)]
+            _studentModel.AddProperty(nameof(FirstName))
 				.TypeIsString("Justin");
 		}
 

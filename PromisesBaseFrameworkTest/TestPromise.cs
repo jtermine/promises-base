@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using PromisesBaseFrameworkTest.TestPromiseComponents;
 using Termine.Promises.Base.Generics;
-using Termine.Promises.Base.Interfaces;
 
 namespace PromisesBaseFrameworkTest
 {
@@ -20,7 +19,7 @@ namespace PromisesBaseFrameworkTest
 
 			promise.WithExecutor("exec", (p, c, w, rq, rx) =>
 			{
-				p.Trace(GenericEventMessage.New(p.PromiseName, EnumEventType.Info));
+				p.Trace(new GenericEventMessage(p.PromiseName));
 				rx.OutputString = "new output";
 			});
 

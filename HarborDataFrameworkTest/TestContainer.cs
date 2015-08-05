@@ -66,9 +66,8 @@ namespace HarborDataFrameworkTest
 			Assert.IsTrue(personTestObject.CanPlaySports);
 
 			Assert.IsTrue(personTestObject.TestingTimeRequired == 120);
-
-
-			for (int i = 0; i < 10; i++)
+            
+			for (var i = 0; i < 10; i++)
 			{
 				Assert.IsTrue(personTestObject.LetterGrade == "A");
 			}
@@ -159,8 +158,8 @@ namespace HarborDataFrameworkTest
 		[Test]
 		public void TestOnePlusOne()
 		{
-			var var1 = 5;
-			var var2 = 10;
+			var var1 = 2;
+			var var2 = 0;
 
 			var result = var1 + var2;
 

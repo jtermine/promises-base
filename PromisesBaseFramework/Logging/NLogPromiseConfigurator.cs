@@ -46,7 +46,7 @@ namespace Termine.Promises.Logging
 
 			theEvent.Properties.Add("RequestId", promise.PromiseId);
 
-			var messageNumber = $"{message.EventType}.{message.EventApplicationGroup}.{message.EventNumber}.{message.MinorEventNumber}";
+			var messageNumber = $"{message.EventNumber}.{message.MinorEventNumber}";
 
 			theEvent.Properties.Add("EventTypeId", messageNumber);
 			theEvent.Properties.Add("EventPublicDetails", message.EventPublicDetails);
