@@ -56,7 +56,7 @@ namespace Termine.Promises.Base
             public Dictionary<string, object> Objects = new Dictionary<string, object>();
              */
              
-            public readonly CancellationTokenSource TokenSource = new CancellationTokenSource();
+            public CancellationTokenSource TokenSource { get; private set; } =  new CancellationTokenSource();
 
             /// <summary>
             /// a collection of actions that execute in sequence before a promise starts
@@ -144,6 +144,11 @@ namespace Termine.Promises.Base
 			/// </summary>
 			public PromiseHandlerQueue<IHandlePromiseActions> SuccessHandlers { get; } = new PromiseHandlerQueue<IHandlePromiseActions>();
 
+
+		    public void ResetCancellationToken()
+		    {
+                TokenSource = new CancellationTokenSource();
+		    }
         }
 
         private readonly PromiseContext _context = new PromiseContext();
@@ -303,23 +308,33 @@ namespace Termine.Promises.Base
 
 	    private void Execute()
 	    {
-	        try
+
+            _context.ResetCancellationToken();
+
+            IsTerminated = false;
+            IsBlocked = false;
+
+            try
+            {
+                _context.WorkloadCtors.Invoke(this, Config, Workload, Request, Response);
+                _context.PreStartActions.Invoke(this, Config, Workload, Request, Response);
+            }
+            catch (Exception ex)
+            {
+                Error(new GenericEventMessage(ex));
+            }
+
+            try
 	        {
-	            IsTerminated = false;
-	            IsBlocked = false;
-
 	            Trace(PromiseMessages.PromiseStarted);
-
-	            _context.WorkloadCtors.Invoke(this, Config, Workload, Request, Response);
-	            _context.PreStartActions.Invoke(this, Config, Workload, Request, Response);
+	            
 	            _context.AuthChallengers.Invoke(this, Config, Workload, Request, Response);
 	            _context.Validators.Invoke(this, Config, Workload, Request, Response);
 	            _context.Executors.Invoke(this, Config, Workload, Request, Response);
                 _context.XferActions.Invoke(this, Config, Workload, Request, Response);
                 _context.SuccessHandlers.Invoke(this, PromiseMessages.PromiseSuccess);
-                _context.PostEndActions.Invoke(this, Config, Workload, Request, Response, true);
 
-	            Trace(PromiseMessages.PromiseSuccess);
+                Trace(PromiseMessages.PromiseSuccess);
 	        }
 	        catch (OperationCanceledException)
 	        {
@@ -330,6 +345,16 @@ namespace Termine.Promises.Base
                 Error(new GenericEventMessage(ex));
                 Trace(PromiseMessages.PromiseFail);
             }
+
+	        try
+	        {
+                _context.PostEndActions.Invoke(this, Config, Workload, Request, Response, true);
+            }
+	        catch (Exception ex)
+	        {
+                Error(new GenericEventMessage(ex));
+	        }
+
         }
 
         /// <summary>

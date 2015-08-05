@@ -23,9 +23,22 @@ namespace PromisesBaseFrameworkTest
 				rx.OutputString = "new output";
 			});
 
+
 			promise.Run();
 
-			var response = promise.SerializeResponse();
+            promise.Abort(new GenericEventMessage("Abort promise-1"));
+
+            promise.Run();
+
+            promise.Abort(new GenericEventMessage("Abort promise-2"));
+            
+            promise.Run();
+
+            promise.Abort(new GenericEventMessage("Abort promise-3"));
+            
+            promise.Run();
+
+            var response = promise.SerializeResponse();
 
 			Assert.IsNotEmpty(response);
 

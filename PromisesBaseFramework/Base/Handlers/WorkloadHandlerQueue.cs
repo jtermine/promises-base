@@ -25,7 +25,7 @@ namespace Termine.Promises.Base.Handlers
         {
             _queue.ForEach(a =>
             {
-                promise.CancellationToken.ThrowIfCancellationRequested();
+                if (!ignoreBlockOrTermination) promise.CancellationToken.ThrowIfCancellationRequested();
 
                 if (!ignoreBlockOrTermination & (promise.IsTerminated || promise.IsBlocked)) return;
 
