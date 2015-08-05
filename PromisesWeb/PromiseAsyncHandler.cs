@@ -53,7 +53,7 @@ namespace Termine.Promises.Web
                 
                 var promiseFactory = new TT();
 
-                var response = promiseFactory.Run(json);
+                var response = promiseFactory.Run(json, HttpContext.Current.Server.MapPath("~/"));
 
                 context.Response.AddHeader("Content-Type", "application/json");
                 context.Response.Write(response);

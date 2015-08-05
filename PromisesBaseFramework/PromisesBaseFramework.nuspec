@@ -7,7 +7,7 @@
     <authors>Joseph Termine</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A base library to implement a promise object for use in a railway programming pattern.</description>
-    <releaseNotes>Introductory release for Promises.base</releaseNotes>
+    <releaseNotes>Introductory release for Promises</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Termine Promises</tags>
   </metadata>
