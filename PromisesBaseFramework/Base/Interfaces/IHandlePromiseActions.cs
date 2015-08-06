@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 
 namespace Termine.Promises.Base.Interfaces
@@ -6,6 +7,8 @@ namespace Termine.Promises.Base.Interfaces
 	public interface IHandlePromiseActions
 	{
         CancellationToken CancellationToken { get; }
+        HttpStatusCode ReturnHttpStatusCode { get; }
+        string ReturnHttpMessage { get; }
 		bool IsBlocked { get; }
 		bool IsTerminated { get; }
 
@@ -17,7 +20,6 @@ namespace Termine.Promises.Base.Interfaces
 		string PromiseId { get; }
 		string LoggerName { get; }
 		string PromiseName { get; }
-		int ApplicationGroupId { get; }
 		int AuthChallengersCount { get; }
 		int ValidatorsCount { get; }
 		int ExecutorsCount { get; }
@@ -43,5 +45,16 @@ namespace Termine.Promises.Base.Interfaces
 		void Abort(Exception ex);
 		void AbortOnAccessDenied(Exception ex);
 
-	}
+        void Block(string message);
+        void Trace(string message);
+        void Debug(string message);
+        void Info(string message);
+        void Warn(string message);
+        void Error(string message);
+        void Fatal(string message);
+        void Abort(string message);
+        void AbortOnAccessDenied(string message);
+        void Stop(string message);
+
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -169,6 +170,8 @@ namespace Termine.Promises.Base
         }
 
 	    public CancellationToken CancellationToken => _context.TokenSource.Token;
+	    public HttpStatusCode ReturnHttpStatusCode { get; private set; } = HttpStatusCode.OK;
+	    public string ReturnHttpMessage { get; private set; } = "OK";
 
 	    /// <summary>
         /// Reports whether the promise has been blocked from executing
@@ -245,11 +248,6 @@ namespace Termine.Promises.Base
 		public string LoggerName => $"{PromiseName}.{PromiseId}";
 
 		/// <summary>
-		/// The application groupId that the promise will run under -- used when passing events across applications.
-		/// </summary>
-		public int ApplicationGroupId => 1;
-
-        /// <summary>
         /// Exposes the promise's configuration
         /// </summary>
         private TC Config { get; set; }
@@ -366,7 +364,7 @@ namespace Termine.Promises.Base
         {
             IsTerminated = true;
             IsBlocked = true;
-
+            ReturnHttpStatusCode = HttpStatusCode.Forbidden;
             _context.BlockHandlers.Invoke(this, message);
         }
 
@@ -414,6 +412,10 @@ namespace Termine.Promises.Base
         public void Error(IHandleEventMessage message)
         {
             IsTerminated = true;
+            ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
+            ReturnHttpMessage = message.IsSensitiveMessage
+                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
+                : $"{message.EventPublicMessage} > {LoggerName}";
             _context.ErrorHandlers.Invoke(this, message);
         }
 
@@ -424,6 +426,10 @@ namespace Termine.Promises.Base
         public void Fatal(IHandleEventMessage message)
         {
             IsTerminated = true;
+            ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
+            ReturnHttpMessage = message.IsSensitiveMessage
+                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
+                : $"{message.EventPublicMessage} > {LoggerName}";
             _context.FatalHandlers.Invoke(this, message);
         }
 
@@ -435,6 +441,10 @@ namespace Termine.Promises.Base
         public void Abort(IHandleEventMessage message)
         {
             IsTerminated = true;
+            ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
+            ReturnHttpMessage = message.IsSensitiveMessage
+                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
+                : $"{message.EventPublicMessage} > {LoggerName}";
             _context.AbortHandlers.Invoke(this, message);
             _context.TokenSource.Cancel();
         }
@@ -447,6 +457,10 @@ namespace Termine.Promises.Base
         public void AbortOnAccessDenied(IHandleEventMessage message)
         {
             IsTerminated = true;
+            ReturnHttpStatusCode = HttpStatusCode.Unauthorized;
+            ReturnHttpMessage = message.IsSensitiveMessage
+                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
+                : $"{message.EventPublicMessage} > {LoggerName}";
             _context.AbortOnAccessDeniedHandlers.Invoke(this, message);
         }
 
@@ -539,6 +553,57 @@ namespace Termine.Promises.Base
         public void AbortOnAccessDenied(Exception ex)
         {
             AbortOnAccessDenied(new GenericEventMessage(ex));
+        }
+
+	    public void Block(string message)
+	    {
+	        Block(new GenericEventMessage(message));
+	    }
+
+	    public void Trace(string message)
+	    {
+            Trace(new GenericEventMessage(message));
+        }
+
+	    public void Debug(string message)
+	    {
+            Debug(new GenericEventMessage(message));
+        }
+
+	    public void Info(string message)
+	    {
+            Info(new GenericEventMessage(message));
+        }
+
+	    public void Warn(string message)
+	    {
+            Warn(new GenericEventMessage(message));
+        }
+
+	    public void Error(string message)
+	    {
+            Error(new GenericEventMessage(message));
+        }
+
+	    public void Fatal(string message)
+	    {
+            Fatal(new GenericEventMessage(message));
+        }
+
+	    public void Abort(string message)
+	    {
+            Abort(new GenericEventMessage(message));
+        }
+
+	    public void AbortOnAccessDenied(string message)
+	    {
+            AbortOnAccessDenied(new GenericEventMessage(message));
+        }
+
+	    public void Stop(string message)
+	    {
+            Trace(message);
+            Stop();
         }
 
 	    /// <summary>
