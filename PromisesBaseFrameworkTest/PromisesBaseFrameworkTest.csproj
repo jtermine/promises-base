@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetSitesPromise\GetSitesRequest.cs" />
+    <Compile Include="GetSitesPromise\GetSitesResponse.cs" />
+    <Compile Include="GetSitesPromise\SiteEntity.cs" />
     <Compile Include="Interfaces\IAmAClaimsRequest.cs" />
     <Compile Include="TestPromise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

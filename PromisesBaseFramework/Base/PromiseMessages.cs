@@ -83,6 +83,11 @@ namespace Termine.Promises.Base
         public static readonly GenericEventMessage PromiseAborted = new GenericEventMessage("The promise was aborted.", 14);
 
         /// <summary>
+        /// A promise action to be invoked on a control thread was skipped because no control handle was created.
+        /// </summary>
+        public static readonly GenericEventMessage PromiseActionSkippedNoHandle = new GenericEventMessage("A promise action to be invoked on a control thread was skipped because no control handle was created.  It may have been asynchronously invoked on a control that does not exist or may have been disposed.", 80);
+
+        /// <summary>
         /// AuthChallenger started {actionId}
         /// </summary>
         /// <param name="actionId">the actionId of the authChallenger that started</param>

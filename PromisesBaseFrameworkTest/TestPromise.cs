@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
+using PromisesBaseFrameworkTest.GetSitesPromise;
 using PromisesBaseFrameworkTest.TestPromiseComponents;
+using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;
 
 namespace PromisesBaseFrameworkTest
@@ -43,5 +45,24 @@ namespace PromisesBaseFrameworkTest
 			Assert.IsNotEmpty(response);
 
 		}
+
+	    [Test]
+	    public void TestXfer()
+	    {
+            var getSitesPromise = new Promise<GenericConfig, GenericWorkload, GetSitesRequest, GetSitesResponse>();
+            
+            getSitesPromise.WithXferAction("GetSites", (config, p, c, w, rq, rx) =>
+            {
+                config.BaseUri = @"http://localhost.fiddler/api/1.0/testService";
+                config.EndpointUri = @"/GetSites";
+            });
+
+	        getSitesPromise.WithPostEnd("testPostEnd", (p, c, w, rq, rx) =>
+	        {
+                Assert.IsTrue(rx.Sites.Count > 0);
+	        });
+            
+            getSitesPromise.Run();
+        }
     }
 }

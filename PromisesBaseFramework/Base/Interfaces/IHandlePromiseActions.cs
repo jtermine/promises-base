@@ -17,6 +17,8 @@ namespace Termine.Promises.Base.Interfaces
 		string SerializeConfig();
 		string SerializeResponse();
 
+	    void DeserializeResponse(string json);
+
 		string PromiseId { get; }
 		string LoggerName { get; }
 		string PromiseName { get; }

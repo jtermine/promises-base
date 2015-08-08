@@ -42,6 +42,10 @@
       <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -61,7 +65,11 @@
     <Compile Include="Base\Generics\GenericWorkload.cs" />
     <Compile Include="Base\Handlers\PromiseHandler.cs" />
     <Compile Include="Base\Handlers\PromiseHandlerQueue.cs" />
+    <Compile Include="Base\Handlers\RestSharpJsonSerializer.cs" />
     <Compile Include="Base\Handlers\WorkloadHandler.cs" />
+    <Compile Include="Base\Handlers\WorkloadXferHandler.cs" />
+    <Compile Include="Base\Handlers\WorkloadXferHandlerConfig.cs" />
+    <Compile Include="Base\Handlers\WorkloadXferHandlerQueue.cs" />
     <Compile Include="Base\Handlers\WorkloadHandlerQueue.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseFactory.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseRequest.cs" />

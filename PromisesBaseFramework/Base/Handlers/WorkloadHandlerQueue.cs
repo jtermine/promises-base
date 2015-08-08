@@ -33,6 +33,12 @@ namespace Termine.Promises.Base.Handlers
 
                 if (a.Control != default(Control))
                 {
+                    if (!a.Control.IsHandleCreated)
+                    {
+                        promise.Warn(PromiseMessages.PromiseActionSkippedNoHandle);
+                        return;
+                    }
+
                     a.Control?.Invoke(a.Action, promise, config, workload, request, response);
                 }
                 else

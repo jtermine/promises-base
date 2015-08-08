@@ -92,7 +92,7 @@ namespace Termine.Promises.Base
 			/// <summary>
 			/// a collection of actions that execute in sequence when transmitting a promise to a services
 			/// </summary>
-			public readonly WorkloadHandlerQueue<TC, TW, TR, TE> XferActions = new WorkloadHandlerQueue<TC, TW, TR, TE>();
+			public readonly WorkloadXferHandlerQueue<TC, TW, TR, TE> XferActions = new WorkloadXferHandlerQueue<TC, TW, TR, TE>();
 
 			/// <summary>
 			/// a collection of block handlers -- there are executed when a promise is blocked
@@ -239,7 +239,14 @@ namespace Termine.Promises.Base
             return JsonConvert.SerializeObject(Response, _jsonSerializerSettings);
         }
 
-        /// <summary>
+	    public void DeserializeResponse(string json)
+	    {
+	        if (string.IsNullOrEmpty(json)) Warn("Attempting to deserialize a response object by providing a null or empty JSON string.  This will be skipped.");
+
+	        Response = JsonConvert.DeserializeObject<TE>(json);
+	    }
+
+	    /// <summary>
         /// The Id for the promise.  Gets sent to the requestId of the workload if one isn't already provided.
         /// </summary>
         public string PromiseId { get; }
@@ -265,7 +272,7 @@ namespace Termine.Promises.Base
         /// <summary>
         /// 
         /// </summary>
-        public TE Response { get; }
+        public TE Response { get; private set; }
 
         /// <summary>
         /// the number of authChallenger actions established on this promise
@@ -328,8 +335,8 @@ namespace Termine.Promises.Base
 	            
 	            _context.AuthChallengers.Invoke(this, Config, Workload, Request, Response);
 	            _context.Validators.Invoke(this, Config, Workload, Request, Response);
-	            _context.Executors.Invoke(this, Config, Workload, Request, Response);
                 _context.XferActions.Invoke(this, Config, Workload, Request, Response);
+                _context.Executors.Invoke(this, Config, Workload, Request, Response);
                 _context.SuccessHandlers.Invoke(this, PromiseMessages.PromiseSuccess);
 
                 Trace(PromiseMessages.PromiseSuccess);
@@ -743,23 +750,28 @@ namespace Termine.Promises.Base
             return this;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-        public Promise<TC, TW, TR, TE> WithXferAction(string actionId, Action<IHandlePromiseActions, TC, TW, TR, TE> action)
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="configurator"></param>
+	    /// <param name="action"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithXferAction(string actionId, Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TW, TR, TE> configurator, Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TW, TR, TE> action = default(Action<WorkloadXferHandlerConfig,IHandlePromiseActions, TC, TW, TR, TE>))
         {
-            if (string.IsNullOrEmpty(actionId) || action == null) return this;
+            if (string.IsNullOrEmpty(actionId) || action == configurator) return this;
 
-            _context.XferActions.Enqueue(new WorkloadHandler<TC, TW, TR, TE>
-            {
-                Action = action,
-                EndMessage = PromiseMessages.XferActionStopped(actionId),
-                StartMessage = PromiseMessages.XferActionStarted(actionId),
-                HandlerName = actionId
-            });
+	        var workloadXferHandler = new WorkloadXferHandler<TC, TW, TR, TE>
+	        {
+	            Configurator = configurator,
+	            EndMessage = PromiseMessages.XferActionStopped(actionId),
+	            StartMessage = PromiseMessages.XferActionStarted(actionId),
+	            HandlerName = actionId
+	        };
+
+	        if (action != null) workloadXferHandler.Action = action;
+
+            _context.XferActions.Enqueue(workloadXferHandler);
 
             return this;
         }
