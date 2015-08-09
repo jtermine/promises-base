@@ -1,22 +1,27 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Termine.Promises.Base.Interfaces
 {
-	public interface IHandlePromiseEvents
-	{
+	public interface IHandlePromiseEvents<out TC, out TW, out TR, out TE>
+        where TC : IHandlePromiseConfig
+        where TW : IAmAPromiseWorkload
+        where TR : IAmAPromiseRequest
+        where TE : IAmAPromiseResponse
+    {
 		string PromiseId { get; }
 		string LoggerName { get; }
 		string PromiseName { get; }
 
-		void WithBlockHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-        void WithTraceHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-        void WithDebugHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-        void WithInfoHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-        void WithWarnHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-        void WithErrorHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-        void WithFatalHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-		void WithAbortHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-		void WithAbortOnAccessDeniedHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
-		void WithSuccessHandler(string actionId, Action<IHandlePromiseActions, IHandleEventMessage> action);
+		void WithBlockHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+        void WithTraceHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+        void WithDebugHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+        void WithInfoHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+        void WithWarnHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+        void WithErrorHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+        void WithFatalHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+		void WithAbortHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+		void WithAbortOnAccessDeniedHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
+		void WithSuccessHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control));
 	}
 }
