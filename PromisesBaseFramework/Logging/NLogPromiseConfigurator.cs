@@ -1,16 +1,13 @@
 ﻿using System.Globalization;
 using NLog;
+using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Logging
 {
-	public class NLogPromiseConfigurator<TC, TW, TR, TE> : IConfigurePromise<TC, TW, TR, TE>
-        where TC : IHandlePromiseConfig
-        where TW : IAmAPromiseWorkload
-        where TR : IAmAPromiseRequest
-        where TE : IAmAPromiseResponse
+	public class NLogPromiseConfigurator : IConfigurePromise<GenericConfig, GenericWorkload, GenericRequest, GenericResponse>
     {
-		public void Configure(IHandlePromiseEvents<TC, TW, TR, TE> promise)
+		public void Configure(IHandlePromiseEvents<GenericConfig, GenericWorkload, GenericRequest, GenericResponse> promise)
 		{
 			var log = LogManager.GetLogger(promise.LoggerName);
 
@@ -42,7 +39,7 @@ namespace Termine.Promises.Logging
 				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
 		}
 
-		private static void LogEvent<TT>(TT message, Logger logger, LogLevel logLevel, IHandlePromiseActions promise, params object[] options)
+		private static void LogEvent<TT>(TT message, ILoggerBase logger, LogLevel logLevel, IHandlePromiseActions promise, params object[] options)
 			where TT : IHandleEventMessage
 		{
 			var theEvent = new LogEventInfo(logLevel, logger.Name, CultureInfo.DefaultThreadCurrentCulture,

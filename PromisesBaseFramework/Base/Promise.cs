@@ -776,6 +776,18 @@ namespace Termine.Promises.Base
             return this;
         }
 
+	    public void WithUserMessageHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = null)
+	    {
+	        WithBlockHandler($"{actionId}.block", action, control);
+            WithInfoHandler($"{actionId}.info", action, control);
+            WithWarnHandler($"{actionId}.warn", action, control);
+            WithErrorHandler($"{actionId}.error", action, control);
+            WithFatalHandler($"{actionId}.fatal", action, control);
+            WithAbortOnAccessDeniedHandler($"{actionId}.accessDenied", action, control);
+            WithAbortHandler($"{actionId}.abort", action, control);
+            WithSuccessHandler($"{actionId}.success", action, control);
+        }
+
 	    /// <summary>
 	    /// 
 	    /// </summary>
@@ -833,13 +845,14 @@ namespace Termine.Promises.Base
 
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="actionId"></param>
-		/// <param name="action"></param>
-		/// <returns></returns>
-        public void WithInfoHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="action"></param>
+	    /// <param name="control"></param>
+	    /// <returns></returns>
+	    public void WithInfoHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = default(Control))
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return;
 
