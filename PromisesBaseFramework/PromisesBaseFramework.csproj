@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.5.6.2.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
@@ -67,14 +71,19 @@
     <Compile Include="Base\Handlers\PromiseHandlerQueue.cs" />
     <Compile Include="Base\Handlers\RestSharpJsonSerializer.cs" />
     <Compile Include="Base\Handlers\WorkloadHandler.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlConfigDelegate.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlHandler.cs" />
     <Compile Include="Base\Handlers\WorkloadXferHandler.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlHandlerConfig.cs" />
     <Compile Include="Base\Handlers\WorkloadXferHandlerConfig.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlHandlerQueue.cs" />
     <Compile Include="Base\Handlers\WorkloadXferHandlerQueue.cs" />
     <Compile Include="Base\Handlers\WorkloadHandlerQueue.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseFactory.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseRequest.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseWorkload.cs" />
+    <Compile Include="Base\Interfaces\IAmASqlObject.cs" />
     <Compile Include="Base\Interfaces\IConfigurePromise.cs" />
     <Compile Include="Base\Interfaces\IHandleEventMessage.cs" />
     <Compile Include="Base\Interfaces\IHandlePromiseActions.cs" />
@@ -89,6 +98,9 @@
     <Compile Include="Config\PxInit.cs" />
     <Compile Include="Config\PxInitsCollection.cs" />
     <Compile Include="Config\PxConfigSection.cs" />
+    <Compile Include="Config\PxProtectedConfigurationProvider.cs" />
+    <Compile Include="Helpers\Functions.cs" />
+    <Compile Include="Logging\ChaosMonkeyPromiseConfigurator.cs" />
     <Compile Include="Logging\NLogPromiseConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -200,6 +200,34 @@ namespace Termine.Promises.Base
         }
 
         /// <summary>
+        /// SqlAction started {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that started</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage SqlActionStarted(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventNumber = 100,
+                EventPublicMessage = $"SqlAction started {actionId}"
+            };
+        }
+
+        /// <summary>
+        /// SqlAction stopped {actionId}
+        /// </summary>
+        /// <param name="actionId">the actionId of the executor that stopped</param>
+        /// <returns>an event message</returns>
+        public static GenericEventMessage SqlActionStopped(string actionId)
+        {
+            return new GenericEventMessage
+            {
+                EventNumber = 101,
+                EventPublicMessage = $"SqlAction stopped {actionId}"
+            };
+        }
+
+        /// <summary>
         /// PreStartAction started {actionId}
         /// </summary>
         /// <param name="actionId">the actionId of the PreStartAction that started</param>

@@ -58,5 +58,11 @@ namespace Termine.Promises.Base.Interfaces
         void AbortOnAccessDenied(string message);
         void Stop(string message);
 
-    }
+	    void ThrowChaos();
+	    void ThrowChaosOnConfig();
+	    void ThrowChaosOnWorkload();
+	    void ThrowChaosOnRequest();
+	    void ThrowChaosOnResponse();
+
+	}
 }

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Dapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Handlers;
 using Termine.Promises.Base.Interfaces;
+using Termine.Promises.Helpers;
 
 namespace Termine.Promises.Base
 {
@@ -90,14 +93,19 @@ namespace Termine.Promises.Base
 			public readonly WorkloadHandlerQueue<TC, TW, TR, TE> PostEndActions = new WorkloadHandlerQueue<TC, TW, TR, TE>();
 
 			/// <summary>
-			/// a collection of actions that execute in sequence when transmitting a promise to a services
+			/// a collection of actions that execute in sequence when transmitting a promise to a service
 			/// </summary>
 			public readonly WorkloadXferHandlerQueue<TC, TW, TR, TE> XferActions = new WorkloadXferHandlerQueue<TC, TW, TR, TE>();
 
-			/// <summary>
-			/// a collection of block handlers -- there are executed when a promise is blocked
+            /// <summary>
+			/// a collection of actions that execute Sql against a database server using Dapper
 			/// </summary>
-			public PromiseHandlerQueue<TC, TW, TR, TE> BlockHandlers { get; } = new PromiseHandlerQueue<TC, TW, TR, TE>();
+			public readonly WorkloadSqlHandlerQueue<TC, TW, TR, TE> SqlActions = new WorkloadSqlHandlerQueue<TC, TW, TR, TE>();
+
+            /// <summary>
+            /// a collection of block handlers -- there are executed when a promise is blocked
+            /// </summary>
+            public PromiseHandlerQueue<TC, TW, TR, TE> BlockHandlers { get; } = new PromiseHandlerQueue<TC, TW, TR, TE>();
             
 			/// <summary>
 			/// a collection of trace handlers -- these are executed when a promise is tracing
@@ -145,8 +153,7 @@ namespace Termine.Promises.Base
 			/// </summary>
 			public PromiseHandlerQueue<TC, TW, TR, TE> SuccessHandlers { get; } = new PromiseHandlerQueue<TC, TW, TR, TE>();
 
-
-		    public void ResetCancellationToken()
+            public void ResetCancellationToken()
 		    {
                 TokenSource = new CancellationTokenSource();
 		    }
@@ -336,6 +343,7 @@ namespace Termine.Promises.Base
 	            _context.AuthChallengers.Invoke(this, Config, Workload, Request, Response);
 	            _context.Validators.Invoke(this, Config, Workload, Request, Response);
                 _context.XferActions.Invoke(this, Config, Workload, Request, Response);
+                _context.SqlActions.Invoke(this, Config, Workload, Request, Response);
                 _context.Executors.Invoke(this, Config, Workload, Request, Response);
                 _context.SuccessHandlers.Invoke(PromiseMessages.PromiseSuccess, this, Config, Workload, Request, Response);
 
@@ -613,6 +621,34 @@ namespace Termine.Promises.Base
             Stop();
         }
 
+	    public void ThrowChaos()
+	    {
+	        Functions.CreateChaosInProperties(Config);
+            Functions.CreateChaosInProperties(Workload);
+            Functions.CreateChaosInProperties(Request);
+            Functions.CreateChaosInProperties(Response);
+        }
+
+	    public void ThrowChaosOnConfig()
+	    {
+            Functions.CreateChaosInProperties(Config);
+        }
+
+	    public void ThrowChaosOnWorkload()
+	    {
+            Functions.CreateChaosInProperties(Workload);
+        }
+
+	    public void ThrowChaosOnRequest()
+	    {
+            Functions.CreateChaosInProperties(Request);
+        }
+
+	    public void ThrowChaosOnResponse()
+	    {
+            Functions.CreateChaosInProperties(Response);
+        }
+
 	    /// <summary>
 	    /// 
 	    /// </summary>
@@ -775,6 +811,44 @@ namespace Termine.Promises.Base
 
             return this;
         }
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="actionId"></param>
+	    /// <param name="sqlStringFunc"></param>
+	    /// <param name="sqlAction"></param>
+	    /// <param name="connStringFunc"></param>
+	    /// <returns></returns>
+	    public Promise<TC, TW, TR, TE> WithSqlAction(string actionId, 
+            WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE> connStringFunc = default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>),
+            WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE> sqlStringFunc = default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>),
+            Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE> sqlAction = default(Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE>))
+	    {
+	        if (string.IsNullOrEmpty(actionId) || connStringFunc == default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>) || sqlStringFunc == default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>)) return this;
+
+            var configurator = new Action<WorkloadSqlHandlerConfig<TW>>(
+	            gc =>
+	            {
+	                gc.ConnectionString = connStringFunc.Invoke(this, Config, Workload, Request, Response);
+	                gc.SqlFile = sqlStringFunc.Invoke(this, Config, Workload, Request, Response);
+	            });
+
+	        var workloadSqlHandler = new WorkloadSqlHandler<TC, TW, TR, TE>
+	        {
+	            Configurator = configurator,
+	            EndMessage = PromiseMessages.SqlActionStopped(actionId),
+	            StartMessage = PromiseMessages.SqlActionStarted(actionId),
+	            HandlerName = actionId
+	        };
+
+	        if (sqlAction != default(Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE>))
+	            workloadSqlHandler.SqlAction = sqlAction;
+
+	        _context.SqlActions.Enqueue(workloadSqlHandler);
+
+	        return this;
+	    }
 
 	    public void WithUserMessageHandler(string actionId, Action<IHandleEventMessage, IHandlePromiseActions, TC, TW, TR, TE> action, Control control = null)
 	    {
