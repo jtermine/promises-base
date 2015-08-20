@@ -116,11 +116,11 @@ namespace Termine.Promises.Helpers
         public static string GetFileFromResource(string resourceFileName)
         {
 
-            var resourcePath = (from x in Assembly.GetCallingAssembly().GetManifestResourceNames()
+            var resourcePath = (from x in Assembly.GetExecutingAssembly().GetManifestResourceNames()
                                 where x.ToLower().Contains(resourceFileName.ToLower())
                                 select x).SingleOrDefault();
 
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
 
             using (var stream = assembly.GetManifestResourceStream(resourcePath))
             {
