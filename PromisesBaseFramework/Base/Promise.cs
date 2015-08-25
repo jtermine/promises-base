@@ -30,17 +30,23 @@ namespace Termine.Promises.Base
         /// </summary>
         public Promise()
         {
-            PromiseId = Guid.NewGuid().ToString("N");
+	        Init();
+        }
+
+	    public Promise(bool throwExceptions)
+	    {
+	        Init();
+	        _context.ThrowExceptions = throwExceptions;
+	    }
+
+	    private void Init()
+		{
             Config = new TC();
             Request = new TR();
             Workload = new TW();
             Response = new TE();
-	        Init();
-        }
 
-		private void Init()
-		{
-			foreach (var configurator in PromiseConfigurator<TC, TW, TR,TE>.Instance.Configurators)
+            foreach (var configurator in PromiseConfigurator<TC, TW, TR,TE>.Instance.Configurators)
 			{
 				configurator.Configure(this);
 			}
@@ -57,6 +63,8 @@ namespace Termine.Promises.Base
             /// </summary>
             public Dictionary<string, object> Objects = new Dictionary<string, object>();
              */
+
+		    public bool ThrowExceptions { get; set; }
              
             public CancellationTokenSource TokenSource { get; private set; } =  new CancellationTokenSource();
 
@@ -252,11 +260,11 @@ namespace Termine.Promises.Base
 	    }
 
 	    /// <summary>
-        /// The Id for the promise.  Gets sent to the requestId of the workload if one isn't already provided.
-        /// </summary>
-        public string PromiseId { get; }
+	    /// The Id for the promise.  Gets sent to the requestId of the workload if one isn't already provided.
+	    /// </summary>
+	    public string PromiseId { get; } = Guid.NewGuid().ToString("N");
 
-		public string PromiseName => $"{PromiseConfigurator<TC, TW, TR,TE>.PxConfigSection.PxApplicationGroup.Name}.{Request.RequestName}";
+        public string PromiseName => $"{PromiseConfigurator<TC, TW, TR,TE>.PxConfigSection.PxApplicationGroup.Name}.{Request.RequestName}";
 		public string LoggerName => $"{PromiseName}.{PromiseId}";
 
 		/// <summary>
@@ -332,6 +340,7 @@ namespace Termine.Promises.Base
             catch (Exception ex)
             {
                 Error(new GenericEventMessage(ex));
+                if (_context.ThrowExceptions) throw;
             }
 
             try
@@ -350,11 +359,13 @@ namespace Termine.Promises.Base
 	        catch (OperationCanceledException)
 	        {
 	            Info(PromiseMessages.PromiseAborted);
-	        }
+                
+            }
             catch (Exception ex)
             {
                 Error(new GenericEventMessage(ex));
                 Debug(PromiseMessages.PromiseFail);
+                if (_context.ThrowExceptions) throw;
             }
 
 	        try
@@ -364,7 +375,8 @@ namespace Termine.Promises.Base
 	        catch (Exception ex)
 	        {
                 Error(new GenericEventMessage(ex));
-	        }
+                if (_context.ThrowExceptions) throw;
+            }
 
         }
 
