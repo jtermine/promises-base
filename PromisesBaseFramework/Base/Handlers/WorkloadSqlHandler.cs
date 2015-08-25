@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using Dapper;
 using Termine.Promises.Base.Interfaces;
 using Termine.Promises.Helpers;
@@ -13,12 +15,12 @@ namespace Termine.Promises.Base.Handlers
         where TR : class, IAmAPromiseRequest, new()
         where TE : class, IAmAPromiseResponse, new()
     {
-        public Action<WorkloadSqlHandlerConfig<TW>, IHandlePromiseActions, TC, TW, TR, TE> Action { get; set; }
+        public Action<WorkloadSqlHandlerConfig, IHandlePromiseActions, TC, TW, TR, TE> Action { get; set; }
         public string HandlerName { get; set; }
         public IHandleEventMessage StartMessage { get; set; }
         public IHandleEventMessage EndMessage { get; set; }
-        public Action<WorkloadSqlHandlerConfig<TW>> Configurator { get; set; }
-        public Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE> SqlAction { get; set; }
+        public WorkloadSqlHandlerConfig WorkloadSqlHandlerConfig { get; set; }
+        public WorkloadSqlActionResultsDelegate SqlAction { get; set; }
 
         public WorkloadSqlHandler()
         {
@@ -35,12 +37,23 @@ namespace Termine.Promises.Base.Handlers
                     return;
                 }
 
-                var sql = Functions.GetFileFromResource(gc.SqlFile);
+                var sql = Functions.GetFileFromResource(gc.Assembly, gc.SqlFile);
+
+                if (string.IsNullOrEmpty(sql))
+                {
+                    p.Abort($"The sql file was not located in the assembly provided > {gc.Assembly?.FullName}.");
+                    return;
+                }
 
                 using (var conn = new SqlConnection(gc.ConnectionString))
                 {
                     var cmd = new CommandDefinition(sql, w);
-                    SqlAction.Invoke(conn, cmd, p, c, w, rq, rx);
+                    gc.SendResultsTo = new List<object>(SqlAction.Invoke(conn, cmd).Cast<object>());
+                }
+
+                if (!gc.DoesAllowNullResponse && !gc.SendResultsTo.Cast<object>().Any())
+                {
+                    p.Abort("No entries returned from specified values.");
                 }
             };
         }

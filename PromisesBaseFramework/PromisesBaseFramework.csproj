@@ -71,7 +71,8 @@
     <Compile Include="Base\Handlers\PromiseHandlerQueue.cs" />
     <Compile Include="Base\Handlers\RestSharpJsonSerializer.cs" />
     <Compile Include="Base\Handlers\WorkloadHandler.cs" />
-    <Compile Include="Base\Handlers\WorkloadSqlConfigDelegate.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlActionResultsDelegate.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlHandlerConfigDelegate.cs" />
     <Compile Include="Base\Handlers\WorkloadSqlHandler.cs" />
     <Compile Include="Base\Handlers\WorkloadXferHandler.cs" />
     <Compile Include="Base\Handlers\WorkloadSqlHandlerConfig.cs" />
