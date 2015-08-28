@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Remoting.Messaging;
+﻿using System.Reflection;
 using Dapper;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -17,7 +14,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
         [Test]
         public void TestGetSites()
         {
-            var promise = new Promise<ServiceConfig, GetFRCTBySiteW, GetFRCTBySiteRq, GetFRCTBySiteRx>();
+            var promise = new Promise<ServiceConfig, GetFRCTBySiteW, GetFRCTBySiteRq, GetFRCTBySiteRx>(true);
 
             var request = new GetFRCTBySiteRq { SiteId = 1 };
 
@@ -30,7 +27,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
             {
                 if (rq.SiteId < 1)
                 {
-                    p.Abort(new GenericEventMessage("The SiteId was either a negative integer or not provided."));
+                    p.Abort("The SiteId was either a negative integer or not provided.");
                     return;
                 }
 
