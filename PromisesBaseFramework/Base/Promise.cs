@@ -308,9 +308,9 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the async task that returns an instance of this promise object when it completes</returns>
 	    // ReSharper disable once UnusedMember.Global
-        public Task<Promise<TC, TW, TR, TE>> RunAsync()
+        public Task<Promise<TC, TW, TR, TE>> RunAsync(TR request = default(TR))
         {
-            return Task.Run(() => Run(), CancellationToken);
+            return Task.Run(() => Run(request), CancellationToken);
         }
 
         /// <summary>
@@ -318,8 +318,9 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the instance of this promise object</returns>
         // ReSharper disable once MemberCanBePrivate.Global
-        public Promise<TC, TW, TR, TE> Run()
+        public Promise<TC, TW, TR, TE> Run(TR request = default(TR))
         {
+            Request = request;
             Execute();
             return this;
         }
