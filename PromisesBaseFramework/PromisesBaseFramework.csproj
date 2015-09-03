@@ -84,6 +84,7 @@
     <Compile Include="Base\Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseWorkload.cs" />
     <Compile Include="Base\Interfaces\IAmASqlObject.cs" />
+    <Compile Include="Base\Interfaces\IAmAStrongPromiseFactory.cs" />
     <Compile Include="Base\Interfaces\IConfigurePromise.cs" />
     <Compile Include="Base\Interfaces\IHandleEventMessage.cs" />
     <Compile Include="Base\Interfaces\IHandlePromiseActions.cs" />
