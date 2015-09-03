@@ -1,5 +1,4 @@
-﻿using NLog;
-using Tabular.TabModels;
+﻿using Tabular.TabModels;
 using Tabular.Workloads;
 using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;

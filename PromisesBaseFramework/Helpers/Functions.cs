@@ -113,14 +113,14 @@ namespace Termine.Promises.Helpers
 
         }
 
-        public static string GetFileFromResource(string resourceFileName)
+        public static string GetFileFromResource(Assembly assembly, string resourceFileName)
         {
 
-            var resourcePath = (from x in Assembly.GetExecutingAssembly().GetManifestResourceNames()
+            if (assembly == default(Assembly)) return string.Empty;
+
+            var resourcePath = (from x in assembly.GetManifestResourceNames()
                                 where x.ToLower().Contains(resourceFileName.ToLower())
                                 select x).SingleOrDefault();
-
-            var assembly = Assembly.GetExecutingAssembly();
 
             using (var stream = assembly.GetManifestResourceStream(resourcePath))
             {

@@ -36,19 +36,15 @@ namespace Termine.Promises.Base.Handlers
 
                 if ((p.IsTerminated || p.IsBlocked)) return;
 
-                if (a.Configurator == null)
+                if (a.WorkloadSqlHandlerConfig == null)
                 {
                     p.Abort("No configurator was provided to the Sql handler");
                     return;
                 }
 
-                var workloadSqlHandlerConfig = new WorkloadSqlHandlerConfig<TW>();
-
-                a.Configurator.Invoke(workloadSqlHandlerConfig);
-
                 p.Trace(a.StartMessage);
 
-                a.Action.Invoke(workloadSqlHandlerConfig, p, c, w, rq, rx);
+                a.Action.Invoke(a.WorkloadSqlHandlerConfig, p, c, w, rq, rx);
 
                 p.Trace(a.EndMessage);
             });

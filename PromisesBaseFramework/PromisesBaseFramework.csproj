@@ -46,8 +46,8 @@
       <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -71,7 +71,8 @@
     <Compile Include="Base\Handlers\PromiseHandlerQueue.cs" />
     <Compile Include="Base\Handlers\RestSharpJsonSerializer.cs" />
     <Compile Include="Base\Handlers\WorkloadHandler.cs" />
-    <Compile Include="Base\Handlers\WorkloadSqlConfigDelegate.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlActionResultsDelegate.cs" />
+    <Compile Include="Base\Handlers\WorkloadSqlHandlerConfigDelegate.cs" />
     <Compile Include="Base\Handlers\WorkloadSqlHandler.cs" />
     <Compile Include="Base\Handlers\WorkloadXferHandler.cs" />
     <Compile Include="Base\Handlers\WorkloadSqlHandlerConfig.cs" />

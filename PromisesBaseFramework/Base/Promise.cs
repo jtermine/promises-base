@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Dapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Termine.Promises.Base.Generics;
@@ -828,35 +826,28 @@ namespace Termine.Promises.Base
 	    /// 
 	    /// </summary>
 	    /// <param name="actionId"></param>
-	    /// <param name="sqlStringFunc"></param>
 	    /// <param name="sqlAction"></param>
-	    /// <param name="connStringFunc"></param>
+	    /// <param name="configFunc"></param>
 	    /// <returns></returns>
 	    public Promise<TC, TW, TR, TE> WithSqlAction(string actionId, 
-            WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE> connStringFunc = default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>),
-            WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE> sqlStringFunc = default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>),
-            Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE> sqlAction = default(Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE>))
+            WorkloadSqlHandlerConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE> configFunc,
+            WorkloadSqlActionResultsDelegate sqlAction)
 	    {
-	        if (string.IsNullOrEmpty(actionId) || connStringFunc == default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>) || sqlStringFunc == default(WorkloadSqlConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>)) return this;
+	        if (string.IsNullOrEmpty(actionId) ||
+	            configFunc == default(WorkloadSqlHandlerConfigDelegate<IHandlePromiseActions, TC, TW, TR, TE>))
+	            return this;
 
-            var configurator = new Action<WorkloadSqlHandlerConfig<TW>>(
-	            gc =>
-	            {
-	                gc.ConnectionString = connStringFunc.Invoke(this, Config, Workload, Request, Response);
-	                gc.SqlFile = sqlStringFunc.Invoke(this, Config, Workload, Request, Response);
-	            });
+	        var workloadSqlHandlerConfig = configFunc.Invoke(this, Config, Workload, Request, Response);
 
 	        var workloadSqlHandler = new WorkloadSqlHandler<TC, TW, TR, TE>
 	        {
-	            Configurator = configurator,
+	            WorkloadSqlHandlerConfig = workloadSqlHandlerConfig,
 	            EndMessage = PromiseMessages.SqlActionStopped(actionId),
 	            StartMessage = PromiseMessages.SqlActionStarted(actionId),
-	            HandlerName = actionId
+	            HandlerName = actionId,
+	            SqlAction = sqlAction
 	        };
-
-	        if (sqlAction != default(Action<SqlConnection, CommandDefinition, IHandlePromiseActions, TC, TW, TR, TE>))
-	            workloadSqlHandler.SqlAction = sqlAction;
-
+            
 	        _context.SqlActions.Enqueue(workloadSqlHandler);
 
 	        return this;
