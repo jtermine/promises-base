@@ -320,7 +320,7 @@ namespace Termine.Promises.Base
         // ReSharper disable once MemberCanBePrivate.Global
         public Promise<TC, TW, TR, TE> Run(TR request = default(TR))
         {
-            Request = request;
+            if (request != default(TR)) Request = request;
             Execute();
             return this;
         }
