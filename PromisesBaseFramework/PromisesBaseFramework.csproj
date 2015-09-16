@@ -66,6 +66,7 @@
     <Compile Include="Base\Generics\GenericEventMessage.cs" />
     <Compile Include="Base\Generics\GenericRequest.cs" />
     <Compile Include="Base\Generics\GenericResponse.cs" />
+    <Compile Include="Base\Generics\GenericValidator.cs" />
     <Compile Include="Base\Generics\GenericWorkload.cs" />
     <Compile Include="Base\Handlers\PromiseHandler.cs" />
     <Compile Include="Base\Handlers\PromiseHandlerQueue.cs" />

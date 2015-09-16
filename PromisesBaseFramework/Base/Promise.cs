@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -50,6 +52,25 @@ namespace Termine.Promises.Base
 			{
 				configurator.Configure(this);
 			}
+
+	        WithValidator("validateRequest", (p, c, w, rq, rx) =>
+	        {
+	            var result = rq.GetValidator().Validate(rq);
+
+	            if (result.IsValid) return;
+
+	            var errors = result.Errors.Select(f => $"[{f.PropertyName}|>|{f.AttemptedValue}|->|{f.ErrorMessage}]").ToArray();
+
+                var errorString = new StringBuilder();
+
+	            foreach (var error in errors)
+	            {
+	                errorString.Append(error);
+	            }
+
+                p.Abort($"Validation errors: {errorString.ToString()}");
+                
+	        });
 		}
 
 		/// <summary>
