@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Nancy.Security;
 
 namespace Termine.Promises.Base.Interfaces
 {
-    public interface IAmAPromiseUser
+    public interface IAmAPromiseUser: IUserIdentity
     {
-        string UserName { get; set; }
-        IEnumerable<string> Claims { get; set;  }
+        
     }
 }
