@@ -11,9 +11,9 @@ namespace Tabular.Promises
 	public static class ChangeValuesPromise
     {
 
-		public static Promise<GenericConfig, SelectedCellsWorkload, GenericRequest, GenericResponse> Get()
+		public static Promise<GenericConfig, GenericUserIdentity, SelectedCellsWorkload, GenericRequest, GenericResponse> Get()
 		{
-			var promise = new Promise<GenericConfig, SelectedCellsWorkload, GenericRequest, GenericResponse>();
+			var promise = new Promise<GenericConfig, GenericUserIdentity, SelectedCellsWorkload, GenericRequest, GenericResponse>();
 
 			promise.WithValidator("hasSelectedCells", HasSelectedCells);
 			promise.WithValidator("hasDataTable", HasDataTable);
@@ -22,7 +22,7 @@ namespace Tabular.Promises
 			return promise;
 		}
 		
-        private static void HasDataTable(IHandlePromiseActions actions, GenericConfig genericConfig, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static void HasDataTable(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity userIdentity, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
             var rowCount = selectedCellsWorkload.DataTable.Rows.Count;
 
@@ -41,7 +41,7 @@ namespace Tabular.Promises
             return workload;
         }
 
-        private static void ChangeValue(IHandlePromiseActions actions, GenericConfig genericConfig, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static void ChangeValue(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity userIdentity, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
             foreach (var gridCell in selectedCellsWorkload.GridCells)
             {
@@ -56,7 +56,7 @@ namespace Tabular.Promises
             }
         }
 
-        private static void HasSelectedCells(IHandlePromiseActions actions, GenericConfig genericConfig, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static void HasSelectedCells(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity userIdentity, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
         {
             if (selectedCellsWorkload.GridCells.Equals(default(IEnumerable<GridCell>))) actions.Abort(new SelectedCellsDoNotExist());
         }

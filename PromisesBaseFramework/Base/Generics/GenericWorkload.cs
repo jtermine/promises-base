@@ -4,5 +4,6 @@ namespace Termine.Promises.Base.Generics
 {
     public class GenericWorkload : IAmAPromiseWorkload
     {
+        public virtual IAmAPromiseUser User { get; }
     }
 }

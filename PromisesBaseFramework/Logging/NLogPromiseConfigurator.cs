@@ -5,38 +5,38 @@ using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Logging
 {
-	public class NLogPromiseConfigurator : IConfigurePromise<GenericConfig, GenericWorkload, GenericRequest, GenericResponse>
+	public class NLogPromiseConfigurator : IConfigurePromise<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse>
     {
-		public void Configure(IHandlePromiseEvents<GenericConfig, GenericWorkload, GenericRequest, GenericResponse> promise)
+		public void Configure(IHandlePromiseEvents<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse> promise)
 		{
 			var log = LogManager.GetLogger(promise.LoggerName);
 
 			promise.WithBlockHandler("nlog.block",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Trace, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Trace, p));
 
 			promise.WithTraceHandler("nlog.trace",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Trace, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Trace, p));
 
 			promise.WithDebugHandler("nlog.debug",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Debug, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Debug, p));
 
 			promise.WithInfoHandler("nlog.info",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
 
 			promise.WithWarnHandler("nlog.warn",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Warn, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Warn, p));
 
 			promise.WithErrorHandler("nlog.error",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Error, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Error, p));
 
 			promise.WithFatalHandler("nlog.fatal",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Fatal, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Fatal, p));
 
 			promise.WithAbortHandler("nlog.abort",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
 
 			promise.WithAbortOnAccessDeniedHandler("nlog.abortAccessDenied",
-				(m, p, c, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
+				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
 		}
 
 		private static void LogEvent<TT>(TT message, ILoggerBase logger, LogLevel logLevel, IHandlePromiseActions promise, params object[] options)

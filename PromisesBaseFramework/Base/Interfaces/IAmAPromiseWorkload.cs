@@ -2,6 +2,6 @@
 {
     public interface IAmAPromiseWorkload
     {
-        
+        IAmAPromiseUser User { get; }
     }
 }

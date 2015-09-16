@@ -14,7 +14,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
         [Test]
         public void TestGetSites()
         {
-            var promise = new Promise<ServiceConfig, GetFRCTBySiteW, GetFRCTBySiteRq, GetFRCTBySiteRx>(true);
+            var promise = new Promise<ServiceConfig, GenericUserIdentity, GetFRCTBySiteW, GetFRCTBySiteRq, GetFRCTBySiteRx>(true);
 
             var request = new GetFRCTBySiteRq { SiteId = 1 };
 
@@ -23,7 +23,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
             promise.DeserializeRequest(js);
 
             //Validate we have a valid siteid
-            promise.WithValidator("validateSiteId", (p, c, w, rq, rx) =>
+            promise.WithValidator("validateSiteId", (p, c, u, w, rq, rx) =>
             {
                 if (rq.SiteId < 1)
                 {
@@ -35,7 +35,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
             });
 
             promise.WithSqlAction("getFolioRoomChargeTypeBySite",
-                (p, c, w, rq, rx) =>
+                (p, c, u, w, rq, rx) =>
                     new WorkloadSqlHandlerConfig
                     {
                         Assembly = Assembly.GetExecutingAssembly(),

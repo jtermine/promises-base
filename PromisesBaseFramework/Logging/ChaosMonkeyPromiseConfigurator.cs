@@ -5,10 +5,10 @@ using Termine.Promises.Base.Interfaces;
 namespace Termine.Promises.Logging
 {
     public class ChaosMonkeyPromiseConfigurator :
-        IConfigurePromise<GenericConfig, GenericWorkload, GenericRequest, GenericResponse>
+        IConfigurePromise<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse>
     {
         public void Configure(
-            IHandlePromiseEvents<GenericConfig, GenericWorkload, GenericRequest, GenericResponse> promise)
+            IHandlePromiseEvents<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse> promise)
         {
             promise.WithBlockHandler("chaos.block", ChaosMonkey);
 
@@ -29,7 +29,7 @@ namespace Termine.Promises.Logging
             promise.WithAbortOnAccessDeniedHandler("chaos.abortAccessDenied", ChaosMonkey);
         }
 
-        private static void ChaosMonkey(IHandleEventMessage m, IHandlePromiseActions p, GenericConfig c, GenericWorkload w,
+        private static void ChaosMonkey(IHandleEventMessage m, IHandlePromiseActions p, GenericConfig c, GenericUserIdentity u, GenericWorkload w,
             GenericRequest rq, GenericResponse rx)
         {
             var random = new Random();

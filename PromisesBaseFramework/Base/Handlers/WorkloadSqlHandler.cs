@@ -9,13 +9,13 @@ using Termine.Promises.Helpers;
 namespace Termine.Promises.Base.Handlers
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class WorkloadSqlHandler<TC, TW, TR, TE>
+    public class WorkloadSqlHandler<TC, TU, TW, TR, TE>
         where TC : class, IHandlePromiseConfig, new()
         where TW : class, IAmAPromiseWorkload, new()
         where TR : class, IAmAPromiseRequest, new()
         where TE : class, IAmAPromiseResponse, new()
     {
-        public Action<WorkloadSqlHandlerConfig, IHandlePromiseActions, TC, TW, TR, TE> Action { get; set; }
+        public Action<WorkloadSqlHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> Action { get; set; }
         public string HandlerName { get; set; }
         public IHandleEventMessage StartMessage { get; set; }
         public IHandleEventMessage EndMessage { get; set; }
@@ -29,7 +29,7 @@ namespace Termine.Promises.Base.Handlers
 
         public void ResetToDefaultAction()
         {
-            Action = (gc, p, c, w, rq, rx) =>
+            Action = (gc, p, c, u, w, rq, rx) =>
             {
                 if (string.IsNullOrEmpty(gc.SqlFile))
                 {

@@ -12,17 +12,18 @@ namespace PromisesBaseFrameworkTest
 		[Test]
 		public void TestPromiseInitializer()
 		{
-			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericWorkload, TestPromiseRequest, TestPromiseResponse>();
+			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, GenericWorkload, TestPromiseRequest, TestPromiseResponse>();
 
-			promise.WithAuthChallenger("auth", (p, c, w, rq, rx) =>
+			promise.WithAuthChallenger("auth", (p, c, u, w, rq, rx) =>
 			{
 				rx.ResponseCode = 200;
 			});
 
-			promise.WithExecutor("exec", (p, c, w, rq, rx) =>
+			promise.WithExecutor("exec", (p, c, u, w, rq, rx) =>
 			{
 				p.Trace(new GenericEventMessage(p.PromiseName));
 				rx.OutputString = "new output";
+                
 			});
 
 
@@ -49,15 +50,15 @@ namespace PromisesBaseFrameworkTest
 	    [Test]
 	    public void TestXfer()
 	    {
-            var getSitesPromise = new Promise<GenericConfig, GenericWorkload, GetSitesRequest, GetSitesResponse>(true);
+            var getSitesPromise = new Promise<GenericConfig, GenericUserIdentity, GenericWorkload, GetSitesRequest, GetSitesResponse>(true);
             
-            getSitesPromise.WithXferAction("GetSites", (config, p, c, w, rq, rx) =>
+            getSitesPromise.WithXferAction("GetSites", (config, p, c, u, w, rq, rx) =>
             {
                 config.BaseUri = @"http://localhost.fiddler/api/1.0/testService";
                 config.EndpointUri = @"/GetSites";
             });
 
-	        getSitesPromise.WithPostEnd("testPostEnd", (p, c, w, rq, rx) =>
+	        getSitesPromise.WithPostEnd("testPostEnd", (p, c, u, w, rq, rx) =>
 	        {
                 Assert.IsTrue(rx.Sites.Count > 0);
 	        });

@@ -35,16 +35,16 @@ namespace Tabular
         {
 
 			var addColumnPromise = AddRowPromise.Get()
-				.WithWorkloadCtor("workloadCtor", (actions, config, workload, req, res) =>
+				.WithWorkloadCtor("workloadCtor", (p, c, u, w, rq, rx) =>
 				{
-					workload.FormActions = _timer.Queue;
-					workload.StudentHarborModels = _dataSet;
-					workload.RowsToAdd = 1000;
-					workload.RowStart = _rowStart;
+					w.FormActions = _timer.Queue;
+					w.StudentHarborModels = _dataSet;
+					w.RowsToAdd = 1000;
+					w.RowStart = _rowStart;
 				})
-				.WithExecutor("updateRowStart", (actions, config, workload, req, res) =>
+				.WithExecutor("updateRowStart", (p, c, u, w, rq, rx) =>
 				{
-					_rowStart = _rowStart + workload.RowsToAdd;
+					_rowStart = _rowStart + w.RowsToAdd;
 				});
 
 
@@ -83,11 +83,11 @@ namespace Tabular
             var selectedCells = gridView1.GetSelectedCells();
 
 	        var promise = ChangeValuesPromise.Get()
-		        .WithWorkloadCtor("workloadCtor", (actions, config, workload, req, res) =>
+		        .WithWorkloadCtor("workloadCtor", (p, c, u, w, rq, rx) =>
 		        {
-			        workload.DataTable = (bindingSource1.DataSource as DataTable);
-			        workload.GridCells = selectedCells;
-			        workload.NewValue = "newValue";
+			        w.DataTable = (bindingSource1.DataSource as DataTable);
+			        w.GridCells = selectedCells;
+			        w.NewValue = "newValue";
 		        });
 
 	        promise.Run();

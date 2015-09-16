@@ -3,16 +3,17 @@ using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Handlers
 {
-    public class WorkloadSqlHandlerQueue<TC, TW, TR, TE>
+    public class WorkloadSqlHandlerQueue<TC, TU, TW, TR, TE>
         where TW : class, IAmAPromiseWorkload, new()
+        where TU: class, IAmAPromiseUser, new ()
         where TC : class, IHandlePromiseConfig, new()
         where TR : class, IAmAPromiseRequest, new()
         where TE: class, IAmAPromiseResponse, new()
     {
-        private readonly List<WorkloadSqlHandler<TC, TW, TR, TE>> _queue = new List<WorkloadSqlHandler<TC, TW, TR, TE>>();
+        private readonly List<WorkloadSqlHandler<TC, TU, TW, TR, TE>> _queue = new List<WorkloadSqlHandler<TC, TU, TW, TR, TE>>();
         private readonly HashSet<string> _alreadyAdded = new HashSet<string>();
 
-        public void Enqueue(WorkloadSqlHandler<TC, TW, TR, TE> item)
+        public void Enqueue(WorkloadSqlHandler<TC, TU, TW, TR, TE> item)
         {
             if (!_alreadyAdded.Add(item.HandlerName)) return;
             _queue.Add(item);
@@ -25,10 +26,11 @@ namespace Termine.Promises.Base.Handlers
         /// </summary>
         /// <param name="p">promise</param>
         /// <param name="c">configuration</param>
+        /// <param name="u">user</param>
         /// <param name="w">workload</param>
         /// <param name="rq">request</param>
         /// <param name="rx">response</param>
-	    public void Invoke(IHandlePromiseActions p, TC c, TW w, TR rq, TE rx)
+        public void Invoke(IHandlePromiseActions p, TC c, TU u, TW w, TR rq, TE rx)
 	    {
 	       _queue.ForEach(a =>
             {
@@ -44,7 +46,7 @@ namespace Termine.Promises.Base.Handlers
 
                 p.Trace(a.StartMessage);
 
-                a.Action.Invoke(a.WorkloadSqlHandlerConfig, p, c, w, rq, rx);
+                a.Action.Invoke(a.WorkloadSqlHandlerConfig, p, c, u, w, rq, rx);
 
                 p.Trace(a.EndMessage);
             });

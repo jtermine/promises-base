@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Net;
-using Newtonsoft.Json;
 using RestSharp;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Handlers
 {
-    public class WorkloadXferHandler<TC, TW, TR, TE>
+    public class WorkloadXferHandler<TC, TU, TW, TR, TE>
         where TC : IHandlePromiseConfig
+        where TU: IAmAPromiseUser
         where TW : IAmAPromiseWorkload
         where TR : IAmAPromiseRequest
         where TE : IAmAPromiseResponse, new()
     {
-        public Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TW, TR, TE> Action { get; set; }
+        public Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> Action { get; set; }
         public string HandlerName { get; set; }
         public IHandleEventMessage StartMessage { get; set; }
         public IHandleEventMessage EndMessage { get; set; }
-        public Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TW, TR, TE> Configurator { get; set; }
+        public Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> Configurator { get; set; }
 
         public WorkloadXferHandler()
         {
@@ -26,7 +26,7 @@ namespace Termine.Promises.Base.Handlers
 
         public void ResetToDefaultAction()
         {
-            Action = (gc, p, c, w, rq, rx) =>
+            Action = (gc, p, u, c, w, rq, rx) =>
             {
                 var client = new RestClient(gc.BaseUri);
 
