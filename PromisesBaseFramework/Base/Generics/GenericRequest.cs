@@ -1,4 +1,5 @@
-﻿using Termine.Promises.Base.Interfaces;
+﻿using FluentValidation;
+using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Generics
 {
@@ -13,5 +14,9 @@ namespace Termine.Promises.Base.Generics
 	    public string RequestId { get; set; }
 	    public string RequestName { get; set; }
 
+        public virtual IValidator GetValidator()
+        {
+            return new GenericValidator<GenericRequest>();
+        }
     }
 }

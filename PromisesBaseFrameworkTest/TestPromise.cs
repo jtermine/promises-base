@@ -49,7 +49,7 @@ namespace PromisesBaseFrameworkTest
 	    [Test]
 	    public void TestXfer()
 	    {
-            var getSitesPromise = new Promise<GenericConfig, GenericWorkload, GetSitesRequest, GetSitesResponse>();
+            var getSitesPromise = new Promise<GenericConfig, GenericWorkload, GetSitesRequest, GetSitesResponse>(true);
             
             getSitesPromise.WithXferAction("GetSites", (config, p, c, w, rq, rx) =>
             {

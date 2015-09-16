@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -50,6 +52,25 @@ namespace Termine.Promises.Base
 			{
 				configurator.Configure(this);
 			}
+
+	        WithValidator("validateRequest", (p, c, w, rq, rx) =>
+	        {
+	            var result = rq.GetValidator().Validate(rq);
+
+	            if (result.IsValid) return;
+
+	            var errors = result.Errors.Select(f => $"[{f.PropertyName}|>|{f.AttemptedValue}|->|{f.ErrorMessage}]").ToArray();
+
+                var errorString = new StringBuilder();
+
+	            foreach (var error in errors)
+	            {
+	                errorString.Append(error);
+	            }
+
+                p.Abort($"Validation errors: {errorString.ToString()}");
+                
+	        });
 		}
 
 		/// <summary>
@@ -308,9 +329,9 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the async task that returns an instance of this promise object when it completes</returns>
 	    // ReSharper disable once UnusedMember.Global
-        public Task<Promise<TC, TW, TR, TE>> RunAsync()
+        public Task<Promise<TC, TW, TR, TE>> RunAsync(TR request = default(TR))
         {
-            return Task.Run(() => Run(), CancellationToken);
+            return Task.Run(() => Run(request), CancellationToken);
         }
 
         /// <summary>
@@ -318,8 +339,9 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the instance of this promise object</returns>
         // ReSharper disable once MemberCanBePrivate.Global
-        public Promise<TC, TW, TR, TE> Run()
+        public Promise<TC, TW, TR, TE> Run(TR request = default(TR))
         {
+            if (request != default(TR)) Request = request;
             Execute();
             return this;
         }
