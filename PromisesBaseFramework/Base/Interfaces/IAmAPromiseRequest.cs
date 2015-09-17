@@ -7,5 +7,6 @@ namespace Termine.Promises.Base.Interfaces
         string RequestId { get; set; }
         string RequestName { get; set; }
         IValidator GetValidator();
+        IValidator GetAuthenticator();
     }
 }

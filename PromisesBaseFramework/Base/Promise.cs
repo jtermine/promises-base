@@ -74,7 +74,26 @@ namespace Termine.Promises.Base
                 p.Abort($"Validation errors: {errorString.ToString()}");
                 
 	        });
-		}
+
+            WithAuthChallenger("authenticateRequest", (p, c, u, w, rq, rx) =>
+            {
+                var result = rq.GetAuthenticator().Validate(u);
+
+                if (result.IsValid) return;
+
+                var errors = result.Errors.Select(f => $"[{f.PropertyName}|>|{f.AttemptedValue}|->|{f.ErrorMessage}]").ToArray();
+
+                var errorString = new StringBuilder();
+
+                foreach (var error in errors)
+                {
+                    errorString.Append(error);
+                }
+
+                p.AbortOnAccessDenied($"Access denied: {errorString.ToString()}");
+
+            });
+        }
 
 		/// <summary>
         /// The promise context stores instances of the actions (i.e. auth challengers, validators, executors) that a promise supports
@@ -337,9 +356,9 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the async task that returns an instance of this promise object when it completes</returns>
 	    // ReSharper disable once UnusedMember.Global
-        public Task<Promise<TC, TU, TW, TR, TE>> RunAsync(TR request = default(TR))
+        public Task<Promise<TC, TU, TW, TR, TE>> RunAsync(PromiseOptions<TR, TU> options = null)
         {
-            return Task.Run(() => Run(request), CancellationToken);
+            return Task.Run(() => Run(options), CancellationToken);
         }
 
         /// <summary>
@@ -347,9 +366,10 @@ namespace Termine.Promises.Base
         /// </summary>
         /// <returns>the instance of this promise object</returns>
         // ReSharper disable once MemberCanBePrivate.Global
-        public Promise<TC, TU, TW, TR, TE> Run(TR request = default(TR))
+        public Promise<TC, TU, TW, TR, TE> Run(PromiseOptions<TR, TU> options = null)
         {
-            if (request != default(TR)) Request = request;
+            if (options?.Request != default(TR)) Request = options.Request;
+            if (options?.GenericUser != default(TU)) User = options.GenericUser;
             Execute();
             return this;
         }

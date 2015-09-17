@@ -18,5 +18,10 @@ namespace Termine.Promises.Base.Generics
         {
             return new GenericValidator<GenericRequest>();
         }
+
+        public virtual IValidator GetAuthenticator()
+        {
+            return new GenericAuthenticator<GenericUserIdentity>();
+        }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Base\Generics\GenericRequest.cs" />
     <Compile Include="Base\Generics\GenericResponse.cs" />
     <Compile Include="Base\Generics\GenericUserIdentity.cs" />
+    <Compile Include="Base\Generics\GenericAuthenticator.cs" />
     <Compile Include="Base\Generics\GenericValidator.cs" />
     <Compile Include="Base\Generics\GenericWorkload.cs" />
     <Compile Include="Base\Handlers\PromiseHandler.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="Base\Handlers\WorkloadSqlHandlerQueue.cs" />
     <Compile Include="Base\Handlers\WorkloadXferHandlerQueue.cs" />
     <Compile Include="Base\Handlers\WorkloadHandlerQueue.cs" />
-    <Compile Include="Base\Interfaces\IAmAPromiseFactory.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseRequest.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseUser.cs" />
@@ -105,6 +105,7 @@
     <Compile Include="Base\Promise.cs" />
     <Compile Include="Base\PromiseConfigurator.cs" />
     <Compile Include="Base\PromiseMessages.cs" />
+    <Compile Include="Base\PromiseOptions.cs" />
     <Compile Include="Config\PxApplicationGroup.cs" />
     <Compile Include="Config\PxContext.cs" />
     <Compile Include="Config\PxContextsCollection.cs" />
