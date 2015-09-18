@@ -14,11 +14,6 @@ namespace PromisesBaseFrameworkTest
 		{
 			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, GenericWorkload, TestPromiseRequest, TestPromiseResponse>();
 
-			promise.WithAuthChallenger("auth", (p, c, u, w, rq, rx) =>
-			{
-				rx.ResponseCode = 200;
-			});
-
 			promise.WithExecutor("exec", (p, c, u, w, rq, rx) =>
 			{
 				p.Trace(new GenericEventMessage(p.PromiseName));

@@ -6,7 +6,7 @@ namespace Termine.Promises.Base.Interfaces
     {
         string Email { get; set; }
         string DisplayName { get; set; }
-
+        bool IsAuthenticated { get; }
         IAmAPromiseUser AddClaim(string claim);
 
     }

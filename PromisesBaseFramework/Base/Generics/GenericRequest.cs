@@ -1,8 +1,10 @@
-﻿using FluentValidation;
+﻿using System.Runtime.Serialization;
+using FluentValidation;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Generics
 {
+    [DataContract]
     public class GenericRequest: IAmAPromiseRequest
     {
 	    public GenericRequest()
@@ -11,17 +13,17 @@ namespace Termine.Promises.Base.Generics
 		    RequestName = $"{typeName.Substring(0, 1).ToLowerInvariant()}{typeName.Substring(1, typeName.Length-1)}" ;
 	    }
 
-	    public string RequestId { get; set; }
-	    public string RequestName { get; set; }
+        [DataMember(Name = "requestId")]
+        public string RequestId { get; set; }
+
+        [DataMember(Name = "requestName")]
+        public string RequestName { get; set; }
 
         public virtual IValidator GetValidator()
         {
             return new GenericValidator<GenericRequest>();
         }
 
-        public virtual IValidator GetAuthenticator()
-        {
-            return new GenericAuthenticator<GenericUserIdentity>();
-        }
+        
     }
 }

@@ -2,6 +2,8 @@
 {
     public interface IAmAPromiseResponse
     {
-        int ResponseCode { get; set; }
+        string ResponseCode { get; set; }
+        string ResponseDescription { get; set; }
+        bool IsSuccess { get; set; }
     }
 }

@@ -257,9 +257,9 @@ namespace Termine.HarborData.Models
 
 			i.ComputeAction += (instance =>
 			{
-				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, DecimalResponse>();
+				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, DecimalResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				promise.WithExecutor(actionName, (actions, u, uconfig, model, request, response) =>
 				{
 					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
 				});
@@ -287,9 +287,9 @@ namespace Termine.HarborData.Models
 
 			i.ComputeAction += (instance =>
 			{
-				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, StringResponse>();
+				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, StringResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
 				{
 					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
 				});
@@ -307,7 +307,7 @@ namespace Termine.HarborData.Models
 		public HarborProperty TypeIsComputedInt(Action<HarborModel, IntResponse> modelAction, int defaultValue = default(int), string actionName = default(string))
 		{
 			if (string.IsNullOrEmpty(actionName)) actionName = $"intEvaluator.{Name}";
-
+            
 			_harborPropertyInstance.DataType = EnumDataType.ComputedInt;
 
 			var i = new HarborPropertyValue(this);
@@ -316,9 +316,9 @@ namespace Termine.HarborData.Models
 
 			i.ComputeAction += (instance =>
 			{
-				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, IntResponse>();
+				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, IntResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
 				{
 					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
 				});
@@ -345,9 +345,9 @@ namespace Termine.HarborData.Models
 
 			i.ComputeAction += (instance =>
 			{
-				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, BoolResponse>();
+				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, BoolResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
 				{
 					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
 				});
@@ -374,9 +374,9 @@ namespace Termine.HarborData.Models
 
 			i.ComputeAction += (instance =>
 			{
-				var promise = new Promise<GenericConfig, HarborModel, GenericRequest, DateTimeResponse>();
+				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, DateTimeResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, model, request, response) =>
+				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
 				{
 					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
 				});

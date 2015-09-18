@@ -75,24 +75,6 @@ namespace Termine.Promises.Base
                 
 	        });
 
-            WithAuthChallenger("authenticateRequest", (p, c, u, w, rq, rx) =>
-            {
-                var result = rq.GetAuthenticator().Validate(u);
-
-                if (result.IsValid) return;
-
-                var errors = result.Errors.Select(f => $"[{f.PropertyName}|>|{f.AttemptedValue}|->|{f.ErrorMessage}]").ToArray();
-
-                var errorString = new StringBuilder();
-
-                foreach (var error in errors)
-                {
-                    errorString.Append(error);
-                }
-
-                p.AbortOnAccessDenied($"Access denied: {errorString.ToString()}");
-
-            });
         }
 
 		/// <summary>
@@ -428,7 +410,11 @@ namespace Termine.Promises.Base
                 if (_context.ThrowExceptions) throw;
             }
 
-        }
+	        Response.IsSuccess = !IsTerminated && !IsBlocked;
+	        Response.ResponseCode = ((int)ReturnHttpStatusCode).ToString();
+	        Response.ResponseDescription = ReturnHttpMessage;
+
+	    }
 
         /// <summary>
         /// Submits a message to the 'block' instrumentation handler.

@@ -11,6 +11,8 @@ namespace Termine.Promises.Base.Generics
         public string Email { get; set; }
         public string DisplayName { get; set; }
 
+        public bool IsAuthenticated => !string.IsNullOrEmpty(UserName);
+
         public IAmAPromiseUser AddClaim(string claim)
         {
             if ((Claims as List<string>) == null) return this;
@@ -20,6 +22,8 @@ namespace Termine.Promises.Base.Generics
 
         public static GenericUserIdentity Init(IUserIdentity userIdentity)
         {
+            if (userIdentity == default(IUserIdentity)) return new GenericUserIdentity();
+
             var genericUserIdentity = new GenericUserIdentity
             {
                 UserName = userIdentity.UserName,
