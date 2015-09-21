@@ -62,7 +62,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,9 +72,11 @@
     <Compile Include="Base\Extensions.cs" />
     <Compile Include="Base\Generics\GenericConfig.cs" />
     <Compile Include="Base\Generics\GenericEventMessage.cs" />
+    <Compile Include="Base\Generics\GenericPublicEventMessage.cs" />
     <Compile Include="Base\Generics\GenericRequest.cs" />
     <Compile Include="Base\Generics\GenericResponse.cs" />
     <Compile Include="Base\Generics\GenericUserIdentity.cs" />
+    <Compile Include="Base\Generics\GenericValidationFailure.cs" />
     <Compile Include="Base\Generics\GenericValidator.cs" />
     <Compile Include="Base\Generics\GenericWorkload.cs" />
     <Compile Include="Base\Handlers\PromiseHandler.cs" />
@@ -95,8 +96,10 @@
     <Compile Include="Base\Interfaces\IAmAPromiseResponse.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseUser.cs" />
     <Compile Include="Base\Interfaces\IAmAPromiseWorkload.cs" />
+    <Compile Include="Base\Interfaces\IAmAPublicEventMessage.cs" />
     <Compile Include="Base\Interfaces\IAmASqlObject.cs" />
     <Compile Include="Base\Interfaces\IAmAStrongPromiseFactory.cs" />
+    <Compile Include="Base\Interfaces\IAmAValidationFailure.cs" />
     <Compile Include="Base\Interfaces\IConfigurePromise.cs" />
     <Compile Include="Base\Interfaces\IHandleEventMessage.cs" />
     <Compile Include="Base\Interfaces\IHandlePromiseActions.cs" />
@@ -104,6 +107,9 @@
     <Compile Include="Base\Interfaces\IHandlePromiseEvents.cs" />
     <Compile Include="Base\Promise.cs" />
     <Compile Include="Base\PromiseConfigurator.cs" />
+    <Compile Include="Base\PromiseFunc.cs" />
+    <Compile Include="Base\PromiseMessageFunc.cs" />
+    <Compile Include="Base\Resp.cs" />
     <Compile Include="Base\PromiseMessages.cs" />
     <Compile Include="Base\PromiseOptions.cs" />
     <Compile Include="Config\PxApplicationGroup.cs" />

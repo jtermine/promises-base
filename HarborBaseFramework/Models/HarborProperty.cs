@@ -259,9 +259,10 @@ namespace Termine.HarborData.Models
 			{
 				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, DecimalResponse>();
 
-				promise.WithExecutor(actionName, (actions, u, uconfig, model, request, response) =>
+				promise.WithExecutor(actionName, func =>
 				{
-					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, func.Rx);
+                    return Resp.Success();
 				});
 
 				promise.Run();
@@ -289,9 +290,10 @@ namespace Termine.HarborData.Models
 			{
 				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, StringResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
+				promise.WithExecutor(actionName, func =>
 				{
-					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, func.Rx);
+                    return Resp.Success();
 				});
 
 				promise.Run();
@@ -318,9 +320,10 @@ namespace Termine.HarborData.Models
 			{
 				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, IntResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
+				promise.WithExecutor(actionName, func =>
 				{
-					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, func.Rx);
+                    return Resp.Success();
 				});
 
 				promise.Run();
@@ -347,9 +350,10 @@ namespace Termine.HarborData.Models
 			{
 				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, BoolResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
+				promise.WithExecutor(actionName, func =>
 				{
-					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, func.Rx);
+                    return Resp.Success();
 				});
 
 				promise.Run();
@@ -376,9 +380,10 @@ namespace Termine.HarborData.Models
 			{
 				var promise = new Promise<GenericConfig, GenericUserIdentity, HarborModel, GenericRequest, DateTimeResponse>();
 
-				promise.WithExecutor(actionName, (actions, config, u, model, request, response) =>
+				promise.WithExecutor(actionName, func =>
 				{
-					modelAction.Invoke(_harborPropertyInstance.HarborModel, response);
+					modelAction.Invoke(_harborPropertyInstance.HarborModel, func.Rx);
+                    return Resp.Success();
 				});
 
 				promise.Run();

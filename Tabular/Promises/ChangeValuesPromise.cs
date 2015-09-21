@@ -4,7 +4,6 @@ using DevExpress.XtraGrid.Views.Base;
 using Tabular.Workloads;
 using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;
-using Termine.Promises.Base.Interfaces;
 
 namespace Tabular.Promises
 {
@@ -22,11 +21,10 @@ namespace Tabular.Promises
 			return promise;
 		}
 		
-        private static void HasDataTable(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity userIdentity, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static Resp HasDataTable(PromiseFunc<GenericConfig, GenericUserIdentity, SelectedCellsWorkload, GenericRequest, GenericResponse> promiseFunc)
         {
-            var rowCount = selectedCellsWorkload.DataTable.Rows.Count;
-
-            if (rowCount < 1) actions.Abort(new DataSourceHasNoRows());
+            var rowCount = promiseFunc.W.DataTable.Rows.Count;
+            return rowCount < 1 ? Resp.Abort(new DataSourceHasNoRows()) : Resp.Success();
         }
 
         public static SelectedCellsWorkload Prep(IEnumerable<GridCell> gridCells, DataTable dataTable, string newValue )
@@ -41,27 +39,29 @@ namespace Tabular.Promises
             return workload;
         }
 
-        private static void ChangeValue(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity userIdentity, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static Resp ChangeValue(PromiseFunc<GenericConfig, GenericUserIdentity, SelectedCellsWorkload, GenericRequest, GenericResponse> promiseFunc)
         {
-            foreach (var gridCell in selectedCellsWorkload.GridCells)
+            foreach (var gridCell in promiseFunc.W.GridCells)
             {
-                actions.Trace(new GenericEventMessage(gridCell.Column.FieldName));
+                promiseFunc.P.Trace(new GenericEventMessage(gridCell.Column.FieldName));
 
                 if (gridCell.RowHandle < 0) continue;
 
-                var getRow = selectedCellsWorkload.DataTable.Rows[gridCell.RowHandle];
+                var getRow = promiseFunc.W.DataTable.Rows[gridCell.RowHandle];
 
                 if (gridCell.Column.ColumnType == typeof(string))
-                    getRow[gridCell.Column.FieldName] = selectedCellsWorkload.NewValue;
+                    getRow[gridCell.Column.FieldName] = promiseFunc.W.NewValue;
             }
+
+            return Resp.Success();
         }
 
-        private static void HasSelectedCells(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity userIdentity, SelectedCellsWorkload selectedCellsWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static Resp HasSelectedCells(PromiseFunc<GenericConfig, GenericUserIdentity, SelectedCellsWorkload, GenericRequest, GenericResponse> promiseFunc)
         {
-            if (selectedCellsWorkload.GridCells.Equals(default(IEnumerable<GridCell>))) actions.Abort(new SelectedCellsDoNotExist());
+            return promiseFunc.W.GridCells.Equals(default(IEnumerable<GridCell>)) ? Resp.Abort(new SelectedCellsDoNotExist()) : Resp.Success();
         }
 
-		private class SelectedCellsDoNotExist : GenericEventMessage
+	    private class SelectedCellsDoNotExist : GenericEventMessage
         {
             public SelectedCellsDoNotExist()
             {

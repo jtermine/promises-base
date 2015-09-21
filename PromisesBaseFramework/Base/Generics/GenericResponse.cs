@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Generics
@@ -14,5 +15,11 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "responseCode")]
         public string ResponseCode { get; set; }
+
+        [DataMember(Name = "validationFailures")]
+        public List<GenericValidationFailure> ValidationFailures { get; set; } = new List<GenericValidationFailure>();
+
+        [DataMember(Name = "logMessages")]
+        public List<GenericPublicEventMessage> LogMessages { get; set; } = new List<GenericPublicEventMessage>();
     }
 }

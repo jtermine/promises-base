@@ -1,60 +1,52 @@
 ﻿using System.Globalization;
 using NLog;
-using Termine.Promises.Base.Generics;
+using Termine.Promises.Base;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Logging
 {
-	public class NLogPromiseConfigurator : IConfigurePromise<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse>
+    public class NLogPromiseConfigurator : IConfigurePromise
     {
-		public void Configure(IHandlePromiseEvents<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse> promise)
-		{
-			var log = LogManager.GetLogger(promise.LoggerName);
+        public void Configure(IHandlePromiseEvents promise)
+        {
+            var logger = LogManager.GetLogger(promise.LoggerName);
 
-			promise.WithBlockHandler("nlog.block",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Trace, p));
+            promise.WithBlockHandler("nlog.block", func => LogEvent(func, logger, LogLevel.Trace));
 
-			promise.WithTraceHandler("nlog.trace",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Trace, p));
+            promise.WithTraceHandler("nlog.trace", func => LogEvent(func, logger, LogLevel.Trace));
 
-			promise.WithDebugHandler("nlog.debug",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Debug, p));
+            promise.WithDebugHandler("nlog.debug", func => LogEvent(func, logger, LogLevel.Debug));
 
-			promise.WithInfoHandler("nlog.info",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
+            promise.WithInfoHandler("nlog.info", func => LogEvent(func, logger, LogLevel.Info));
 
-			promise.WithWarnHandler("nlog.warn",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Warn, p));
+            promise.WithWarnHandler("nlog.warn", func => LogEvent(func, logger, LogLevel.Warn));
 
-			promise.WithErrorHandler("nlog.error",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Error, p));
+            promise.WithErrorHandler("nlog.error", func => LogEvent(func, logger, LogLevel.Error));
 
-			promise.WithFatalHandler("nlog.fatal",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Fatal, p));
+            promise.WithFatalHandler("nlog.fatal", func => LogEvent(func, logger, LogLevel.Fatal));
 
-			promise.WithAbortHandler("nlog.abort",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
+            promise.WithAbortHandler("nlog.abort", func => LogEvent(func, logger, LogLevel.Trace));
 
-			promise.WithAbortOnAccessDeniedHandler("nlog.abortAccessDenied",
-				(m, p, c, u, w, rq, rx) => LogEvent(m, log, LogLevel.Info, p));
-		}
+            promise.WithAbortOnAccessDeniedHandler("nlog.abortAccessDenied",
+                func => LogEvent(func, logger, LogLevel.Trace));
 
-		private static void LogEvent<TT>(TT message, ILoggerBase logger, LogLevel logLevel, IHandlePromiseActions promise, params object[] options)
-			where TT : IHandleEventMessage
-		{
-			var theEvent = new LogEventInfo(logLevel, logger.Name, CultureInfo.DefaultThreadCurrentCulture,
-				message.EventPublicMessage, options);
+        }
 
-			theEvent.Properties.Add("RequestId", promise.PromiseId);
+        private static Resp LogEvent(PromiseMessageFunc promiseMessageFunc, Logger logger, LogLevel logLevel, params object[] options)
+        {
+            var theEvent = new LogEventInfo(logLevel, logger.Name, CultureInfo.DefaultThreadCurrentCulture,
+                promiseMessageFunc.M.EventPublicMessage, options);
 
-			var messageNumber = $"{message.EventNumber}.{message.MinorEventNumber}";
+            theEvent.Properties.Add("RequestId", promiseMessageFunc.P.PromiseId);
 
-			theEvent.Properties.Add("EventTypeId", messageNumber);
-			theEvent.Properties.Add("EventPublicDetails", message.EventPublicDetails);
+            var messageNumber = $"{promiseMessageFunc.M.EventNumber}.{promiseMessageFunc.M.MinorEventNumber}";
 
-			logger.Log(theEvent);
-		}
+            theEvent.Properties.Add("EventTypeId", messageNumber);
+            theEvent.Properties.Add("EventPublicDetails", promiseMessageFunc.M.EventPublicDetails);
 
-	    
+            logger.Log(theEvent);
+
+            return Resp.Success();
+        }
     }
 }

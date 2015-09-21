@@ -2,7 +2,6 @@
 using Tabular.Workloads;
 using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;
-using Termine.Promises.Base.Interfaces;
 
 namespace Tabular.Promises
 {
@@ -18,27 +17,32 @@ namespace Tabular.Promises
 		    return promise;
 	    }
 
-	    private static void DataTableNotNull(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity user, DataTableWorkload dataTableWorkload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static Resp DataTableNotNull(
+            PromiseFunc<GenericConfig, GenericUserIdentity, DataTableWorkload, GenericRequest, GenericResponse>
+                promiseFunc)
         {
-	        if (dataTableWorkload.StudentHarborModels == null)
-		        actions.Abort(new GenericEventMessage("The datatable is null blocking the promise from executing.", 1));
+            return promiseFunc.W.StudentHarborModels == null
+                ? Resp.Abort(new GenericEventMessage("The datatable is null blocking the promise from executing.", 1))
+                : Resp.Success();
         }
 
-        private static void AddColumn(IHandlePromiseActions actions, GenericConfig genericConfig, GenericUserIdentity user, DataTableWorkload workload, GenericRequest genericRequest, GenericResponse genericResponse)
+        private static Resp AddColumn(
+            PromiseFunc<GenericConfig, GenericUserIdentity, DataTableWorkload, GenericRequest, GenericResponse> func)
         {
-	        for (var i = 0; i < workload.RowsToAdd; i++)
-	        {
-		        var harborModel = new StudentHarborModel {LastName = $"Termine_{i+workload.RowStart}"};
+            for (var i = 0; i < func.W.RowsToAdd; i++)
+            {
+                var harborModel = new StudentHarborModel {LastName = $"Termine_{i + func.W.RowStart}"};
 
-				/*
+                /*
 				harborModel.PropertyChanged += (sender, args) =>
 				{
 					LogManager.GetCurrentClassLogger().Trace($"{args.PropertyName} changed to {harborModel[args.PropertyName]}");
 				};
 				*/
 
-				workload.FormActions.Enqueue(() => workload.StudentHarborModels.Add(harborModel));
-			}
+                func.W.FormActions.Enqueue(() => func.W.StudentHarborModels.Add(harborModel));
+            }
+            return Resp.Success();
         }
     }
 }

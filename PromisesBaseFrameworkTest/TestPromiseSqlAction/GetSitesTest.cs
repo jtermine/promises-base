@@ -23,15 +23,11 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
             promise.DeserializeRequest(js);
 
             //Validate we have a valid siteid
-            promise.WithValidator("validateSiteId", (p, c, u, w, rq, rx) =>
+            promise.WithValidator("validateSiteId", func =>
             {
-                if (rq.SiteId < 1)
-                {
-                    p.Abort("The SiteId was either a negative integer or not provided.");
-                    return;
-                }
-
-                w.SiteId = rq.SiteId;
+                if (func.Rq.SiteId < 1) return Resp.Abort("The SiteId was either a negative integer or not provided.");
+                func.W.SiteId = func.Rq.SiteId;
+                return Resp.Success();
             });
 
             promise.WithSqlAction("getFolioRoomChargeTypeBySite",

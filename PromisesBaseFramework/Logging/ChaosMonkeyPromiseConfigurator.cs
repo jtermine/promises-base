@@ -1,14 +1,12 @@
 ﻿using System;
-using Termine.Promises.Base.Generics;
+using Termine.Promises.Base;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Logging
 {
-    public class ChaosMonkeyPromiseConfigurator :
-        IConfigurePromise<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse>
+    public class ChaosMonkeyPromiseConfigurator : IConfigurePromise
     {
-        public void Configure(
-            IHandlePromiseEvents<GenericConfig, GenericUserIdentity, GenericWorkload, GenericRequest, GenericResponse> promise)
+        public void Configure(IHandlePromiseEvents promise)
         {
             promise.WithBlockHandler("chaos.block", ChaosMonkey);
 
@@ -29,8 +27,7 @@ namespace Termine.Promises.Logging
             promise.WithAbortOnAccessDeniedHandler("chaos.abortAccessDenied", ChaosMonkey);
         }
 
-        private static void ChaosMonkey(IHandleEventMessage m, IHandlePromiseActions p, GenericConfig c, GenericUserIdentity u, GenericWorkload w,
-            GenericRequest rq, GenericResponse rx)
+        private static Resp ChaosMonkey(PromiseMessageFunc messageFunc)
         {
             var random = new Random();
 
@@ -38,18 +35,20 @@ namespace Termine.Promises.Logging
 
             var throwChaos = randomNumber < 35;
 
-            if (!throwChaos) return;
+            if (!throwChaos) return new Resp();
 
             var hasConfigChaos = new Random().Next(1, 10) > 7;
             var hasWorkloadChaos = new Random().Next(1, 10) > 7;
             var hasRequestChaos = new Random().Next(1, 10) > 7;
             var hasResponseChaos = new Random().Next(1, 10) >7;
 
-            if (hasConfigChaos) p.ThrowChaosOnConfig();
-            if (hasWorkloadChaos) p.ThrowChaosOnWorkload();
-            if (hasRequestChaos) p.ThrowChaosOnRequest();
-            if (hasResponseChaos) p.ThrowChaosOnResponse();
-        }
+            if (hasConfigChaos) messageFunc.P.ThrowChaosOnConfig();
+            if (hasWorkloadChaos) messageFunc.P.ThrowChaosOnWorkload();
+            if (hasRequestChaos) messageFunc.P.ThrowChaosOnRequest();
+            if (hasResponseChaos) messageFunc.P.ThrowChaosOnResponse();
 
+            return new Resp();
+        }
+        
     }
 }

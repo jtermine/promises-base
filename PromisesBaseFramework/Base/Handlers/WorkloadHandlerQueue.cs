@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Handlers
 {
     public class WorkloadHandlerQueue<TC, TU, TW, TR, TE>
         where TW : class, IAmAPromiseWorkload, new()
-        where TU: class, IAmAPromiseUser, new()
+        where TU : class, IAmAPromiseUser, new()
         where TC : class, IHandlePromiseConfig, new()
         where TR : class, IAmAPromiseRequest, new()
-        where TE: class, IAmAPromiseResponse, new()
+        where TE : class, IAmAPromiseResponse, new()
     {
-        private readonly List<WorkloadHandler<TC, TU, TW, TR, TE>> _queue = new List<WorkloadHandler<TC, TU, TW, TR, TE>>();
+        private readonly List<WorkloadHandler<TC, TU, TW, TR, TE>> _queue =
+            new List<WorkloadHandler<TC, TU, TW, TR, TE>>();
+
         private readonly HashSet<string> _alreadyAdded = new HashSet<string>();
 
         public void Enqueue(WorkloadHandler<TC, TU, TW, TR, TE> item)
@@ -22,32 +23,26 @@ namespace Termine.Promises.Base.Handlers
 
         public int Count => _queue.Count;
 
-	    public void Invoke(IHandlePromiseActions promise, TC config, TU user, TW workload, TR request, TE response, bool ignoreBlockOrTermination = false)
+        public void Invoke(IHandlePromiseActions p, TC c, TU u, TW w, TR rq, TE rx,
+            bool ignoreBlockOrTermination = false)
         {
             _queue.ForEach(a =>
             {
-                if (!ignoreBlockOrTermination) promise.CancellationToken.ThrowIfCancellationRequested();
+                if (!ignoreBlockOrTermination) p.CancellationToken.ThrowIfCancellationRequested();
 
-                if (!ignoreBlockOrTermination & (promise.IsTerminated || promise.IsBlocked)) return;
+                if (!ignoreBlockOrTermination & (p.IsTerminated || p.IsBlocked)) return;
 
-                promise.Trace(a.StartMessage);
+                p.Trace(a.StartMessage);
 
-                if (a.Control != default(Control))
+                var response = a.Action.Invoke(new PromiseFunc<TC, TU, TW, TR, TE>(p, c, u, w, rq, rx));
+
+                if (response.IsFailure)
                 {
-                    if (!a.Control.IsHandleCreated)
-                    {
-                        promise.Warn(PromiseMessages.PromiseActionSkippedNoHandle);
-                        return;
-                    }
+                    p.Trace("Silently aborting on receipt of a failed promise workload handler.");
+                    return;
+                }
 
-                    a.Control?.Invoke(a.Action, promise, config, workload, request, response);
-                }
-                else
-                {
-                    a.Action.Invoke(promise, config, user, workload, request, response);
-                }
-                
-                promise.Trace(a.EndMessage);
+                p.Trace(a.EndMessage);
             });
         }
     }

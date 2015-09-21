@@ -12,15 +12,14 @@ namespace PromisesBaseFrameworkTest
 		[Test]
 		public void TestPromiseInitializer()
 		{
-			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, GenericWorkload, TestPromiseRequest, TestPromiseResponse>();
+			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, GenericWorkload, TestPromiseRequest, GenericResponse>();
 
-			promise.WithExecutor("exec", (p, c, u, w, rq, rx) =>
-			{
-				p.Trace(new GenericEventMessage(p.PromiseName));
-				rx.OutputString = "new output";
-                
-			});
-
+		    promise.WithExecutor("exec", (func =>
+		    {
+		        func.P.Trace(new GenericEventMessage(func.P.PromiseName));
+		        //func.Rx.OutputString = "new output";
+		        return Resp.Success();
+		    }));
 
 			promise.Run();
 
@@ -53,10 +52,11 @@ namespace PromisesBaseFrameworkTest
                 config.EndpointUri = @"/GetSites";
             });
 
-	        getSitesPromise.WithPostEnd("testPostEnd", (p, c, u, w, rq, rx) =>
-	        {
-                Assert.IsTrue(rx.Sites.Count > 0);
-	        });
+	        getSitesPromise.WithPostEnd("testPostEnd", (func =>
+            {
+                Assert.IsTrue(func.Rx.Sites.Count > 0);
+                return Resp.Success();
+	        }));
             
             getSitesPromise.Run();
         }

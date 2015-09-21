@@ -22,18 +22,18 @@ namespace Termine.Promises.Base
 
 		public static PxConfigSection PxConfigSection => PxConfigSection.Get();
 
-		public List<IConfigurePromise<TC, TU, TW, TR, TE>> Configurators { get; private set; } = new List<IConfigurePromise<TC, TU, TW, TR, TE>>(); 
+		public List<IConfigurePromise> Configurators { get; private set; } = new List<IConfigurePromise>(); 
 
 		private void Configure()
 		{
 			var pxInits = PxConfigSection.PxContexts.AsQueryable().FirstOrDefault(f => f.Name == "default")?.PxInits;
 			if (pxInits == null) return;
 
-			Configurators = pxInits.OrderBy(f => f.Order)
-				.Select(pxInit => Type.GetType(pxInit.Type, false, true))
-				.Where(type => type != default(Type))
-				.Select((Activator.CreateInstance))
-				.Select(f => f as IConfigurePromise<TC, TU, TW, TR, TE>).ToList();
+		    Configurators = pxInits.OrderBy(f => f.Order)
+		        .Select(pxInit => Type.GetType(pxInit.Type, false, true))
+		        .Where(type => type != default(Type))
+		        .Select((Activator.CreateInstance))
+		        .Select(f => (IConfigurePromise) f).ToList();
 		}
 
 		public static PromiseConfigurator<TC, TU, TW, TR, TE> Instance => _instance ?? (_instance = new PromiseConfigurator<TC, TU, TW, TR, TE>());

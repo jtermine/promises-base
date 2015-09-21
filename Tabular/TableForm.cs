@@ -6,6 +6,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 using Tabular.Promises;
 using Tabular.TabModels;
+using Termine.Promises.Base;
 
 namespace Tabular
 {
@@ -33,20 +34,20 @@ namespace Tabular
 
         private void barAddRow_ItemClick(object sender, ItemClickEventArgs e)
         {
-
-			var addColumnPromise = AddRowPromise.Get()
-				.WithWorkloadCtor("workloadCtor", (p, c, u, w, rq, rx) =>
-				{
-					w.FormActions = _timer.Queue;
-					w.StudentHarborModels = _dataSet;
-					w.RowsToAdd = 1000;
-					w.RowStart = _rowStart;
-				})
-				.WithExecutor("updateRowStart", (p, c, u, w, rq, rx) =>
-				{
-					_rowStart = _rowStart + w.RowsToAdd;
-				});
-
+            var addColumnPromise = AddRowPromise.Get()
+                .WithWorkloadCtor("workloadCtor", func =>
+                {
+                    func.W.FormActions = _timer.Queue;
+                    func.W.StudentHarborModels = _dataSet;
+                    func.W.RowsToAdd = 1000;
+                    func.W.RowStart = _rowStart;
+                    return Resp.Success();
+                })
+                .WithExecutor("updateRowStart", func =>
+                {
+                    _rowStart = _rowStart + func.W.RowsToAdd;
+                    return Resp.Success();
+                });
 
 	        addColumnPromise.Run();
         }
@@ -82,13 +83,14 @@ namespace Tabular
 
             var selectedCells = gridView1.GetSelectedCells();
 
-	        var promise = ChangeValuesPromise.Get()
-		        .WithWorkloadCtor("workloadCtor", (p, c, u, w, rq, rx) =>
-		        {
-			        w.DataTable = (bindingSource1.DataSource as DataTable);
-			        w.GridCells = selectedCells;
-			        w.NewValue = "newValue";
-		        });
+            var promise = ChangeValuesPromise.Get()
+                .WithWorkloadCtor("workloadCtor", func =>
+                {
+                    func.W.DataTable = (bindingSource1.DataSource as DataTable);
+                    func.W.GridCells = selectedCells;
+                    func.W.NewValue = "newValue";
+                    return Resp.Success();
+                });
 
 	        promise.Run();
         }

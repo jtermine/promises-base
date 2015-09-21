@@ -1,6 +1,5 @@
 ﻿using PromisesBaseFrameworkTest.Interfaces;
 using Termine.Promises.Base;
-using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Interfaces;
 
 namespace PromisesBaseFrameworkTest.TestPromiseComponents
@@ -11,17 +10,15 @@ namespace PromisesBaseFrameworkTest.TestPromiseComponents
 			where TC : class, IHandlePromiseConfig, new()
             where TU: class, IAmAPromiseUser, new()
 			where TW : class, IAmAPromiseWorkload, new()
-			where TR : class, IAmAClaimsRequest, new()
+			where TR : class, IAmAPromiseRequest, new()
 			where TE : class, IAmAPromiseResponse, new()
 		{
 			var promise = new Promise<TC, TU, TW, TR, TE>();
 
 			promise.WithAuthChallenger("claims-authChallenger",
-				(p, c, u, w, rq, rx) =>
-				{
-					if (string.IsNullOrEmpty(rq.Claim))
-						p.AbortOnAccessDenied(new GenericEventMessage("Claim is null or empty"));
-				});
+                (func => string.IsNullOrEmpty(func.Rq.RequestId)
+                    ? Resp.AbortOnAccessDenied("Claim is null or empty.")
+                    : Resp.Success()));
 
 			return promise;
 		}

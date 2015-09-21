@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Handlers
 {
-    public class PromiseHandlerQueue<TC, TU, TW, TR, TE>
-        where TC : IHandlePromiseConfig
-        where TU: IAmAPromiseUser
-        where TW : IAmAPromiseWorkload
-        where TR : IAmAPromiseRequest
-        where TE : IAmAPromiseResponse
+    public class PromiseHandlerQueue
     {
-        private readonly List<PromiseHandler<TC, TU, TW, TR, TE>> _queue = new List<PromiseHandler<TC, TU, TW, TR, TE>>();
+        private readonly List<PromiseHandler> _queue = new List<PromiseHandler>();
         private readonly HashSet<string> _alreadyAdded = new HashSet<string>();
 
-        public void Enqueue(PromiseHandler<TC, TU, TW, TR, TE> item)
+        public void Enqueue(PromiseHandler item)
         {
             if (!_alreadyAdded.Add(item.HandlerName)) return;
             _queue.Add(item);
@@ -21,10 +17,13 @@ namespace Termine.Promises.Base.Handlers
 
         public int Count => _queue.Count;
 
-	    public void Invoke(IHandleEventMessage eventMessage, IHandlePromiseActions p, TC c, TU u, TW w, TR rq, TE rx)
-        {
-            _queue.ForEach(a=> a.Action.Invoke(eventMessage, p, c, u, w, rq, rx));
-        }
-
+	    public void Invoke(IHandlePromiseActions p, IHandleEventMessage m)
+	    {
+	        if (_queue.Select(promiseHandler => promiseHandler.Action.Invoke(
+	            new PromiseMessageFunc(p, m))).Any(funcResponse => funcResponse.IsFailure))
+	        {
+	            p.Trace("Silently aborting on receipt of a failed promise handler.");
+	        }
+	    }
     }
 }
