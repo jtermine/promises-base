@@ -19,10 +19,14 @@ namespace Termine.Promises.Base.Handlers
 
 	    public void Invoke(IHandlePromiseActions p, IHandleEventMessage m)
 	    {
-	        if (_queue.Select(promiseHandler => promiseHandler.Action.Invoke(
-	            new PromiseMessageFunc(p, m))).Any(funcResponse => funcResponse.IsFailure))
+	        foreach (var response in _queue.Select(promiseHandler => promiseHandler.Action.Invoke(new PromiseMessageFunc(p, m))))
 	        {
-	            p.Trace("Silently aborting on receipt of a failed promise handler.");
+	            if (response.IsFailure)
+	            {
+	                p.Abort(response);
+	            }
+
+	            break;
 	        }
 	    }
     }

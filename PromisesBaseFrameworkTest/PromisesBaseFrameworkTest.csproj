@@ -71,6 +71,7 @@
     <Compile Include="TestPromiseComponents\ClaimsPromiseFactory.cs" />
     <Compile Include="TestPromiseComponents\TestPromiseRequest.cs" />
     <Compile Include="TestPromiseComponents\TestPromiseResponse.cs" />
+    <Compile Include="TestPromiseComponents\TestPromiseV.cs" />
     <Compile Include="TestPromiseSqlAction\FRCTEntity.cs" />
     <Compile Include="TestPromiseSqlAction\GetFRCTBySiteRq.cs" />
     <Compile Include="TestPromiseSqlAction\GetFRCTBySiteRx.cs" />

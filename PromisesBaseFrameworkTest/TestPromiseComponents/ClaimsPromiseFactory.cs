@@ -13,7 +13,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseComponents
 			where TR : class, IAmAPromiseRequest, new()
 			where TE : class, IAmAPromiseResponse, new()
 		{
-			var promise = new Promise<TC, TU, TW, TR, TE>();
+			var promise = new Promise<TC, TU, TW, TR, TE>(true);
 
 			promise.WithAuthChallenger("claims-authChallenger",
                 (func => string.IsNullOrEmpty(func.Rq.RequestId)

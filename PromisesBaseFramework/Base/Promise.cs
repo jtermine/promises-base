@@ -53,21 +53,18 @@ namespace Termine.Promises.Base
 				configurator.Configure(this);
 			}
 
-	        WithValidator("validateRequest", (func =>
+	        WithAuthChallenger("validateRequest", (func =>
 	        {
 	            var result = func.Rq.GetValidator().Validate(func.Rq);
 
-	            if (result.IsValid) Resp.Success();
+	            if (result.IsValid) return Resp.Success();
 
 	            foreach (var error in result.Errors)
 	            {
-	                func.Rx.ValidationFailures.Add(new GenericValidationFailure(error.PropertyName, error.ErrorMessage,
-	                    error.AttemptedValue.ToString()) {ErrorCode = error.ErrorCode});
+	                func.Rx.ValidationFailures.Add(new GenericValidationFailure(error.PropertyName, error.ErrorMessage, error.AttemptedValue?.ToString()) {ErrorCode = error.ErrorCode});
 	            }
 
-	            // p.Abort($"Validation errors: {JsonConvert.SerializeObject(rx.ValidationFailures)}");
-
-	            return Resp.Failure();
+	            return Resp.Abort("The request failed pre-auth validation.");
 
 	        }));
 
@@ -1036,7 +1033,7 @@ namespace Termine.Promises.Base
         {
             if (string.IsNullOrEmpty(actionId) || action == null) return;
 
-            _context.SuccessHandlers.Enqueue(new PromiseHandler { Action = action, HandlerName = actionId });
+            _context.SuccessHandlers.Enqueue(new PromiseHandler {Action = action, HandlerName = actionId});
 
         }
 

@@ -38,7 +38,7 @@ namespace Termine.Promises.Base.Handlers
 
                 if (response.IsFailure)
                 {
-                    p.Trace("Silently aborting on receipt of a failed promise workload handler.");
+                    p.Abort(response);
                     return;
                 }
 
