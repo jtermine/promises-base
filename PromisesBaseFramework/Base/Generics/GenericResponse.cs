@@ -33,5 +33,14 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "_request")]
         public string Request { get; set; }
+
+        [DataMember(Name = "_userName")]
+        public string UserName { get; set; }
+
+        [DataMember(Name = "_userDisplayName")]
+        public string UserDisplayName { get; set; }
+
+        [DataMember(Name = "_userEmail")]
+        public string UserEmail { get; set; }
     }
 }

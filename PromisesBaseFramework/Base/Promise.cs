@@ -406,6 +406,9 @@ namespace Termine.Promises.Base
                 if (_context.ThrowExceptions) throw;
             }
 
+	        Response.UserName = User.UserName;
+	        Response.UserDisplayName = User.DisplayName;
+	        Response.UserEmail = User.Email;
 	        Response.IsSuccess = !IsTerminated && !IsBlocked;
 	        Response.ResponseCode = ((int)ReturnHttpStatusCode).ToString();
 	        Response.ResponseDescription = ReturnHttpMessage;

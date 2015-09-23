@@ -14,5 +14,8 @@ namespace Termine.Promises.Base.Interfaces
         List<GenericPublicEventMessage> LogMessages { get; set; }
         bool IsRequestSensitive { get; set; }
         string Request { get; set; }
+        string UserName { get; set; }
+        string UserDisplayName { get; set; }
+        string UserEmail { get; set; }
     }
 }
