@@ -1,7 +1,11 @@
-﻿namespace Termine.Promises.Base.Interfaces
+﻿using System;
+
+namespace Termine.Promises.Base.Interfaces
 {
     public interface IAmAPublicEventMessage
     {
+        DateTime EventTimestamp { get; set; }
+
         /// <summary>
         /// An integer an application group designates as the authoritative event
         /// </summary>

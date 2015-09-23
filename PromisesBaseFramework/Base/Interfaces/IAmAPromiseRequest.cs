@@ -6,6 +6,7 @@ namespace Termine.Promises.Base.Interfaces
     {
         string RequestId { get; set; }
         string RequestName { get; set; }
+        bool ReturnLog { get; set; }
         IValidator GetValidator();        
     }
 }

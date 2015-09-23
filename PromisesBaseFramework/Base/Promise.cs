@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -285,6 +286,8 @@ namespace Termine.Promises.Base
         public string PromiseName => $"{PromiseConfigurator<TC, TU, TW, TR,TE>.PxConfigSection.PxApplicationGroup.Name}.{Request.RequestName}";
 		public string LoggerName => $"{PromiseName}.{PromiseId}";
 
+        private List<GenericPublicEventMessage> PromiseMessageLog { get; } = new List<GenericPublicEventMessage>();
+
         /// <summary>
         /// Exposes the promise's configuration
         /// </summary>
@@ -406,8 +409,35 @@ namespace Termine.Promises.Base
 	        Response.IsSuccess = !IsTerminated && !IsBlocked;
 	        Response.ResponseCode = ((int)ReturnHttpStatusCode).ToString();
 	        Response.ResponseDescription = ReturnHttpMessage;
-
+	        Response.ResponseId = LoggerName;
+	        Response.RequestId = Request.RequestId;
+	        Response.LogMessages = Request.ReturnLog || !Response.IsSuccess
+	            ? PromiseMessageLog
+	            : new List<GenericPublicEventMessage>();
 	    }
+
+        private void WriteMessage(IHandleEventMessage message)
+        {
+            if (message == default(IHandleEventMessage)) return;
+
+            if (message.IsSensitiveMessage)
+            {
+                PromiseMessageLog.Add(new GenericPublicEventMessage
+                {
+                    EventNumber = message.EventNumber,
+                    EventPublicDetails = "Details suppressed.",
+                    EventPublicMessage = "A sensitive event occurred."
+                }); 
+                return;
+            }
+
+            PromiseMessageLog.Add(new GenericPublicEventMessage
+            {
+                EventNumber = message.EventNumber,
+                EventPublicMessage = message.EventPublicMessage,
+                EventPublicDetails = message.EventPublicDetails
+            });
+        }
 
         /// <summary>
         /// Submits a message to the 'block' instrumentation handler.
@@ -419,6 +449,7 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             IsBlocked = true;
             ReturnHttpStatusCode = HttpStatusCode.Forbidden;
+            WriteMessage(message);
             _context.BlockHandlers.Invoke(this, message);
         }
 
@@ -428,6 +459,7 @@ namespace Termine.Promises.Base
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Trace(IHandleEventMessage message)
         {
+            WriteMessage(message);
             _context.TraceHandlers.Invoke(this, message);
         }
 
@@ -437,6 +469,7 @@ namespace Termine.Promises.Base
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Debug(IHandleEventMessage message)
         {
+            WriteMessage(message);
             _context.DebugHandlers.Invoke(this, message);
         }
 
@@ -446,6 +479,7 @@ namespace Termine.Promises.Base
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Info(IHandleEventMessage message)
         {
+            WriteMessage(message);
             _context.InfoHandlers.Invoke(this, message);
         }
 
@@ -455,7 +489,7 @@ namespace Termine.Promises.Base
         /// <param name="message">a message object implementing IHandleEventMessage</param>
         public void Warn(IHandleEventMessage message)
         {
-
+            WriteMessage(message);
             _context.WarnHandlers.Invoke(this, message);
         }
 
@@ -468,8 +502,9 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
-                : $"{message.EventPublicMessage} > {LoggerName}";
+                ? $"An error that contains sensitive diagnostic information has occurred"
+                : $"{message.EventPublicMessage}";
+            WriteMessage(message);
             _context.ErrorHandlers.Invoke(this, message);
         }
 
@@ -482,8 +517,9 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
-                : $"{message.EventPublicMessage} > {LoggerName}";
+                ? $"An error that contains sensitive diagnostic information has occurred"
+                : $"{message.EventPublicMessage}";
+            WriteMessage(message);
             _context.FatalHandlers.Invoke(this, message);
         }
 
@@ -497,8 +533,9 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
-                : $"{message.EventPublicMessage} > {LoggerName}";
+                ? $"An error that contains sensitive diagnostic information has occurred"
+                : $"{message.EventPublicMessage}";
+            WriteMessage(message);
             _context.AbortHandlers.Invoke(this, message);
             _context.TokenSource.Cancel();
         }
@@ -513,8 +550,9 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.Unauthorized;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred > {LoggerName}"
-                : $"{message.EventPublicMessage} > {LoggerName}";
+                ? $"An error that contains sensitive diagnostic information has occurred"
+                : $"{message.EventPublicMessage}";
+            WriteMessage(message);
             _context.AbortOnAccessDeniedHandlers.Invoke(this, message);
         }
 

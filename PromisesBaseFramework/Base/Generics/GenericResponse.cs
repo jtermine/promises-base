@@ -7,19 +7,25 @@ namespace Termine.Promises.Base.Generics
     [DataContract]
     public class GenericResponse: IAmAPromiseResponse
     {
-        [DataMember(Name = "responseDescription")]
+        [DataMember(Name = "_requestId")]
+        public string RequestId { get; set; }
+
+        [DataMember(Name = "_responseId")]
+        public string ResponseId { get; set; }
+
+        [DataMember(Name = "_responseDescription")]
         public string ResponseDescription { get; set; }
 
-        [DataMember(Name = "isSuccess")]
+        [DataMember(Name = "_isSuccess")]
         public bool IsSuccess { get; set; }
 
-        [DataMember(Name = "responseCode")]
+        [DataMember(Name = "_responseCode")]
         public string ResponseCode { get; set; }
 
-        [DataMember(Name = "validationFailures")]
+        [DataMember(Name = "_validationFailures")]
         public List<GenericValidationFailure> ValidationFailures { get; set; } = new List<GenericValidationFailure>();
 
-        [DataMember(Name = "logMessages")]
+        [DataMember(Name = "_logMessages")]
         public List<GenericPublicEventMessage> LogMessages { get; set; } = new List<GenericPublicEventMessage>();
     }
 }
