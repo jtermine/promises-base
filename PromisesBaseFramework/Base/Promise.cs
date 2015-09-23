@@ -411,6 +411,9 @@ namespace Termine.Promises.Base
 	        Response.ResponseDescription = ReturnHttpMessage;
 	        Response.ResponseId = LoggerName;
 	        Response.RequestId = Request.RequestId;
+	        Response.Request = !Response.IsRequestSensitive
+	            ? JsonConvert.SerializeObject(Request, Formatting.None)
+	            : string.Empty;
 	        Response.LogMessages = Request.ReturnLog || !Response.IsSuccess
 	            ? PromiseMessageLog
 	            : new List<GenericPublicEventMessage>();
@@ -502,7 +505,7 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred"
+                ? "An error that contains sensitive diagnostic information has occurred"
                 : $"{message.EventPublicMessage}";
             WriteMessage(message);
             _context.ErrorHandlers.Invoke(this, message);
@@ -517,7 +520,7 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred"
+                ? "An error that contains sensitive diagnostic information has occurred"
                 : $"{message.EventPublicMessage}";
             WriteMessage(message);
             _context.FatalHandlers.Invoke(this, message);
@@ -533,7 +536,7 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.InternalServerError;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred"
+                ? "An error that contains sensitive diagnostic information has occurred"
                 : $"{message.EventPublicMessage}";
             WriteMessage(message);
             _context.AbortHandlers.Invoke(this, message);
@@ -550,7 +553,7 @@ namespace Termine.Promises.Base
             IsTerminated = true;
             ReturnHttpStatusCode = HttpStatusCode.Unauthorized;
             ReturnHttpMessage = message.IsSensitiveMessage
-                ? $"An error that contains sensitive diagnostic information has occurred"
+                ? "An error that contains sensitive diagnostic information has occurred"
                 : $"{message.EventPublicMessage}";
             WriteMessage(message);
             _context.AbortOnAccessDeniedHandlers.Invoke(this, message);

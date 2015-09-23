@@ -14,14 +14,15 @@ namespace PromisesBaseFrameworkTest
 		{
 			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, GenericWorkload, TestPromiseRequest, GenericResponse>();
 
-		    promise.WithExecutor("exec", (func =>
+            promise.WithExecutor("exec", (func =>
 		    {
 		        func.P.Trace(new GenericEventMessage(func.P.PromiseName));
 		        //func.Rx.OutputString = "new output";
 		        return Resp.Success();
 		    }));
 
-			promise.Run();
+		    promise.Run(
+		        new PromiseOptions<TestPromiseRequest, GenericUserIdentity>(new TestPromiseRequest {Claim = "1234-Claim"}));
 
             promise.Abort(new GenericEventMessage("Abort promise-1"));
 

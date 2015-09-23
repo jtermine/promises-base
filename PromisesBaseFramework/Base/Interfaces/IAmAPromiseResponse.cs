@@ -12,5 +12,7 @@ namespace Termine.Promises.Base.Interfaces
         bool IsSuccess { get; set; }
         List<GenericValidationFailure> ValidationFailures { get; set; }
         List<GenericPublicEventMessage> LogMessages { get; set; }
+        bool IsRequestSensitive { get; set; }
+        string Request { get; set; }
     }
 }

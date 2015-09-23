@@ -1,12 +1,17 @@
-﻿using FluentValidation;
+﻿using System.Runtime.Serialization;
+using FluentValidation;
 using Termine.Promises.Base.Generics;
 
 namespace PromisesBaseFrameworkTest.TestPromiseComponents
 {
+    [DataContract]
 	public class TestPromiseRequest : GenericRequest
 	{
-	    public string Name { get; set; }
-		public string Claim { get; set; }
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "claim")]
+        public string Claim { get; set; }
 
 	    public override IValidator GetValidator()
 	    {

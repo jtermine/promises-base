@@ -27,5 +27,11 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "_logMessages")]
         public List<GenericPublicEventMessage> LogMessages { get; set; } = new List<GenericPublicEventMessage>();
+
+        [DataMember(Name = "_isRequestSensitive")]
+        public bool IsRequestSensitive { get; set; }
+
+        [DataMember(Name = "_request")]
+        public string Request { get; set; }
     }
 }
