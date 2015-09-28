@@ -18,6 +18,26 @@ namespace Termine.Promises.Base
             return new Resp { IsFailure = true };
         }
 
+        public static Resp Success(IHandleEventMessage message)
+        {
+            return new Resp
+            {
+                EventPublicMessage = message.EventPublicMessage,
+                EventNumber = message.EventNumber,
+                EventPublicDetails = message.EventPublicDetails,
+                IsSensitiveMessage = message.IsSensitiveMessage,
+                MinorEventNumber = message.MinorEventNumber
+            };
+        }
+
+        public static Resp Success(string message)
+        {
+            return new Resp
+            {
+                EventPublicMessage = message
+            };
+        }
+
         public static Resp Abort(IHandleEventMessage message)
         {
             return new Resp

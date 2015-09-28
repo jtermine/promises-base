@@ -32,28 +32,34 @@ namespace Termine.Promises.Base.Handlers
         /// <param name="rx">response</param>
         public void Invoke(IHandlePromiseActions p, TC c, TU u, TW w, TR rq, TE rx)
 	    {
-	       _queue.ForEach(a =>
+            _queue.ForEach(a =>
             {
                 p.CancellationToken.ThrowIfCancellationRequested();
 
                 if ((p.IsTerminated || p.IsBlocked)) return;
 
-                if (a.Configurator == null)
+                p.Trace(a.StartMessage);
+
+                var workloadXferHandlerConfig = new WorkloadXferHandlerConfig();
+                var configurator = a.Configurator.Invoke(new PromiseXferFunc<TC, TU, TW, TR, TE>(workloadXferHandlerConfig, p, c, u, w, rq, rx));
+
+                if (configurator.IsFailure)
                 {
-                    p.Abort("No configurator was provided to the xfer handler");
+                    p.Abort(configurator);
                     return;
                 }
 
-                var workloadXferHandlerConfig = new WorkloadXferHandlerConfig();
+                var response = a.Action.Invoke(new PromiseXferFunc<TC, TU, TW, TR, TE>(workloadXferHandlerConfig, p, c, u, w, rq, rx));
 
-                a.Configurator.Invoke(workloadXferHandlerConfig, p, c, u, w, rq, rx);
-
-                p.Trace(a.StartMessage);
-
-                a.Action.Invoke(workloadXferHandlerConfig, p, c, u, w, rq, rx);
+                if (response.IsFailure)
+                {
+                    p.Abort(response);
+                    return;
+                }
 
                 p.Trace(a.EndMessage);
             });
+
 	    }
     }
 }

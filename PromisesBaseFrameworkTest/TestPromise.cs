@@ -47,10 +47,12 @@ namespace PromisesBaseFrameworkTest
 	    {
             var getSitesPromise = new Promise<GenericConfig, GenericUserIdentity, GenericWorkload, GetSitesRequest, GetSitesResponse>(true);
             
-            getSitesPromise.WithXferAction("GetSites", (config, p, c, u, w, rq, rx) =>
+            getSitesPromise.WithXferAction("GetSites", func =>
             {
-                config.BaseUri = @"http://localhost.fiddler/api/1.0/testService";
-                config.EndpointUri = @"/GetSites";
+                func.XferConfig.BaseUri = @"http://localhost.fiddler/api/1.0/testService";
+                func.XferConfig.EndpointUri = @"/GetSites";
+
+                return Resp.Success();  
             });
 
 	        getSitesPromise.WithPostEnd("testPostEnd", (func =>

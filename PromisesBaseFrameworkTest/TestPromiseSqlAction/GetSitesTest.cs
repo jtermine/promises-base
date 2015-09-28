@@ -30,6 +30,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
                 return Resp.Success();
             });
 
+            /*
             promise.WithSqlAction("getFolioRoomChargeTypeBySite",
                 (p, c, u, w, rq, rx) =>
                     new WorkloadSqlHandlerConfig
@@ -42,6 +43,7 @@ namespace PromisesBaseFrameworkTest.TestPromiseSqlAction
                     }, (conn, cmd) => conn.Query<FRCTEntity>(cmd));
             
             promise.Run();
+            */
         }
     }
 }

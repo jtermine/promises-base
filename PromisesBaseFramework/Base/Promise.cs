@@ -123,11 +123,6 @@ namespace Termine.Promises.Base
 			public readonly WorkloadXferHandlerQueue<TC, TU, TW, TR, TE> XferActions = new WorkloadXferHandlerQueue<TC, TU, TW, TR, TE>();
 
             /// <summary>
-			/// a collection of actions that execute Sql against a database server using Dapper
-			/// </summary>
-			public readonly WorkloadSqlHandlerQueue<TC, TU, TW, TR, TE> SqlActions = new WorkloadSqlHandlerQueue<TC, TU, TW, TR, TE>();
-
-            /// <summary>
             /// a collection of block handlers -- there are executed when a promise is blocked
             /// </summary>
             public PromiseHandlerQueue BlockHandlers { get; } = new PromiseHandlerQueue();
@@ -378,7 +373,6 @@ namespace Termine.Promises.Base
 	            _context.AuthChallengers.Invoke(this, Config, User, Workload, Request, Response);
 	            _context.Validators.Invoke(this, Config, User, Workload, Request, Response);
                 _context.XferActions.Invoke(this, Config, User, Workload, Request, Response);
-                _context.SqlActions.Invoke(this, Config, User, Workload, Request, Response);
                 _context.Executors.Invoke(this, Config, User, Workload, Request, Response);
                 _context.SuccessHandlers.Invoke(this, PromiseMessages.PromiseSuccess);
 
@@ -406,7 +400,7 @@ namespace Termine.Promises.Base
                 if (_context.ThrowExceptions) throw;
             }
 
-	        Response.UserName = User.UserName;
+	        Response.UserName = User.Name;
 	        Response.UserDisplayName = User.DisplayName;
 	        Response.UserEmail = User.Email;
 	        Response.IsSuccess = !IsTerminated && !IsBlocked;
@@ -869,7 +863,7 @@ namespace Termine.Promises.Base
 	    /// <param name="configurator"></param>
 	    /// <param name="action"></param>
 	    /// <returns></returns>
-	    public Promise<TC, TU, TW, TR, TE> WithXferAction(string actionId, Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> configurator, Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> action = default(Action<WorkloadXferHandlerConfig,IHandlePromiseActions, TC, TU, TW, TR, TE>))
+	    public Promise<TC, TU, TW, TR, TE> WithXferAction(string actionId, Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp> configurator, Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp> action = default(Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp>))
         {
             if (string.IsNullOrEmpty(actionId) || action == configurator) return this;
 
@@ -887,37 +881,6 @@ namespace Termine.Promises.Base
 
             return this;
         }
-
-	    /// <summary>
-	    /// 
-	    /// </summary>
-	    /// <param name="actionId"></param>
-	    /// <param name="sqlAction"></param>
-	    /// <param name="configFunc"></param>
-	    /// <returns></returns>
-	    public Promise<TC, TU, TW, TR, TE> WithSqlAction(string actionId, 
-            WorkloadSqlHandlerConfigDelegate<IHandlePromiseActions, TC, TU, TW, TR, TE> configFunc,
-            WorkloadSqlActionResultsDelegate sqlAction)
-	    {
-	        if (string.IsNullOrEmpty(actionId) ||
-	            configFunc == default(WorkloadSqlHandlerConfigDelegate<IHandlePromiseActions, TC, TU, TW, TR, TE>))
-	            return this;
-
-	        var workloadSqlHandlerConfig = configFunc.Invoke(this, Config, User, Workload, Request, Response);
-
-	        var workloadSqlHandler = new WorkloadSqlHandler<TC, TU, TW, TR, TE>
-	        {
-	            WorkloadSqlHandlerConfig = workloadSqlHandlerConfig,
-	            EndMessage = PromiseMessages.SqlActionStopped(actionId),
-	            StartMessage = PromiseMessages.SqlActionStarted(actionId),
-	            HandlerName = actionId,
-	            SqlAction = sqlAction
-	        };
-            
-	        _context.SqlActions.Enqueue(workloadSqlHandler);
-
-	        return this;
-	    }
 
 	    public void WithUserMessageHandler(string actionId, Func<PromiseMessageFunc, Resp> action)
 	    {
