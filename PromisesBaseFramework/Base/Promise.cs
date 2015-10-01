@@ -414,6 +414,20 @@ namespace Termine.Promises.Base
 	        Response.LogMessages = Request.ReturnLog || !Response.IsSuccess
 	            ? PromiseMessageLog
 	            : new List<GenericPublicEventMessage>();
+
+	        if (Response.LogMessages.Count == 0)
+	        {
+	            Response.EventNumber = 201;
+	            Response.EventPublicMessage = "No log was returned with the response.";
+	            return;
+	        }
+
+            var lastLogMessage = Response.LogMessages[Response.LogMessages.Count - 1];
+
+	        Response.EventPublicMessage = lastLogMessage.EventPublicMessage;
+	        Response.EventPublicDetails = lastLogMessage.EventPublicDetails;
+	        Response.EventNumber = lastLogMessage.EventNumber;
+	        Response.MinorEventNumber = lastLogMessage.MinorEventNumber;
 	    }
 
         private void WriteMessage(IHandleEventMessage message)
@@ -426,7 +440,8 @@ namespace Termine.Promises.Base
                 {
                     EventNumber = message.EventNumber,
                     EventPublicDetails = "Details suppressed.",
-                    EventPublicMessage = "A sensitive event occurred."
+                    EventPublicMessage = "A sensitive event occurred.",
+                    MinorEventNumber = message.MinorEventNumber
                 }); 
                 return;
             }
@@ -435,7 +450,8 @@ namespace Termine.Promises.Base
             {
                 EventNumber = message.EventNumber,
                 EventPublicMessage = message.EventPublicMessage,
-                EventPublicDetails = message.EventPublicDetails
+                EventPublicDetails = message.EventPublicDetails,
+                MinorEventNumber = message.MinorEventNumber
             });
         }
 
