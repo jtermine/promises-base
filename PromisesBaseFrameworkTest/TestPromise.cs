@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PromisesBaseFrameworkTest.GetResvPromise;
 using PromisesBaseFrameworkTest.GetSitesPromise;
 using PromisesBaseFrameworkTest.TestPromiseComponents;
 using Termine.Promises.Base;
@@ -45,21 +46,21 @@ namespace PromisesBaseFrameworkTest
 	    [Test]
 	    public void TestXfer()
 	    {
-            var getSitesPromise = new Promise<GenericConfig, GenericUserIdentity, GenericWorkload, GetSitesRequest, GetSitesResponse>(true);
+            var promise = new Promise<GenericConfig, GenericUserIdentity, GenericWorkload, GetResvByIdRq, GetResvByIdRx>(true);
             
-            getSitesPromise.WithXferAction("GetSites", (config, p, c, u, w, rq, rx) =>
+            promise.WithXferAction("GetSites", (config, p, c, u, w, rq, rx) =>
             {
-                config.BaseUri = @"http://localhost.fiddler/api/1.0/testService";
-                config.EndpointUri = @"/GetSites";
+                config.BaseUri = @"http://localhost.fiddler:11368";
+                config.EndpointUri = @"/api/1-0/TSWxPaymentService/GetResvById";
             });
 
-	        getSitesPromise.WithPostEnd("testPostEnd", (func =>
+	        promise.WithPostEnd("testPostEnd", (func =>
             {
-                Assert.IsTrue(func.Rx.Sites.Count > 0);
+                Assert.IsTrue(func.Rx.ResvEntity != null);
                 return Resp.Success();
 	        }));
-            
-            getSitesPromise.Run();
-        }
+
+	        promise.Run(new PromiseOptions<GetResvByIdRq, GenericUserIdentity>(new GetResvByIdRq {ResvId = 2}));
+	    }
     }
 }
