@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Constants\PromiseXferHeaders.cs" />
     <Compile Include="Base\Extensions.cs" />
     <Compile Include="Base\Generics\GenericConfig.cs" />
     <Compile Include="Base\Generics\GenericEventMessage.cs" />

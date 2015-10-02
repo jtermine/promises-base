@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using RestSharp;
 using RestSharp.Authenticators;
+using Termine.Promises.Base.Constants;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Interfaces;
 
@@ -30,7 +32,6 @@ namespace Termine.Promises.Base.Handlers
             Action = func =>
             { 
                 var client = new RestClient(func.XferConfig.BaseUri);
-
                 if (func.XferConfig.UseNtlm) client.Authenticator = new NtlmAuthenticator();
 
                 var request = new RestRequest(func.XferConfig.EndpointUri, Method.POST)
@@ -53,7 +54,18 @@ namespace Termine.Promises.Base.Handlers
                     return Resp.Abort(new GenericEventMessage(response.ErrorException));
                 }
 
-                if (response.StatusCode != HttpStatusCode.OK) return Resp.Abort(response.StatusDescription);
+                if (response.StatusCode != HttpStatusCode.OK && response.Headers.Count(f=>f.Name == PromiseXferHeaders.XPromiseResponse)> 0)
+                {
+                    var header = response.Headers.First(f => f.Name == PromiseXferHeaders.XPromiseResponse);
+                    if ((string) header.Value != "1") return Resp.Abort(response.StatusDescription);
+                    func.P.DeserializeResponse(response.Content);
+                    return Resp.Success(func.Rx.EventPublicMessage);
+                }
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return Resp.Abort(response.StatusDescription);
+                }
 
                 func.P.DeserializeResponse(response.Content);
 
