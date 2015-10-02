@@ -17,5 +17,6 @@ namespace Termine.Promises.Base.Interfaces
         string UserName { get; set; }
         string UserDisplayName { get; set; }
         string UserEmail { get; set; }
+        
     }
 }

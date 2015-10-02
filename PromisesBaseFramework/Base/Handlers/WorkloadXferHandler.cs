@@ -59,6 +59,7 @@ namespace Termine.Promises.Base.Handlers
                     var header = response.Headers.First(f => f.Name == PromiseXferHeaders.XPromiseResponse);
                     if ((string) header.Value != "1") return Resp.Abort(response.StatusDescription);
                     func.P.DeserializeResponse(response.Content);
+                    func.W.IsXferResult = true;
                     return Resp.Success(func.Rx.EventPublicMessage);
                 }
 

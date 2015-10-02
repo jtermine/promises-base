@@ -48,19 +48,22 @@ namespace PromisesBaseFrameworkTest
 	    {
             var promise = new Promise<GenericConfig, GenericUserIdentity, GenericWorkload, GetResvByIdRq, GetResvByIdRx>(true);
             
-            promise.WithXferAction("GetSites", (config, p, c, u, w, rq, rx) =>
+            promise.WithXferAction("GetSites", func =>
             {
-                config.BaseUri = @"http://localhost.fiddler:11368";
-                config.EndpointUri = @"/api/1-0/TSWxPaymentService/GetResvById";
+                func.XferConfig.BaseUri = @"http://localhost.fiddler:11368";
+                func.XferConfig.EndpointUri = @"/api/1-0/TSWxPaymentService/GetResvById";
+                return Resp.Success();
             });
 
-	        promise.WithPostEnd("testPostEnd", (func =>
-            {
-                Assert.IsTrue(func.Rx.ResvEntity != null);
-                return Resp.Success();
-	        }));
+	        //promise.WithPostEnd("testPostEnd", (func =>
+         //   {
+         //       Assert.IsTrue(func.Rx.ResvEntity != null);
+         //       return Resp.Success();
+	        //}));
 
 	        promise.Run(new PromiseOptions<GetResvByIdRq, GenericUserIdentity>(new GetResvByIdRq {ResvId = 2}));
+
+            var x = promise.Response;
 	    }
     }
 }

@@ -400,6 +400,8 @@ namespace Termine.Promises.Base
                 if (_context.ThrowExceptions) throw;
             }
 
+	        if (Workload.IsXferResult) return;
+
 	        Response.UserName = User.Name;
 	        Response.UserDisplayName = User.DisplayName;
 	        Response.UserEmail = User.Email;
