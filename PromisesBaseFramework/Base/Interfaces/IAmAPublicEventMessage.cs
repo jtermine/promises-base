@@ -7,7 +7,7 @@ namespace Termine.Promises.Base.Interfaces
         DateTime EventTimestamp { get; set; }
 
         /// <summary>
-        /// An integer an application group designates as the authoritative event
+        /// The HTTP response code to return ot the client when this message is engaged.
         /// </summary>
         int EventNumber { get; set; }
 
@@ -20,5 +20,10 @@ namespace Termine.Promises.Base.Interfaces
         /// The details to the event message which will be publically displayed in unsecured contexdts if the "IsPublicMessage" property is set to true
         /// </summary>
         string EventPublicDetails { get; set; }
+
+        /// <summary>
+        /// The specific notification event number.
+        /// </summary>
+        int MinorEventNumber { get; set; }
     }
 }

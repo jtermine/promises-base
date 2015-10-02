@@ -3,7 +3,7 @@ using Termine.Promises.Base.Generics;
 
 namespace Termine.Promises.Base.Interfaces
 {
-    public interface IAmAPromiseResponse
+    public interface IAmAPromiseResponse: IHandleEventMessage
     {
         string RequestId { get; set; }
         string ResponseId { get; set; }

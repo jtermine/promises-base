@@ -1,37 +1,33 @@
 ﻿using System.Collections.Generic;
-using Nancy.Security;
+using System.Security.Claims;
 using Termine.Promises.Base.Interfaces;
 
 namespace Termine.Promises.Base.Generics
 {
     public class GenericUserIdentity: IAmAPromiseUser
     {
-        public string UserName { get; set; } = "Anonymous";
-        public IEnumerable<string> Claims { get; set; } = new List<string>();
-        public string Email { get; set; }
-        public string DisplayName { get; set; } = "Anonymous User";
+        public string Email { get; private set; }
+        public string DisplayName { get;  private set; } = "Anonymous User";
+        public List<Claim> Claims { get; } = new List<Claim>();
+        public string Name { get; private set; } = "Anonymous";
+        public string AuthenticationType { get; private set; } = "None";
+        public bool IsAuthenticated => GetAuthenticatedStatus();
 
-        public bool IsAuthenticated => !string.IsNullOrEmpty(UserName);
-
-        public IAmAPromiseUser AddClaim(string claim)
+        private bool GetAuthenticatedStatus()
         {
-            if ((Claims as List<string>) == null) return this;
-            ((List<string>) Claims).Add(claim);
-            return this;
+            return !string.IsNullOrEmpty(Name) && Name != "Anonymous";
         }
 
-        public static GenericUserIdentity Init(IUserIdentity userIdentity)
+        public void Authenticate(string userName, string displayName = "", string email = "", string authenticationType = "None",
+            IEnumerable<Claim> claims = default(IEnumerable<Claim>))
         {
-            if (userIdentity == default(IUserIdentity)) return new GenericUserIdentity();
+            Name = userName;
+            DisplayName = displayName;
+            Email = email;
+            AuthenticationType = authenticationType;
 
-            var genericUserIdentity = new GenericUserIdentity
-            {
-                UserName = userIdentity.UserName,
-                Claims = userIdentity.Claims
-            };
-
-            return genericUserIdentity;
+            Claims.Clear();
+            if (claims != null) Claims.AddRange(claims);
         }
-
     }
 }

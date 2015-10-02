@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using RestSharp;
+using RestSharp.Authenticators;
+using Termine.Promises.Base.Constants;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Interfaces;
 
@@ -13,47 +16,60 @@ namespace Termine.Promises.Base.Handlers
         where TR : IAmAPromiseRequest
         where TE : IAmAPromiseResponse, new()
     {
-        public Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> Action { get; set; }
+        public Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp> Action { get; set; }
         public string HandlerName { get; set; }
         public IHandleEventMessage StartMessage { get; set; }
         public IHandleEventMessage EndMessage { get; set; }
-        public Action<WorkloadXferHandlerConfig, IHandlePromiseActions, TC, TU, TW, TR, TE> Configurator { get; set; }
+        public Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp> Configurator { get; set; }
 
         public WorkloadXferHandler()
         {
             ResetToDefaultAction();
         }
 
-        public void ResetToDefaultAction()
+        private void ResetToDefaultAction()
         {
-            Action = (gc, p, u, c, w, rq, rx) =>
-            {
-                var client = new RestClient(gc.BaseUri);
+            Action = func =>
+            { 
+                var client = new RestClient(func.XferConfig.BaseUri);
+                if (func.XferConfig.UseNtlm) client.Authenticator = new NtlmAuthenticator();
 
-                var request = new RestRequest(gc.EndpointUri, Method.POST)
+                var request = new RestRequest(func.XferConfig.EndpointUri, Method.POST)
                 {
                     JsonSerializer = new RestSharpJsonSerializer(),
-                    Timeout = gc.TimeoutInMs
+                    Timeout = func.XferConfig.TimeoutInMs
                 };
 
-                request.AddJsonBody(rq);
+                request.AddJsonBody(func.Rq);
 
                 var response = client.Execute(request);
                 
                 if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    p.Warn(new GenericEventMessage(response.ErrorMessage));
+                    return Resp.Success(new GenericEventMessage(response.ErrorMessage));
                 }
 
                 if (response.ErrorException != default(Exception))
                 {
-                    p.Abort(response.ErrorException);
-                    return;
+                    return Resp.Abort(new GenericEventMessage(response.ErrorException));
                 }
 
-                if (response.StatusCode != HttpStatusCode.OK) return;
+                if (response.StatusCode != HttpStatusCode.OK && response.Headers.Count(f=>f.Name == PromiseXferHeaders.XPromiseResponse)> 0)
+                {
+                    var header = response.Headers.First(f => f.Name == PromiseXferHeaders.XPromiseResponse);
+                    if ((string) header.Value != "1") return Resp.Abort(response.StatusDescription);
+                    func.P.DeserializeResponse(response.Content);
+                    return Resp.Success(func.Rx.EventPublicMessage);
+                }
 
-                p.DeserializeResponse(response.Content);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return Resp.Abort(response.StatusDescription);
+                }
+
+                func.P.DeserializeResponse(response.Content);
+
+                return Resp.Success();
             };
         }
     }

@@ -42,5 +42,20 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "_userEmail")]
         public string UserEmail { get; set; }
+        
+        [DataMember(Name = "_minorEventNumber")]
+        public int MinorEventNumber { get; set; }
+
+        [DataMember(Name = "_eventNumber")]
+        public int EventNumber { get; set; }
+
+        [DataMember(Name = "_eventPublicMessage")]
+        public string EventPublicMessage { get; set; }
+
+        [DataMember(Name = "_eventPublicDetails")]
+        public string EventPublicDetails { get; set; }
+
+        [DataMember(Name = "_isSensitiveMessage")]
+        public bool IsSensitiveMessage { get; set; }
     }
 }

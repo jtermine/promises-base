@@ -18,5 +18,8 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "eventPublicDetails")]
         public string EventPublicDetails { get; set; }
+
+        [DataMember(Name = "minorEventNumber")]
+        public int MinorEventNumber { get; set; }
     }
 }

@@ -1,13 +1,16 @@
-﻿using Nancy.Security;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace Termine.Promises.Base.Interfaces
 {
-    public interface IAmAPromiseUser: IUserIdentity
+    public interface IAmAPromiseUser: IIdentity
     {
-        string Email { get; set; }
-        string DisplayName { get; set; }
-        bool IsAuthenticated { get; }
-        IAmAPromiseUser AddClaim(string claim);
+        string Email { get; }
+        string DisplayName { get; }
+        List<Claim> Claims { get; }
 
+        void Authenticate(string userName, string displayName = "", string email = "", string authenticationType = "None",
+            IEnumerable<Claim> claims = default(IEnumerable<Claim>));
     }
 }
