@@ -1,9 +1,10 @@
 ﻿using NUnit.Framework;
+using PromisesBaseFrameworkTest.ComputeTestPromise;
 using PromisesBaseFrameworkTest.GetResvPromise;
-using PromisesBaseFrameworkTest.GetSitesPromise;
 using PromisesBaseFrameworkTest.TestPromiseComponents;
 using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;
+using Termine.Promises.Base.Handlers;
 
 namespace PromisesBaseFrameworkTest
 {
@@ -13,7 +14,7 @@ namespace PromisesBaseFrameworkTest
 		[Test]
 		public void TestPromiseInitializer()
 		{
-			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, GenericWorkload, TestPromiseRequest, GenericResponse>();
+			var promise = ClaimsPromiseFactory.Get<GenericConfig, GenericUserIdentity, TestPromiseW, TestPromiseRq, GenericResponse>();
 
             promise.WithExecutor("exec", (func =>
 		    {
@@ -22,8 +23,22 @@ namespace PromisesBaseFrameworkTest
 		        return Resp.Success();
 		    }));
 
-		    promise.Run(
-		        new PromiseOptions<TestPromiseRequest, GenericUserIdentity>(new TestPromiseRequest {Claim = "1234-Claim"}));
+		    promise.WithPromiseExecutor("c", func =>
+		    {
+		        var config = new PromiseExecutorConfig<ComputeTestRq, ComputeTestRx, GenericUserIdentity>
+		        {
+		            PromiseFactory = new ComputeTestPf(),
+		            Rq = new ComputeTestRq {Multiplier = 5, StartNum = 1},
+		            OnResponse = rx =>
+		            {
+                        func.W.Result = rx.Result;
+		            }
+		        };
+
+                return config;
+		    });
+
+            promise.Run(new PromiseOptions<TestPromiseRq, GenericUserIdentity>(new TestPromiseRq {Name="Joseph", Claim = "1234-Claim"}));
 
             promise.Abort(new GenericEventMessage("Abort promise-1"));
 

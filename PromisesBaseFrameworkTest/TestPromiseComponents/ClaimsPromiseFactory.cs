@@ -15,10 +15,10 @@ namespace PromisesBaseFrameworkTest.TestPromiseComponents
 		{
 			var promise = new Promise<TC, TU, TW, TR, TE>(true);
 
-			promise.WithAuthChallenger("claims-authChallenger",
-                (func => string.IsNullOrEmpty(func.Rq.RequestId)
-                    ? Resp.AbortOnAccessDenied("Claim is null or empty.")
-                    : Resp.Success()));
+			//promise.WithAuthChallenger("claims-authChallenger",
+   //             (func => string.IsNullOrEmpty(func.Rq.RequestId)
+   //                 ? Resp.AbortOnAccessDenied("Claim is null or empty.")
+   //                 : Resp.Success()));
 
 			return promise;
 		}

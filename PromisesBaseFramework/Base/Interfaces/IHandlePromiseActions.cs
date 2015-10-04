@@ -7,8 +7,6 @@ namespace Termine.Promises.Base.Interfaces
 	public interface IHandlePromiseActions
 	{
         CancellationToken CancellationToken { get; }
-        HttpStatusCode ReturnHttpStatusCode { get; }
-        string ReturnHttpMessage { get; }
 		bool IsBlocked { get; }
 		bool IsTerminated { get; }
 

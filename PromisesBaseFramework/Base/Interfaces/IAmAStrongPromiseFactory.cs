@@ -7,6 +7,6 @@ namespace Termine.Promises.Base.Interfaces
         where TX : IAmAPromiseResponse
         where TU : IAmAPromiseUser
     {
-        TX Run(TR request, TU user);
+        TX Run(TR request, TU user, PromiseMessenger messenger = default(PromiseMessenger));
     }
 }

@@ -5,7 +5,7 @@ using Termine.Promises.Base.Generics;
 namespace PromisesBaseFrameworkTest.TestPromiseComponents
 {
     [DataContract]
-	public class TestPromiseRequest : GenericRequest
+	public class TestPromiseRq : GenericRequest
 	{
         [DataMember(Name = "name")]
         public string Name { get; set; }

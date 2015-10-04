@@ -8,26 +8,34 @@ namespace Termine.Promises.Base
     {
         public TR Request { get; set; }
         public TU GenericUser { get; set; }
+        public PromiseMessenger Messenger { get; set; }
 
         public PromiseOptions()
         {
-            
         }
 
-        public PromiseOptions(TR request, TU genericUser)
+        public PromiseOptions(TR request, TU genericUser, PromiseMessenger messenger = default(PromiseMessenger))
         {
             Request = request;
             GenericUser = genericUser;
+            Messenger = messenger;
         }
 
-        public PromiseOptions(TR request)
+        public PromiseOptions(TR request, PromiseMessenger messenger = default(PromiseMessenger))
         {
+            Messenger = messenger;
             Request = request;
         }
 
-        public PromiseOptions(TU genericUser)
+        public PromiseOptions( TU genericUser, PromiseMessenger messenger = default(PromiseMessenger))
         {
+            Messenger = messenger;
             GenericUser = genericUser;
+        }
+
+        public PromiseOptions(PromiseMessenger messenger = default(PromiseMessenger))
+        {
+            Messenger = messenger;
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace PromisesBaseFrameworkTest.TestPromiseComponents
 {
-	public class TestPromiseResponse : GenericResponse
+	public class TestPromiseW : GenericWorkload
 	{
-		public string OutputString { get; set; }
+	    public int Result { get; set; }
 	}
 }

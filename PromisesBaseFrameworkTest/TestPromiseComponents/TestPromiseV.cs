@@ -2,7 +2,7 @@
 
 namespace PromisesBaseFrameworkTest.TestPromiseComponents
 {
-    public class TestPromiseV: AbstractValidator<TestPromiseRequest>
+    public class TestPromiseV: AbstractValidator<TestPromiseRq>
     {
         public TestPromiseV()
         {
