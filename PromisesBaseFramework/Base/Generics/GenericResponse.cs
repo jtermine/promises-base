@@ -57,5 +57,8 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "_isSensitiveMessage")]
         public bool IsSensitiveMessage { get; set; }
+
+        [DataMember(Name = "_isFailure")]
+        public bool IsFailure { get; set; }
     }
 }

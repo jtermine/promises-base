@@ -321,6 +321,13 @@ namespace Termine.Promises.Base
 	            _context.Validators.Invoke(this, Config, User, Workload, Request, Response);
                 _context.XferActions.Invoke(this, Config, User, Workload, Request, Response);
                 _context.Executors.Invoke(this, Config, User, Workload, Request, Response);
+
+	            if (IsTerminated)
+	            {
+	                _context.TokenSource.Cancel(true);
+                    _context.TokenSource.Token.ThrowIfCancellationRequested();
+	            }
+
                 _context.Messenger.SuccessHandlers.Invoke(this, PromiseMessages.PromiseSuccess(PromiseName));
 
                 Debug(PromiseMessages.PromiseSuccess(PromiseName));
@@ -377,6 +384,7 @@ namespace Termine.Promises.Base
 	        Response.EventPublicDetails = lastLogMessage.EventPublicDetails;
 	        Response.EventNumber = lastLogMessage.EventNumber;
 	        Response.MinorEventNumber = lastLogMessage.MinorEventNumber;
+	        Response.IsFailure = lastLogMessage.IsFailure;
 	    }
 
         private void WriteMessage(IHandleEventMessage message)
@@ -387,10 +395,12 @@ namespace Termine.Promises.Base
             {
                 PromiseMessageLog.Add(new GenericPublicEventMessage
                 {
+                    
                     EventNumber = message.EventNumber,
                     EventPublicDetails = "Details suppressed.",
                     EventPublicMessage = "A sensitive event occurred.",
-                    MinorEventNumber = message.MinorEventNumber
+                    MinorEventNumber = message.MinorEventNumber,
+                    IsFailure = message.IsFailure
                 }); 
                 return;
             }
@@ -400,7 +410,8 @@ namespace Termine.Promises.Base
                 EventNumber = message.EventNumber,
                 EventPublicMessage = message.EventPublicMessage,
                 EventPublicDetails = message.EventPublicDetails,
-                MinorEventNumber = message.MinorEventNumber
+                MinorEventNumber = message.MinorEventNumber,
+                IsFailure = message.IsFailure
             });
         }
 

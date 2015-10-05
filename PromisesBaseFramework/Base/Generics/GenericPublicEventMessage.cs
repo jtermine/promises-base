@@ -21,5 +21,8 @@ namespace Termine.Promises.Base.Generics
 
         [DataMember(Name = "minorEventNumber")]
         public int MinorEventNumber { get; set; }
+
+        [DataMember(Name = "isFailure")]
+        public bool IsFailure { get; set; }
     }
 }

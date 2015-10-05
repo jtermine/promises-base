@@ -25,5 +25,7 @@ namespace Termine.Promises.Base.Interfaces
         /// The specific notification event number.
         /// </summary>
         int MinorEventNumber { get; set; }
+
+        bool IsFailure { get; set; }
     }
 }

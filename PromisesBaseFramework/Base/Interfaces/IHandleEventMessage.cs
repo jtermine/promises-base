@@ -30,6 +30,6 @@
 		/// Designates whether the event message and details should be displayed in unsecured contexts
 		/// </summary>
 		bool IsSensitiveMessage { get; set; }
+        bool IsFailure { get; set; }
     }
-
 }

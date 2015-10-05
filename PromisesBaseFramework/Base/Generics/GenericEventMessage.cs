@@ -10,6 +10,7 @@ namespace Termine.Promises.Base.Generics
 	    public string EventPublicMessage { get; set; }
         public string EventPublicDetails { get; set; }
         public bool IsSensitiveMessage { get; set; }
+        public bool IsFailure { get; set; }
 
         public GenericEventMessage()
         {

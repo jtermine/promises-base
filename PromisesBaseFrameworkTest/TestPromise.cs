@@ -23,7 +23,7 @@ namespace PromisesBaseFrameworkTest
 		        return Resp.Success();
 		    }));
 
-		    promise.WithPromiseExecutor("c", func =>
+		    promise.WithPromiseExecutor("computeTest", func =>
 		    {
 		        var config = new PromiseExecutorConfig<ComputeTestRq, ComputeTestRx, GenericUserIdentity>
 		        {
