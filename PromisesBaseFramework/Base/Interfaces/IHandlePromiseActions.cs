@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
 
 namespace Termine.Promises.Base.Interfaces
 {
 	public interface IHandlePromiseActions
 	{
+        PromiseMessenger PromiseMessenger { get; }
         CancellationToken CancellationToken { get; }
 		bool IsBlocked { get; }
 		bool IsTerminated { get; }

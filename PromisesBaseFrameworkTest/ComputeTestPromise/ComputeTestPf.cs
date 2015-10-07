@@ -1,6 +1,9 @@
-﻿using Termine.Promises;
+﻿using System;
+using PromisesBaseFrameworkTest.DeepPromise;
+using Termine.Promises;
 using Termine.Promises.Base;
 using Termine.Promises.Base.Generics;
+using Termine.Promises.Base.Handlers;
 using Termine.Promises.Base.Interfaces;
 
 namespace PromisesBaseFrameworkTest.ComputeTestPromise
@@ -30,9 +33,22 @@ namespace PromisesBaseFrameworkTest.ComputeTestPromise
                 return Resp.Success();
             });
 
+            _promise.WithPromiseExecutor("px", func =>
+            {
+                return new PromiseExecutorConfig<DeepPromiseRq, DeepPromiseRx, GenericUserIdentity>
+                {
+                    PromiseFactory = new DeepPromisePf(),
+                    Rq = new DeepPromiseRq {Multiplier = 5, StartNum = 1},
+                    OnResponse = rx =>
+                    {
+                        func.W.DeepPromiseResult = rx.Result;
+                        func.W.StandingValue = func.W.StandingValue + func.W.DeepPromiseResult;
+                    }
+                };
+            });
+            
             _promise.WithExecutor("e4", func =>
             {
-                return Resp.Failure();
                 func.W.StandingValue = func.W.StandingValue * func.Rq.Multiplier;
                 return Resp.Success();
             });

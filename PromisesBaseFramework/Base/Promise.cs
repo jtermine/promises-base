@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using RestSharp;
+using RestSharp.Authenticators;
+using Termine.Promises.Base.Constants;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Handlers;
 using Termine.Promises.Base.Interfaces;
@@ -112,11 +116,6 @@ namespace Termine.Promises.Base
 			/// </summary>
 			public readonly WorkloadHandlerQueue<TC, TU, TW, TR, TE> PostEndActions = new WorkloadHandlerQueue<TC, TU, TW, TR, TE>();
 
-			/// <summary>
-			/// a collection of actions that execute in sequence when transmitting a promise to a service
-			/// </summary>
-			public readonly WorkloadXferHandlerQueue<TC, TU, TW, TR, TE> XferActions = new WorkloadXferHandlerQueue<TC, TU, TW, TR, TE>();
-
             public PromiseMessenger Messenger { get; set; }
 
             public void ResetCancellationToken()
@@ -142,7 +141,8 @@ namespace Termine.Promises.Base
             return this;
         }
 
-	    public CancellationToken CancellationToken => _context.TokenSource.Token;
+        public PromiseMessenger PromiseMessenger => _context.Messenger;
+        public CancellationToken CancellationToken => _context.TokenSource.Token;
         private HttpStatusCode ReturnHttpStatusCode { get; set; } = HttpStatusCode.OK;
         private string ReturnHttpMessage { get; set; } = "OK";
 
@@ -319,7 +319,6 @@ namespace Termine.Promises.Base
 	            
 	            _context.AuthChallengers.Invoke(this, Config, User, Workload, Request, Response);
 	            _context.Validators.Invoke(this, Config, User, Workload, Request, Response);
-                _context.XferActions.Invoke(this, Config, User, Workload, Request, Response);
                 _context.Executors.Invoke(this, Config, User, Workload, Request, Response);
 
 	            if (IsTerminated)
@@ -837,15 +836,16 @@ namespace Termine.Promises.Base
         /// <param name="configuratorFunc"></param>
         /// <returns></returns>
         public Promise<TC, TU, TW, TR, TE> WithPromiseExecutor<TXR, TXE, TXU>(string actionId,
-            Func<PromiseExecutorFunc<TW, TE>, PromiseExecutorConfig<TXR, TXE, TXU>> configuratorFunc)
+            Func<PromiseExecutorFunc<TW, TR, TE>, PromiseExecutorConfig<TXR, TXE, TXU>> configuratorFunc)
             where TXU : class, IAmAPromiseUser, new()
             where TXR : class, IAmAPromiseRequest, new()
             where TXE : class, IAmAPromiseResponse, new()
         {
             if (string.IsNullOrEmpty(actionId) || configuratorFunc == null) return this;
 
-            var config = configuratorFunc.Invoke(new PromiseExecutorFunc<TW, TE>
+            var config = configuratorFunc.Invoke(new PromiseExecutorFunc<TW, TR, TE>
             {
+                Rq = Request,
                 Rx = Response,
                 W = Workload
             });
@@ -870,24 +870,65 @@ namespace Termine.Promises.Base
         /// 
         /// </summary>
         /// <param name="actionId"></param>
-        /// <param name="configurator"></param>
-        /// <param name="action"></param>
+        /// <param name="config"></param>
+        /// <param name="configuratorFunc"></param>
         /// <returns></returns>
-        public Promise<TC, TU, TW, TR, TE> WithXferAction(string actionId, Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp> configurator, Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp> action = default(Func<PromiseXferFunc<TC, TU, TW, TR, TE>, Resp>))
+        public Promise<TC, TU, TW, TR, TE> WithXferAction<TXR, TXE, TXU>(string actionId, PromiseXferConfig config, Func<PromiseXferConfig, PromiseExecutorConfig<TXR, TXE, TXU>> configuratorFunc)
+            where TXU : class, IAmAPromiseUser, new()
+            where TXR : class, IAmAPromiseRequest, new()
+            where TXE : class, IAmAPromiseResponse, new()
         {
-            if (string.IsNullOrEmpty(actionId) || action == configurator) return this;
+            if (string.IsNullOrEmpty(actionId) || configuratorFunc == null) return this;
 
-	        var workloadXferHandler = new WorkloadXferHandler<TC, TU, TW, TR, TE>
-	        {
-	            Configurator = configurator,
-	            EndMessage = PromiseMessages.XferActionStopped(PromiseName, actionId),
-	            StartMessage = PromiseMessages.XferActionStarted(PromiseName, actionId),
-	            HandlerName = actionId
-	        };
+            _context.Executors.Enqueue(new WorkloadHandler<TC, TU, TW, TR, TE>
+            {
+                Action = func =>
+                {
+                    var client = new RestClient(config.BaseUri);
+                    if (config.UseNtlm) client.Authenticator = new NtlmAuthenticator();
 
-	        if (action != null) workloadXferHandler.Action = action;
+                    var request = new RestRequest(config.EndpointUri, Method.POST)
+                    {
+                        JsonSerializer = new RestSharpJsonSerializer(),
+                        Timeout = config.TimeoutInMs
+                    };
 
-            _context.XferActions.Enqueue(workloadXferHandler);
+                    request.AddJsonBody(func.Rq);
+
+                    var response = client.Execute(request);
+
+                    if (!string.IsNullOrEmpty(response.ErrorMessage))
+                    {
+                        return Resp.Success(new GenericEventMessage(response.ErrorMessage));
+                    }
+
+                    if (response.ErrorException != default(Exception))
+                    {
+                        return Resp.Abort(new GenericEventMessage(response.ErrorException));
+                    }
+
+                    if (response.StatusCode != HttpStatusCode.OK && response.Headers.Count(f => f.Name == PromiseXferHeaders.XPromiseResponse) > 0)
+                    {
+                        var header = response.Headers.First(f => f.Name == PromiseXferHeaders.XPromiseResponse);
+                        if ((string)header.Value != "1") return Resp.Abort(response.StatusDescription);
+                        func.P.DeserializeResponse(response.Content);
+                        func.W.IsXferResult = true;
+                        return Resp.Success(func.Rx.EventPublicMessage);
+                    }
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        return Resp.Abort(response.StatusDescription);
+                    }
+
+                    func.P.DeserializeResponse(response.Content);
+
+                    return Resp.Success();
+                },
+                EndMessage = PromiseMessages.XferActionStopped(PromiseName, actionId),
+                StartMessage = PromiseMessages.XferActionStarted(PromiseName, actionId),
+                HandlerName = actionId
+            });
 
             return this;
         }

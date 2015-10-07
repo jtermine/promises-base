@@ -66,6 +66,10 @@
     <Compile Include="ComputeTestPromise\ComputeTestW.cs" />
     <Compile Include="ComputeTestPromise\ComputeTestRx.cs" />
     <Compile Include="ComputeTestPromise\ComputeTestRq.cs" />
+    <Compile Include="DeepPromise\DeepPromisePf.cs" />
+    <Compile Include="DeepPromise\DeepPromiseRq.cs" />
+    <Compile Include="DeepPromise\DeepPromiseRx.cs" />
+    <Compile Include="DeepPromise\DeepPromiseW.cs" />
     <Compile Include="GetResvPromise\GetResvByIdRq.cs" />
     <Compile Include="GetResvPromise\GetResvByIdRx.cs" />
     <Compile Include="GetResvPromise\GetResvByIdV.cs" />

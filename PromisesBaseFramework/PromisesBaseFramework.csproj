@@ -72,6 +72,7 @@
     <Compile Include="Base\Generics\GenericValidationFailure.cs" />
     <Compile Include="Base\Generics\GenericValidator.cs" />
     <Compile Include="Base\Generics\GenericWorkload.cs" />
+    <Compile Include="Base\PromiseXferConfig.cs" />
     <Compile Include="Base\Handlers\PromiseExecutorConfig.cs" />
     <Compile Include="Base\Handlers\PromiseHandler.cs" />
     <Compile Include="Base\Handlers\PromiseHandlerQueue.cs" />
@@ -98,7 +99,6 @@
     <Compile Include="Base\PromiseConfigurator.cs" />
     <Compile Include="Base\PromiseFunc.cs" />
     <Compile Include="Base\PromiseExecutorFunc.cs" />
-    <Compile Include="Base\PromiseXferFunc.cs" />
     <Compile Include="Base\PromiseMessageFunc.cs" />
     <Compile Include="Base\Resp.cs" />
     <Compile Include="Base\PromiseMessages.cs" />

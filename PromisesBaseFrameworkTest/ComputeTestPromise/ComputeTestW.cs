@@ -5,5 +5,6 @@ namespace PromisesBaseFrameworkTest.ComputeTestPromise
     public class ComputeTestW : GenericWorkload
     {
         public int StandingValue { get; set; }
+        public int DeepPromiseResult { get; set; }
     }
 }
