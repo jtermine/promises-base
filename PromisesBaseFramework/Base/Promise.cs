@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using RestSharp;
-using RestSharp.Authenticators;
-using Termine.Promises.Base.Constants;
 using Termine.Promises.Base.Generics;
 using Termine.Promises.Base.Handlers;
 using Termine.Promises.Base.Interfaces;
@@ -865,74 +861,7 @@ namespace Termine.Promises.Base
 
             return this;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="actionId"></param>
-        /// <param name="config"></param>
-        /// <param name="configuratorFunc"></param>
-        /// <returns></returns>
-        public Promise<TC, TU, TW, TR, TE> WithXferAction<TXR, TXE, TXU>(string actionId, PromiseXferConfig config, Func<PromiseXferConfig, PromiseExecutorConfig<TXR, TXE, TXU>> configuratorFunc)
-            where TXU : class, IAmAPromiseUser, new()
-            where TXR : class, IAmAPromiseRequest, new()
-            where TXE : class, IAmAPromiseResponse, new()
-        {
-            if (string.IsNullOrEmpty(actionId) || configuratorFunc == null) return this;
-
-            _context.Executors.Enqueue(new WorkloadHandler<TC, TU, TW, TR, TE>
-            {
-                Action = func =>
-                {
-                    var client = new RestClient(config.BaseUri);
-                    if (config.UseNtlm) client.Authenticator = new NtlmAuthenticator();
-
-                    var request = new RestRequest(config.EndpointUri, Method.POST)
-                    {
-                        JsonSerializer = new RestSharpJsonSerializer(),
-                        Timeout = config.TimeoutInMs
-                    };
-
-                    request.AddJsonBody(func.Rq);
-
-                    var response = client.Execute(request);
-
-                    if (!string.IsNullOrEmpty(response.ErrorMessage))
-                    {
-                        return Resp.Success(new GenericEventMessage(response.ErrorMessage));
-                    }
-
-                    if (response.ErrorException != default(Exception))
-                    {
-                        return Resp.Abort(new GenericEventMessage(response.ErrorException));
-                    }
-
-                    if (response.StatusCode != HttpStatusCode.OK && response.Headers.Count(f => f.Name == PromiseXferHeaders.XPromiseResponse) > 0)
-                    {
-                        var header = response.Headers.First(f => f.Name == PromiseXferHeaders.XPromiseResponse);
-                        if ((string)header.Value != "1") return Resp.Abort(response.StatusDescription);
-                        func.P.DeserializeResponse(response.Content);
-                        func.W.IsXferResult = true;
-                        return Resp.Success(func.Rx.EventPublicMessage);
-                    }
-
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        return Resp.Abort(response.StatusDescription);
-                    }
-
-                    func.P.DeserializeResponse(response.Content);
-
-                    return Resp.Success();
-                },
-                EndMessage = PromiseMessages.XferActionStopped(PromiseName, actionId),
-                StartMessage = PromiseMessages.XferActionStarted(PromiseName, actionId),
-                HandlerName = actionId
-            });
-
-            return this;
-        }
-
+        
 	    public void WithUserMessageHandler(string actionId, Func<PromiseMessageFunc, Resp> action)
 	    {
 	        WithBlockHandler($"{actionId}.block", action);

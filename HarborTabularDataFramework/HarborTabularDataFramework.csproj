@@ -99,10 +99,6 @@
     <Compile Include="TabularPoperties\TextEditType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HarborBaseFramework\HarborDataFramework.csproj">
-      <Project>{8F38E7EC-8400-4BF2-A34B-2061F63537F1}</Project>
-      <Name>HarborDataFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PromisesBaseFramework\PromisesBaseFramework.csproj">
       <Project>{AA43A7E2-9D7A-434A-ADBA-D113387D5F93}</Project>
       <Name>PromisesBaseFramework</Name>

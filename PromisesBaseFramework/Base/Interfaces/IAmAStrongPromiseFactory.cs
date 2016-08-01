@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Termine.Promises.Base.Interfaces
+﻿namespace Termine.Promises.Base.Interfaces
 {
     public interface IAmAStrongPromiseFactory<in TR, out TX, in TU>
         where TR : IAmAPromiseRequest

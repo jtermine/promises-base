@@ -50,14 +50,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HarborBaseFramework\HarborDataFramework.csproj">
-      <Project>{8f38e7ec-8400-4bf2-a34b-2061f63537f1}</Project>
-      <Name>HarborDataFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HarborTabularDataFramework\HarborTabularDataFramework.csproj">
-      <Project>{9a32bb1b-0e8b-4741-9683-78c29b09cf93}</Project>
-      <Name>HarborTabularDataFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PromisesBaseFramework\PromisesBaseFramework.csproj">
       <Project>{aa43a7e2-9d7a-434a-adba-d113387d5f93}</Project>
       <Name>PromisesBaseFramework</Name>
